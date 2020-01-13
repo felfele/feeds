@@ -38,7 +38,7 @@ export class PublicChannelsScreen extends React.Component<Props> {
                 {{
                     navigationHeader:
                         <NavigationHeader
-                            title='Public channels'
+                            title='News'
                             leftButton={{
                                 onPress: () => this.props.navigation.navigate('PublicChannelsListContainer', {
                                     showExplore: true,

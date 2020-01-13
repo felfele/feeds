@@ -160,18 +160,7 @@ export const getPrivateChannelPosts = createSelector([ getSelectedTopicPosts ], 
 });
 
 export const getYourPosts = createSelector([ getLocalPosts, getPrivatePosts, getProfile ], (posts: Post[], privatePosts: PostListDict, author) => {
-    const yourPublicKey = author.identity!.publicKey;
-    const postsByTopics = Object.values(privatePosts);
-    const emptyPrivatePosts: PrivatePost[] = [];
-    const yourPrivatePosts = emptyPrivatePosts
-        .concat(...postsByTopics)
-        .filter(post => post.author.identity != null && post.author.identity.publicKey === yourPublicKey)
-    ;
-
-    return posts
-        .filter(post => post.author && post.author.name === author.name)
-        .concat(yourPrivatePosts)
-    ;
+    return [];
 });
 
 export const getYourSortedUniquePosts = createSelector([ getYourPosts ], (posts) => {
