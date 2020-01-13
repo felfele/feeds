@@ -16,7 +16,7 @@ import { setCustomText } from 'react-native-global-props';
 
 import { SettingsEditorContainer } from './containers/SettingsEditorContainer';
 import { Debug } from './Debug';
-import { EditFeedContainer as FeedInfoContainer } from './containers/FeedInfoContainer';
+import { EditFeedContainer as FeedInfoContainer, RSSFeedInfoContainer } from './containers/FeedInfoContainer';
 import { FilterListEditorContainer } from './containers/FilterListEditorContainer';
 import { EditFilterContainer } from './containers/EditFilterContainer';
 import { DebugScreenContainer } from './containers/DebugScreenContainer';
@@ -71,6 +71,9 @@ const Scenes: NavigationRouteConfigMap = {
     },
     RSSFeedLoader: {
         screen: RSSFeedLoaderContainer,
+    },
+    RSSFeedInfo: {
+        screen: RSSFeedInfoContainer,
     },
     FeedLinkReader: {
         screen: FeedLinkReaderContainer,
