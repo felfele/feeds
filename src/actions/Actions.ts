@@ -76,8 +76,6 @@ export const Actions = {
         createAction(ActionTypes.REMOVE_DRAFT),
     appStateReset: () =>
         createAction(ActionTypes.APP_STATE_RESET),
-    changeSettingSaveToCameraRoll: (value: boolean) =>
-        createAction(ActionTypes.CHANGE_SETTING_SAVE_TO_CAMERA_ROLL, { value }),
     changeSettingShowSquareImages: (value: boolean) =>
         createAction(ActionTypes.CHANGE_SETTING_SHOW_SQUARE_IMAGES, { value }),
     changeSettingShowDebugMenu: (value: boolean) =>

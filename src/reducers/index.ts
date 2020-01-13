@@ -176,12 +176,6 @@ const ownFeedsReducer = (ownFeeds: LocalFeed[] = [], action: Actions): LocalFeed
 
 const settingsReducer = (settings = defaultSettings, action: Actions): Settings => {
     switch (action.type) {
-        case 'CHANGE-SETTING-SAVE-TO-CAMERA-ROLL': {
-            return {
-                ...settings,
-                saveToCameraRoll: action.payload.value,
-            };
-        }
         case 'CHANGE-SETTING-SHOW-SQUARE-IMAGES': {
             return {
                 ...settings,

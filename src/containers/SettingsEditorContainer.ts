@@ -14,9 +14,6 @@ const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigatio
 
 const mapDispatchToProps = (dispatch: any): DispatchProps => {
     return {
-        onSaveToCameraRollValueChange: (value: boolean) => {
-            dispatch(Actions.changeSettingSaveToCameraRoll(value));
-        },
         onShowSquareImagesValueChange: (value: boolean) => {
             dispatch(Actions.changeSettingShowSquareImages(value));
         },

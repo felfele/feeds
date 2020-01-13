@@ -2,17 +2,11 @@ import * as React from 'react';
 import {
     NavigationRouteConfigMap,
     createStackNavigator,
-    createBottomTabNavigator,
     createSwitchNavigator,
     NavigationScreenProps,
 } from 'react-navigation';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
-    Platform,
     YellowBox,
-    View,
     AppState,
     AppStateStatus,
 } from 'react-native';
@@ -20,27 +14,22 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 // @ts-ignore
 import { setCustomText } from 'react-native-global-props';
-// @ts-ignore
-import { BottomTabBar } from 'react-navigation-tabs';
 
 import { SettingsEditorContainer } from './containers/SettingsEditorContainer';
 import { Debug } from './Debug';
-import { EditFeedContainer as FeedInfoContainer, RSSFeedInfoContainer } from './containers/FeedInfoContainer';
+import { EditFeedContainer as FeedInfoContainer } from './containers/FeedInfoContainer';
 import { FilterListEditorContainer } from './containers/FilterListEditorContainer';
 import { EditFilterContainer } from './containers/EditFilterContainer';
-import { YourFeedContainer } from './containers/YourFeedContainer';
-import { PostEditorContainer } from './containers/PostEditorContainer';
 import { DebugScreenContainer } from './containers/DebugScreenContainer';
 import { LoadingScreenContainer } from './containers/LoadingScreenContainer';
 import { appendToLog } from './log';
 import { LogViewerContainer } from './containers/LogViewerContainer';
-import { defaultTextProps, ComponentColors } from './styles';
+import { defaultTextProps } from './styles';
 import { FeedContainer } from './containers/FeedContainer';
 import { BackupRestore } from './components/BackupRestore';
 import { RestoreContainer } from './containers/RestoreContainer';
 import { BackupContainer } from './containers/BackupContainer';
 import { SettingsFeedViewContainer } from './containers/SettingsFeedViewContainer';
-import { SwarmSettingsContainer } from './containers/SwarmSettingsContainer';
 import { BugReportViewWithTabBar } from './components/BugReportView';
 import { TopLevelErrorBoundary } from './components/TopLevelErrorBoundary';
 import { FeedSettingsContainer } from './ui/screens/feed-settings/FeedSettingsContainer';
@@ -48,32 +37,18 @@ import { CategoriesContainer } from './ui/screens/explore/CategoriesContainer';
 import { SubCategoriesContainer } from './ui/screens/explore/SubCategoriesContainer';
 import { NewsSourceGridContainer } from './ui/screens/explore/NewsSourceGridContainer';
 import { NewsSourceFeedContainer } from './containers/NewSourceFeedContainer';
-import { TypedNavigation } from './helpers/navigation';
 import { initializeNotifications } from './helpers/notifications';
 import { WelcomeContainer } from './ui/screens/onboarding/WelcomeContainer';
-import { ContactScreenContainer } from './ui/screens/profile/ContactScreenContainer';
-import { HideWhenKeyboardShownComponent } from './ui/misc/HideWhenKeyboardShownComponent';
-import { ContactViewContainer } from './ui/screens/contact/ContactViewContainer';
 import { BASE_URL } from './helpers/deepLinking';
-import { InviteLinkContainer } from './ui/screens/contact/InviteLinkContainer';
 import { initStore, getSerializedAppState, getAppStateFromSerialized } from './store';
 import { Persistor } from 'redux-persist';
 import { Actions } from './actions/Actions';
 import { restartApp } from './helpers/restart';
 import { felfeleInitAppActions } from './store/felfeleInit';
-import { ContactInfoContainer } from './ui/screens/contact/ContactInfoContainer';
 import { FELFELE_APP_NAME } from './reducers/defaultData';
-import { PrivateChannelsContainer } from './ui/screens/private-channels/PrivateChannelsContainer';
-import { PrivateChannelListContainer} from './ui/screens/private-channels/PrivateChannelsListContainer';
-import { ShareWithContainer } from './ui/screens/share-with/ShareWithContainer';
-import { ContactSuccessContainer } from './ui/screens/contact/ContactSuccessContainer';
 import { PublicChannelsContainer } from './ui/screens/public-channels/PublicChannelsContainer';
 import { PublicChannelsListContainer } from './ui/screens/public-channels/PublicChannelsListContainer';
-import { ContactConfirmContainer } from './ui/screens/contact/ContactConfirmContainer';
-import { ContactLoaderContainer } from './ui/screens/contact/ContactLoaderContainer';
 import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkReaderContainer';
-import { RSSFeedLoaderContainer } from './ui/screens/rss-feed/RSSFeedLoaderContainer';
-import { EditProfileContainer } from './ui/screens/profile/EditProfileContainer';
 import { ProfileContainer } from './ui/screens/onboarding/ProfileContainer';
 
 YellowBox.ignoreWarnings([
@@ -85,64 +60,21 @@ Debug.addLogger(appendToLog);
 setCustomText(defaultTextProps);
 initializeNotifications();
 
-const privateChannelTabScenes: NavigationRouteConfigMap = {
-    PrivateChannelTab: {
-        screen: PrivateChannelsContainer,
-    },
-    Feed: {
-        screen: FeedContainer,
-    },
-    PrivateChannelListContainer: {
-        screen: PrivateChannelListContainer,
-    },
-    ContactView: {
-        screen: ContactViewContainer,
-    },
-    ContactInfo: {
-        screen: ContactInfoContainer,
-    },
-    YourFeed: {
-        screen: YourFeedContainer,
-    },
-};
-
-const PrivateChannelNavigator = createStackNavigator(privateChannelTabScenes,
-    {
-        mode: 'card',
-        navigationOptions: {
-            header: null,
-        },
-        initialRouteName: 'PrivateChannelTab',
-    },
-);
-
-const profileScenes: NavigationRouteConfigMap = {
-    Profile: {
-        screen: ContactScreenContainer,
-    },
-    Feed: {
-        screen: FeedContainer,
-    },
-    FeedSettings: {
-        screen: FeedSettingsContainer,
-    },
-    EditProfileContainer: {
-        screen: EditProfileContainer,
-    },
-};
-const ProfileNavigator = createStackNavigator(profileScenes,
-    {
-        mode: 'card',
-        navigationOptions: {
-            header: null,
-        },
-        initialRouteName: 'Profile',
-    },
-);
-
-const publicChannelTabScenes: NavigationRouteConfigMap = {
-    PublicChannelTab: {
+const Scenes: NavigationRouteConfigMap = {
+    PublicChannelsContainer: {
         screen: PublicChannelsContainer,
+    },
+    Restore: {
+        screen: RestoreContainer,
+    },
+    Backup: {
+        screen: BackupContainer,
+    },
+    FeedInfo: {
+        screen: FeedInfoContainer,
+    },
+    FeedLinkReader: {
+        screen: FeedLinkReaderContainer,
     },
     Feed: {
         screen: FeedContainer,
@@ -168,20 +100,7 @@ const publicChannelTabScenes: NavigationRouteConfigMap = {
     FeedSettings: {
         screen: FeedSettingsContainer,
     },
-};
-
-const PublicChannelNavigator = createStackNavigator(publicChannelTabScenes,
-    {
-        mode: 'card',
-        navigationOptions: {
-            header: null,
-        },
-        initialRouteName: 'PublicChannelTab',
-    },
-);
-
-const settingsTabScenes: NavigationRouteConfigMap = {
-    SettingsTab: {
+    Settings: {
         screen: SettingsEditorContainer,
     },
     Debug: {
@@ -193,191 +112,16 @@ const settingsTabScenes: NavigationRouteConfigMap = {
     BackupRestore: {
         screen: BackupRestore,
     },
-    Feed: {
-        screen: SettingsFeedViewContainer,
-    },
-    FeedSettings: {
-        screen: FeedSettingsContainer,
-    },
     EditFilter: {
         screen: EditFilterContainer,
     },
     FilterListEditorContainer: {
         screen: FilterListEditorContainer,
     },
-    SwarmSettingsContainer: {
-        screen: SwarmSettingsContainer,
-    },
     BugReportView: {
         screen: ({navigation}: NavigationScreenProps) => (
             <BugReportViewWithTabBar navigation={navigation} errorView={false}/>
         ),
-    },
-};
-
-const SettingsNavigator = createStackNavigator(settingsTabScenes,
-    {
-        mode: 'card',
-        navigationOptions: {
-            header: null,
-        },
-        initialRouteName: 'SettingsTab',
-    },
-);
-
-const Root = createBottomTabNavigator(
-    {
-        PublicChannelTab: {
-            screen: PublicChannelNavigator,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor, focused }: { tintColor?: string, focused: boolean }) => (
-                    <MaterialCommunityIcon
-                        name={'earth'}
-                        size={24}
-                        color={tintColor}
-                    />
-                ),
-            },
-        },
-        PrivateChannelTab: {
-            screen: PrivateChannelNavigator,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor, focused }: { tintColor?: string, focused: boolean }) => (
-                    <Icon
-                        name={'account-multiple'}
-                        size={24}
-                        color={tintColor}
-                    />
-                ),
-            },
-        },
-        PostTab: {
-            screen: PostEditorContainer,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor, focused }: { tintColor?: string, focused: boolean }) => (
-                    <View style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: 18,
-                        backgroundColor: ComponentColors.TAB_ACTION_BUTTON_COLOR,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
-                        <Icon
-                            name={'pencil'}
-                            size={24}
-                            color={ComponentColors.TAB_ACTION_BUTTON_ICON_COLOR}
-                        />
-                    </View>
-                ),
-                tabBarOnPress: ({ navigation }: { navigation: TypedNavigation }) => {
-                    navigation.navigate('Post', {
-                        selectedFeeds: [],
-                    });
-                },
-                tabBarTestID: 'TabBarPostButton',
-            },
-        },
-        ProfileTab: {
-            screen: ProfileNavigator,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor, focused }: { tintColor?: string, focused: boolean }) => (
-                    <Icon
-                        name={'account-circle'}
-                        size={24}
-                        color={tintColor}
-                    />
-                ),
-            },
-        },
-        SettingsTab: {
-            screen: SettingsNavigator,
-            navigationOptions: {
-                tabBarIcon: ({ tintColor, focused }: { tintColor?: string, focused: boolean }) => (
-                    <MaterialIcon
-                        name={'settings'}
-                        size={24}
-                        color={tintColor}
-                    />
-                ),
-            },
-        },
-    },
-    {
-        tabBarPosition: 'bottom',
-        animationEnabled: false,
-        swipeEnabled: false,
-        tabBarOptions: Platform.OS === 'ios'
-            ?
-                {
-                    showLabel: false,
-                    activeTintColor: ComponentColors.TAB_ACTIVE_COLOR,
-                    inactiveTintColor: ComponentColors.TAB_INACTIVE_COLOR,
-                    style: {
-                        opacity: 0.96,
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                    },
-                }
-            :
-                {
-                    showLabel: false,
-                    showIcon: true,
-                    activeTintColor: ComponentColors.TAB_ACTIVE_COLOR,
-                    inactiveTintColor: ComponentColors.TAB_INACTIVE_COLOR,
-                    style: {
-                        opacity: 1.0,
-                    },
-                },
-        tabBarComponent: props => <HideWhenKeyboardShownComponent><BottomTabBar {...props}/></HideWhenKeyboardShownComponent>,
-    },
-);
-
-const Scenes: NavigationRouteConfigMap = {
-    Root: {
-        screen: Root,
-    },
-    Post: {
-        screen: PostEditorContainer,
-    },
-    Restore: {
-        screen: RestoreContainer,
-    },
-    Backup: {
-        screen: BackupContainer,
-    },
-    FeedInfo: {
-        screen: FeedInfoContainer,
-    },
-    FeedLinkReader: {
-        screen: FeedLinkReaderContainer,
-    },
-    RSSFeedLoader: {
-        screen: RSSFeedLoaderContainer,
-    },
-    RSSFeedInfo: {
-        screen: RSSFeedInfoContainer,
-    },
-    InviteLink: {
-        screen: InviteLinkContainer,
-        path: 'invite/:params',
-    },
-    ContactView: {
-        screen: ContactViewContainer,
-    },
-    ContactConfirm: {
-        screen: ContactConfirmContainer,
-    },
-    ContactLoader: {
-        screen: ContactLoaderContainer,
-    },
-    ContactSuccess: {
-        screen: ContactSuccessContainer,
-    },
-    ShareWithContainer: {
-        screen: ShareWithContainer,
     },
 };
 

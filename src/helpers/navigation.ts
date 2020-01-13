@@ -22,7 +22,7 @@ export interface Routes {
     ProfileTab: {};
     PostTab: {};
     PrivateChannelTab: {};
-    SettingsTab: {};
+    Settings: {};
     PublicChannelTab: {};
     BugReportView: {};
     SwarmSettingsContainer: {};

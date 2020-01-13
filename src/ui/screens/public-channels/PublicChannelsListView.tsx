@@ -92,34 +92,28 @@ const ActionButtons = (openExplore: () => void, openAddChannel: () => void) => (
     />
 );
 
-export class PublicChannelsListView extends React.PureComponent<DispatchProps & StateProps> {
-    public render() {
-        return (
-            <FragmentSafeAreaViewWithoutTabBar>
-                <FeedGrid
-                    headerComponent={this.props.showExplore
-                        ? ActionButtons(this.props.openExplore, this.onAddFeed)
-                        : undefined
-                    }
-                    {...this.props}
-                >
-                    <NavigationHeader
-                        navigation={this.props.navigation}
-                        title={this.props.title}
-                        rightButton1={{
-                            label: <Icon name='plus-box' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
-                            onPress: this.onAddFeed,
-                        }}
-                    />
-                </FeedGrid>
-            </FragmentSafeAreaViewWithoutTabBar>
-        );
-    }
+const navigateToSettings = (navigation: TypedNavigation) => navigation.navigate('Settings', {});
 
-    private onAddFeed = () => {
-        this.props.navigation.navigate('FeedLinkReader', {});
-    }
-}
+export const PublicChannelsListView = (props: DispatchProps & StateProps) => (
+    <FragmentSafeAreaViewWithoutTabBar>
+        <FeedGrid
+            headerComponent={props.showExplore
+                ? ActionButtons(props.openExplore, () => navigateToSettings(props.navigation))
+                : undefined
+            }
+            {...props}
+        >
+            <NavigationHeader
+                navigation={props.navigation}
+                title={props.title}
+                rightButton1={{
+                    label: <Icon name='settings' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
+                    onPress: () => props.navigation.navigate('Settings', {}),
+                }}
+            />
+        </FeedGrid>
+    </FragmentSafeAreaViewWithoutTabBar>
+);
 
 const styles = StyleSheet.create({
     sectionHeader: {
