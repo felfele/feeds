@@ -11,10 +11,6 @@ import { ContactHelper } from './contactHelpers';
 
 export interface Routes {
     App: {};
-    Loading: {};
-    Onboarding: {};
-    ProfileOnboarding: {};
-    Welcome: {};
     Post: {
         selectedFeeds: Feed[],
     };
@@ -22,7 +18,7 @@ export interface Routes {
     ProfileTab: {};
     PostTab: {};
     PrivateChannelTab: {};
-    SettingsTab: {};
+    Settings: {};
     PublicChannelTab: {};
     BugReportView: {};
     SwarmSettingsContainer: {};

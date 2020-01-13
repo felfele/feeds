@@ -12,26 +12,11 @@ export const felfeleInitAppActions = (store: Store<AppState, Actions>) => {
 
     // @ts-ignore
     store.dispatch(AsyncActions.cleanupContentFilters());
-    store.dispatch(Actions.cleanFeedsFromOwnFeeds(store.getState().ownFeeds.map(feed => feed.feedUrl)));
-    for (const ownFeed of store.getState().ownFeeds) {
-        store.dispatch(Actions.updateOwnFeed({
-            ...ownFeed,
-            isSyncing: false,
-        }));
-    }
-    store.dispatch(Actions.updateAppLastEditing(FELFELE_APP_NAME));
-    // @ts-ignore
-    store.dispatch(AsyncActions.cleanUploadingPostState());
     store.dispatch(Actions.timeTick());
     // @ts-ignore
     store.dispatch(BackgroundTaskActions.registerBackgroundTasks());
     // @ts-ignore
-    store.dispatch(AsyncActions.advanceContacts());
-    store.dispatch(ContactActions.removeExpiredContacts());
-    // @ts-ignore
     store.dispatch(AsyncActions.downloadFollowedFeedPosts());
-    // @ts-ignore
-    store.dispatch(AsyncActions.syncPrivateChannels());
 
     setInterval(() => store.dispatch(Actions.timeTick()), 60000);
 };

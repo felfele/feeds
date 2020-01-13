@@ -22,7 +22,6 @@ export interface StateProps {
 }
 
 export interface DispatchProps {
-    onSaveToCameraRollValueChange: (value: boolean) => void;
     onShowSquareImagesValueChange: (value: boolean) => void;
     onShowDebugMenuValueChange: (value: boolean) => void;
 }
@@ -42,17 +41,12 @@ export const SettingsEditor = (props: Props) => {
         <FragmentSafeAreaViewForTabBar>
             <NavigationHeader
                 title='Settings'
+                navigation={props.navigation}
             />
             <ScrollView style={{
                 backgroundColor: ComponentColors.BACKGROUND_COLOR,
                 paddingTop: 10,
             }}>
-                <RowItem
-                    title='Save to Camera Roll'
-                    switchState={props.settings.saveToCameraRoll}
-                    onSwitchValueChange={props.onSaveToCameraRollValueChange}
-                    buttonStyle='switch'
-                />
                 <RowItem
                     title='Send bug report'
                     buttonStyle='navigate'

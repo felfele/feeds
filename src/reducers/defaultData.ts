@@ -7,7 +7,6 @@ import { Feed } from '../models/Feed';
 import { defaultImages } from '../defaultImages';
 
 export const defaultSettings: Settings = {
-    saveToCameraRoll: true,
     showSquareImages: false,
     showDebugMenu: false,
     swarmGatewayAddress: Swarm.defaultGateway,
