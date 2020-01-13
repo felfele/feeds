@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
     NavigationRouteConfigMap,
     createStackNavigator,
-    createSwitchNavigator,
     NavigationScreenProps,
 } from 'react-navigation';
 import {
@@ -21,7 +20,6 @@ import { EditFeedContainer as FeedInfoContainer } from './containers/FeedInfoCon
 import { FilterListEditorContainer } from './containers/FilterListEditorContainer';
 import { EditFilterContainer } from './containers/EditFilterContainer';
 import { DebugScreenContainer } from './containers/DebugScreenContainer';
-import { LoadingScreenContainer } from './containers/LoadingScreenContainer';
 import { appendToLog } from './log';
 import { LogViewerContainer } from './containers/LogViewerContainer';
 import { defaultTextProps } from './styles';
@@ -38,8 +36,6 @@ import { SubCategoriesContainer } from './ui/screens/explore/SubCategoriesContai
 import { NewsSourceGridContainer } from './ui/screens/explore/NewsSourceGridContainer';
 import { NewsSourceFeedContainer } from './containers/NewSourceFeedContainer';
 import { initializeNotifications } from './helpers/notifications';
-import { WelcomeContainer } from './ui/screens/onboarding/WelcomeContainer';
-import { BASE_URL } from './helpers/deepLinking';
 import { initStore, getSerializedAppState, getAppStateFromSerialized } from './store';
 import { Persistor } from 'redux-persist';
 import { Actions } from './actions/Actions';
@@ -49,7 +45,6 @@ import { FELFELE_APP_NAME } from './reducers/defaultData';
 import { PublicChannelsContainer } from './ui/screens/public-channels/PublicChannelsContainer';
 import { PublicChannelsListContainer } from './ui/screens/public-channels/PublicChannelsListContainer';
 import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkReaderContainer';
-import { ProfileContainer } from './ui/screens/onboarding/ProfileContainer';
 
 YellowBox.ignoreWarnings([
     'Method `jumpToIndex` is deprecated.',
@@ -134,34 +129,6 @@ const AppNavigator = createStackNavigator(Scenes,
     },
 );
 
-const OnboardingNavigator = createStackNavigator({
-    Welcome: {
-        screen: WelcomeContainer,
-    },
-    ProfileOnboarding: {
-        screen: ProfileContainer,
-    },
-}, {
-    mode: 'card',
-    navigationOptions: {
-        header: null,
-    },
-    initialRouteName: 'Welcome',
-});
-
-const LoadingNavigator = createStackNavigator({
-    Loading: LoadingScreenContainer,
-});
-
-const InitialNavigator = createSwitchNavigator({
-    Loading: LoadingNavigator,
-    App: () => <AppNavigator uriPrefix={BASE_URL} />,
-    Onboarding: OnboardingNavigator,
-}, {
-    initialRouteName: 'Loading',
-    backBehavior: 'initialRoute',
-});
-
 interface FelfeleAppState {
     store: any;
     persistor: Persistor | null;
@@ -183,7 +150,7 @@ export default class FelfeleApp extends React.Component<{}, FelfeleAppState> {
             <TopLevelErrorBoundary>
                 <Provider store={this.state.store!}>
                     <PersistGate loading={null} persistor={this.state.persistor!}>
-                        <InitialNavigator/>
+                        <AppNavigator/>
                     </PersistGate>
                 </Provider>
             </TopLevelErrorBoundary>

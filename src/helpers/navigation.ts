@@ -11,10 +11,6 @@ import { ContactHelper } from './contactHelpers';
 
 export interface Routes {
     App: {};
-    Loading: {};
-    Onboarding: {};
-    ProfileOnboarding: {};
-    Welcome: {};
     Post: {
         selectedFeeds: Feed[],
     };
