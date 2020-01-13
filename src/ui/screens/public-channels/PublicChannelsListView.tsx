@@ -92,13 +92,11 @@ const ActionButtons = (openExplore: () => void, openAddChannel: () => void) => (
     />
 );
 
-const navigateToSettings = (navigation: TypedNavigation) => navigation.navigate('Settings', {});
-
 export const PublicChannelsListView = (props: DispatchProps & StateProps) => (
     <FragmentSafeAreaViewWithoutTabBar>
         <FeedGrid
             headerComponent={props.showExplore
-                ? ActionButtons(props.openExplore, () => navigateToSettings(props.navigation))
+                ? ActionButtons(props.openExplore, () => props.navigation.navigate('FeedLinkReader', {}))
                 : undefined
             }
             {...props}

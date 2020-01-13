@@ -15,11 +15,7 @@ export interface Routes {
         selectedFeeds: Feed[],
     };
     Root: {};
-    ProfileTab: {};
-    PostTab: {};
-    PrivateChannelTab: {};
     Settings: {};
-    PublicChannelTab: {};
     BugReportView: {};
     SwarmSettingsContainer: {};
     FilterListEditorContainer: {};
@@ -34,9 +30,6 @@ export interface Routes {
     };
     FavoriteListViewerContainer: {
         feeds: Feed[],
-    };
-    PrivateChannelListContainer: {
-        contactFeeds: ContactFeed[],
     };
     Feed: {
         feedUrl: string,

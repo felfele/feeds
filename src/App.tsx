@@ -45,6 +45,7 @@ import { FELFELE_APP_NAME } from './reducers/defaultData';
 import { PublicChannelsContainer } from './ui/screens/public-channels/PublicChannelsContainer';
 import { PublicChannelsListContainer } from './ui/screens/public-channels/PublicChannelsListContainer';
 import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkReaderContainer';
+import { RSSFeedLoaderContainer } from './ui/screens/rss-feed/RSSFeedLoaderContainer';
 
 YellowBox.ignoreWarnings([
     'Method `jumpToIndex` is deprecated.',
@@ -67,6 +68,9 @@ const Scenes: NavigationRouteConfigMap = {
     },
     FeedInfo: {
         screen: FeedInfoContainer,
+    },
+    RSSFeedLoader: {
+        screen: RSSFeedLoaderContainer,
     },
     FeedLinkReader: {
         screen: FeedLinkReaderContainer,
