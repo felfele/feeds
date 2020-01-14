@@ -86,36 +86,22 @@ export const fetchRecentPostFeed = async (feedAddress: Swarm.FeedAddress, swarmG
     return feed;
 };
 
-export const fetchFeedFromUrl = async (url: string, swarmGateway: string): Promise<Feed | RecentPostFeed | ContactFeed | null> => {
-    try {
-        if (url.startsWith(Swarm.defaultFeedPrefix)) {
-            const feedAddress = Swarm.makeFeedAddressFromBzzFeedUrl(url);
-            const feed = await fetchRecentPostFeed(feedAddress, swarmGateway);
-            if (feed != null && feed.publicKey != null) {
-                return {
-                    ...feed,
-                    contact: makeContactFromRecentPostFeed(feed),
-                };
-            }
-            return feed;
-        } else {
-            Debug.log('fetchFeedFromUrl', 'url', url);
-            const canonicalUrl = urlUtils.getCanonicalUrl(url);
-            Debug.log('fetchFeedFromUrl', 'canonicalUrl', canonicalUrl);
-            const feed = await RSSFeedManager.fetchFeedFromUrl(canonicalUrl);
-            Debug.log('fetchFeedFromUrl', 'feed', feed);
-            return feed;
-        }
-    } catch (e) {
-        Debug.log(e);
-        return null;
+const getCanonicalUrlForRSS = (url: string): string => {
+    const canonicalUrl = urlUtils.getCanonicalUrl(url);
+    const humanHostName = urlUtils.getHumanHostname(canonicalUrl);
+    if (humanHostName === 'theverge.com') {
+        return 'https://www.theverge.com/';
     }
+    if (humanHostName === urlUtils.REDDIT_COM && !url.endsWith('.rss')) {
+        return canonicalUrl + '.rss';
+    }
+    return canonicalUrl;
 };
 
 export const fetchRSSFeedFromUrl = async (url: string): Promise<Feed | null> => {
     try {
         Debug.log('fetchRSSFeedFromUrl', 'url', url);
-        const canonicalUrl = urlUtils.getCanonicalUrl(url);
+        const canonicalUrl = getCanonicalUrlForRSS(url);
         Debug.log('fetchRSSFeedFromUrl', 'canonicalUrl', canonicalUrl);
         const feed = await RSSFeedManager.fetchFeedFromUrl(canonicalUrl);
         Debug.log('fetchRSSFeedFromUrl', 'feed', feed);
