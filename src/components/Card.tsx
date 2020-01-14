@@ -233,7 +233,7 @@ const CardTop = (props: {
                 props.togglePostSelection &&
                 <TouchableView
                     style={{
-                        paddingRight: 20,
+                        paddingRight: 10,
                     }}
                     onPress={() => props.togglePostSelection!(props.post)}>
                     <ActionIcon name='dots-vertical' color={Colors.PINKISH_GRAY}/>
