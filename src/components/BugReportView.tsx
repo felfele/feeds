@@ -77,12 +77,6 @@ interface State {
     feedbackText: string;
 }
 
-export const BugReportViewWithTabBar = (props: Props) => (
-    <FragmentSafeAreaViewForTabBar>
-        <BugReportView {...props}/>
-    </FragmentSafeAreaViewForTabBar>
-);
-
 export const BugReportViewWithoutTabBar = (props: Props) => (
     <FragmentSafeAreaViewWithoutTabBar>
         <BugReportView {...props}/>

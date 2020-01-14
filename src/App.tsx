@@ -27,7 +27,7 @@ import { FeedContainer } from './containers/FeedContainer';
 import { BackupRestore } from './components/BackupRestore';
 import { RestoreContainer } from './containers/RestoreContainer';
 import { BackupContainer } from './containers/BackupContainer';
-import { BugReportViewWithTabBar } from './components/BugReportView';
+import { BugReportViewWithoutTabBar } from './components/BugReportView';
 import { TopLevelErrorBoundary } from './components/TopLevelErrorBoundary';
 import { CategoriesContainer } from './ui/screens/explore/CategoriesContainer';
 import { SubCategoriesContainer } from './ui/screens/explore/SubCategoriesContainer';
@@ -115,7 +115,7 @@ const Scenes: NavigationRouteConfigMap = {
     },
     BugReportView: {
         screen: ({navigation}: NavigationScreenProps) => (
-            <BugReportViewWithTabBar navigation={navigation} errorView={false}/>
+            <BugReportViewWithoutTabBar navigation={navigation} errorView={false}/>
         ),
     },
     FeedFromList: {
