@@ -1,8 +1,6 @@
 import * as React from 'react';
 
 import SwipeableViews from 'react-swipeable-views-native';
-// @ts-ignore
-import { autoPlay } from 'react-swipeable-views-utils';
 import { View, Dimensions, StyleSheet } from 'react-native';
 import { Post } from '../../models/Post';
 import { Rectangle, ModelHelper } from '../../models/ModelHelper';
@@ -17,8 +15,6 @@ interface Props {
     modelHelper: ModelHelper;
 }
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
 export class Carousel extends React.PureComponent<Props, { index: number }> {
     public state = {
         index: 0,
@@ -28,7 +24,7 @@ export class Carousel extends React.PureComponent<Props, { index: number }> {
         const windowWidth = Dimensions.get('window').width;
         return (
             <View>
-                <AutoPlaySwipeableViews disabled onChangeIndex={this.handleChangeIndex}>
+                <SwipeableViews onChangeIndex={this.handleChangeIndex}>
                     {this.props.post.images.map((image, index) => {
                         const { width, height } = this.props.calculateImageDimensions(image, windowWidth, windowWidth);
                         return (
@@ -44,7 +40,7 @@ export class Carousel extends React.PureComponent<Props, { index: number }> {
                             />
                         );
                     })}
-                </AutoPlaySwipeableViews>
+                </SwipeableViews>
              <Pagination dots={this.props.post.images.length} index={this.state.index}/>
             </View>
         );
