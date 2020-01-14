@@ -14,7 +14,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { unfollowFeed } from './FeedView';
 import { TypedNavigation } from '../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
-import { PublicProfile } from '../models/Profile';
 import { getFeedImage } from '../helpers/feedHelpers';
 import { ImageDataView } from './ImageDataView';
 import { ModelHelper } from '../models/ModelHelper';
@@ -39,7 +38,6 @@ export interface StateProps {
     feed: Feed;
     navigation: TypedNavigation;
     isKnownFeed: boolean;
-    profile: PublicProfile;
 }
 
 type Props = DispatchProps & StateProps;

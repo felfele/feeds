@@ -39,7 +39,6 @@ export interface StateProps {
     isSelected: boolean;
     post: Post;
     currentTimestamp: number;
-    author: Author;
     modelHelper: ModelHelper;
     togglePostSelection: (post: Post) => void;
     navigation: TypedNavigation;
@@ -233,7 +232,7 @@ const CardTop = (props: {
                 props.togglePostSelection &&
                 <TouchableView
                     style={{
-                        paddingRight: 10,
+                        paddingRight: 20,
                     }}
                     onPress={() => props.togglePostSelection!(props.post)}>
                     <ActionIcon name='dots-vertical' color={Colors.PINKISH_GRAY}/>

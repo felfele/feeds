@@ -8,7 +8,6 @@ const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigatio
     return {
         navigation: ownProps.navigation,
         settings: state.settings,
-        ownFeeds: state.ownFeeds,
     };
 };
 

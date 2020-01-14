@@ -14,11 +14,9 @@ import { createStore, compose, applyMiddleware, Store } from 'redux';
 
 import { currentAppStateVersion, AppState } from '../reducers/AppState';
 import { migrateAppState } from '../reducers/migration';
-import { immutableTransformHack } from '../reducers/immutableTransformHack';
 import { appStateReducer } from '../reducers';
 import { defaultState } from '../reducers/defaultData';
 import { Actions } from '../actions/Actions';
-import { getLegacyAppState } from './legacyAsyncStorage';
 import { getAppGroup } from '../BuildEnvironment';
 import { Debug } from '../Debug';
 
@@ -40,9 +38,6 @@ const getStorageEngine = async () => {
 };
 
 class FelfelePersistConfig implements PersistConfig {
-    public transforms = [immutableTransformHack({
-        whitelist: ['contentFilters', 'feeds', 'ownFeeds', 'rssPosts', 'localPosts', 'postUploadQueue'],
-    })];
     public blacklist = ['currentTimestamp'];
     public key = 'root';
     public keyPrefix = '';
@@ -57,11 +52,9 @@ export const initStore = async (initCallback: (store: Store<AppState, Actions>) 
     persistConfig = new FelfelePersistConfig(storageEngine);
     const persistedReducer = persistReducer(persistConfig, appStateReducer);
 
-    const legacyAppState = await getLegacyAppState();
-    const initialState = legacyAppState != null ? legacyAppState : defaultState;
     const storeInner = createStore(
         persistedReducer,
-        initialState,
+        defaultState,
         compose(
             applyMiddleware(thunkMiddleware),
         ),

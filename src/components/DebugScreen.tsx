@@ -1,35 +1,23 @@
 import * as React from 'react';
-import { View, ViewStyle, ScrollView, SafeAreaView, Alert, Platform } from 'react-native';
+import { View, ViewStyle, ScrollView, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-// @ts-ignore
-import { generateSecureRandom } from 'react-native-securerandom';
 
 import { getSerializedAppState, getAppStateFromSerialized } from '../store';
 import { AppState } from '../reducers/AppState';
 import { Debug } from '../Debug';
 import { NavigationHeader } from './NavigationHeader';
 import * as AreYouSureDialog from './AreYouSureDialog';
-import { ComponentColors, Colors } from '../styles';
+import { Colors } from '../styles';
 import { RowItem } from '../ui/buttons/RowButton';
-import * as Swarm from '../swarm/Swarm';
 import { restartApp } from '../helpers/restart';
 import { Utils } from '../Utils';
 import { TypedNavigation } from '../helpers/navigation';
 import { Feed } from '../models/Feed';
-import { Post, PrivatePost } from '../models/Post';
+import { PrivatePost } from '../models/Post';
 
-import debugIdentities from '../../testdata/debugIdentities.json';
-import contactIdentity1 from '../../testdata/contactIdentity1.json';
-import contactIdentity2 from '../../testdata/contactIdentity2.json';
-import contactIdentity3 from '../../testdata/contactIdentity3.json';
-import contactIdentity4 from '../../testdata/contactIdentity4.json';
 import { MutualContact } from '../models/Contact';
 import { HexString } from '../helpers/opaqueTypes';
-import { deriveSharedKey } from '../helpers/contactHelpers';
-import { calculatePrivateTopic } from '../protocols/privateChannel';
-import { byteArrayToHex } from '../helpers/conversion';
-import { makeEmptyPrivateChannel } from '../protocols/privateChannel';
 import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
 
 export interface StateProps {
@@ -39,14 +27,10 @@ export interface StateProps {
 
 export interface DispatchProps {
     onAppStateReset: () => void;
-    onCreateIdentity: () => void;
-    onDeleteContacts: () => void;
     onDeleteFeeds: () => void;
     onDeletePosts: () => void;
     onAddFeed: (feed: Feed) => void;
     onRefreshFeeds: (feeds: Feed[]) => void;
-    onAddContact: (contact: MutualContact) => void;
-    onAddPrivatePost: (topic: HexString, post: PrivatePost) => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -96,14 +80,6 @@ export const DebugScreen = (props: Props) => (
                     icon={
                         <MaterialCommunityIcon name='trash-can-outline' />
                     }
-                    title='Delete contacts'
-                    onPress={async () => await onDeleteContacts(props)}
-                    buttonStyle='none'
-                />
-                <RowItem
-                    icon={
-                        <MaterialCommunityIcon name='trash-can-outline' />
-                    }
                     title='Delete feeds'
                     onPress={async () => await onDeleteFeeds(props)}
                     buttonStyle='none'
@@ -114,30 +90,6 @@ export const DebugScreen = (props: Props) => (
                     }
                     title='Delete all posts'
                     onPress={async () => await onDeletePosts(props)}
-                    buttonStyle='none'
-                />
-                <RowItem
-                    icon={
-                        <MaterialCommunityIcon name='account-multiple' />
-                    }
-                    title='Setup debug contacts'
-                    onPress={async () => await onSetupContacts(props)}
-                    buttonStyle='none'
-                />
-                <RowItem
-                    icon={
-                        <IonIcon name='md-person' />
-                    }
-                    title='Create new identity'
-                    onPress={async () => await onCreateIdentity(props)}
-                    buttonStyle='none'
-                />
-                <RowItem
-                    icon={
-                        <MaterialCommunityIcon name='message-text-outline' />
-                    }
-                    title='Create private post'
-                    onPress={async () => await onCreatePrivatePost(props)}
                     buttonStyle='none'
                 />
                 <RowItem
@@ -199,16 +151,6 @@ const onAppStateReset = async (props: Props) => {
     }
 };
 
-const onDeleteContacts = async (props: Props) => {
-    const confirmed = await AreYouSureDialog.show(
-        'Are you sure you want to delete contacts?',
-        'This will delete all your contacts and there is no undo!'
-    );
-    if (confirmed) {
-        props.onDeleteContacts();
-    }
-};
-
 const onDeleteFeeds = async (props: Props) => {
     const confirmed = await AreYouSureDialog.show(
         'Are you sure you want to delete feeds?',
@@ -229,72 +171,8 @@ const onDeletePosts = async (props: Props) => {
     }
 };
 
-const onCreateIdentity = async (props: Props) => {
-    const confirmed = await AreYouSureDialog.show(
-        'Are you sure you want to create new identity?',
-        'This will delete your current identity and there is no undo!'
-    );
-    Debug.log('onCreateIdentity: ', confirmed);
-    if (confirmed) {
-        props.onCreateIdentity();
-        await Utils.waitMillisec(3 * 1000);
-        restartApp();
-    }
-};
-
 const onLogAppStateVersion = async () => {
     const serializedAppState = await getSerializedAppState();
     const appState = await getAppStateFromSerialized(serializedAppState);
     Debug.log('onLogAppStateVersion', appState._persist);
-};
-
-const onSetupContacts = async (props: Props) => {
-    const contactIdentities = [
-            contactIdentity1,
-            contactIdentity2,
-            contactIdentity3,
-            contactIdentity4,
-        ]
-    ;
-    const feeds = debugIdentities.map((identity, index) => {
-        const feedUrl = Swarm.makeBzzFeedUrl(Swarm.makeFeedAddressFromPublicIdentity(identity));
-        const feed: Feed = {
-            name: `Feed ${index}`,
-            feedUrl,
-            url: feedUrl,
-            favicon: '',
-        };
-        props.onAddFeed(feed);
-        return feed;
-    });
-    props.onRefreshFeeds(feeds);
-
-    contactIdentities.map((identity, index) => {
-        const contact: MutualContact = {
-            type: 'mutual-contact',
-            name: `Contact${index + 1}`,
-            identity,
-            image: {},
-            privateChannel: makeEmptyPrivateChannel(),
-        };
-        props.onAddContact(contact);
-    });
-
-    Debug.log('onSetupContacts', 'finished');
-};
-
-const onCreatePrivatePost = (props: Props) => {
-    const sharedKey = deriveSharedKey(props.appState.author.identity!, contactIdentity1);
-    const topic = calculatePrivateTopic(sharedKey);
-    const postTime = Date.now();
-    const id = byteArrayToHex(generateSecureRandom(32), false);
-    const post: PrivatePost = {
-        text: `Post ${postTime}`,
-        images: [],
-        createdAt: postTime,
-        author: props.appState.author,
-        topic,
-        _id: id,
-    };
-    props.onAddPrivatePost(topic, post);
 };

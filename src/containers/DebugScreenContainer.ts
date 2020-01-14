@@ -22,34 +22,18 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
         onAppStateReset: () => {
             dispatch(Actions.appStateReset());
         },
-        onCreateIdentity: () => {
-            dispatch(AsyncActions.createUserIdentity());
-        },
-        onDeleteContacts: () => {
-            dispatch(Actions.deleteAllContacts());
-        },
         onDeleteFeeds: () => {
             dispatch(Actions.removeAllFeeds());
         },
         onDeletePosts: () => {
             dispatch(Actions.removeAllPosts());
             dispatch(Actions.updateRssPosts([]));
-            dispatch(Actions.updateOwnFeed({
-                postCommandLog: emptyPostCommandLog,
-                posts: [],
-            }));
         },
         onAddFeed: (feed: Feed) => {
             dispatch(AsyncActions.addFeed(feed));
         },
         onRefreshFeeds: (feeds: Feed[]) => {
             dispatch(AsyncActions.downloadPostsFromFeeds(feeds));
-        },
-        onAddContact: (contact: MutualContact) => {
-            dispatch(AsyncActions.addContact(contact));
-        },
-        onAddPrivatePost: (topic: HexString, post: PrivatePost) => {
-            dispatch(Actions.addPrivatePost(topic, post));
         },
    };
 };

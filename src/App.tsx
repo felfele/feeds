@@ -33,13 +33,9 @@ import { CategoriesContainer } from './ui/screens/explore/CategoriesContainer';
 import { SubCategoriesContainer } from './ui/screens/explore/SubCategoriesContainer';
 import { NewsSourceGridContainer } from './ui/screens/explore/NewsSourceGridContainer';
 import { NewsSourceFeedContainer } from './containers/NewSourceFeedContainer';
-import { initializeNotifications } from './helpers/notifications';
-import { initStore, getSerializedAppState, getAppStateFromSerialized } from './store';
+import { initStore } from './store';
 import { Persistor } from 'redux-persist';
-import { Actions } from './actions/Actions';
-import { restartApp } from './helpers/restart';
 import { felfeleInitAppActions } from './store/felfeleInit';
-import { FELFELE_APP_NAME } from './reducers/defaultData';
 import { PublicChannelsContainer } from './ui/screens/public-channels/PublicChannelsContainer';
 import { PublicChannelsListContainer } from './ui/screens/public-channels/PublicChannelsListContainer';
 import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkReaderContainer';
@@ -53,7 +49,6 @@ YellowBox.ignoreWarnings([
 Debug.setDebugMode(true);
 Debug.addLogger(appendToLog);
 setCustomText(defaultTextProps);
-initializeNotifications();
 
 const Scenes: NavigationRouteConfigMap = {
     PublicChannelsContainer: {
@@ -176,14 +171,6 @@ export default class FelfeleApp extends React.Component<{}, FelfeleAppState> {
     private handleAppStateChange = async (nextAppState: AppStateStatus) => {
         if (this.state.nativeAppState.match(/inactive|background/) && nextAppState === 'active') {
             Debug.log('App has come to the foreground');
-            if (this.state.store != null) {
-                const serializedAppState = await getSerializedAppState();
-                const appState = await getAppStateFromSerialized(serializedAppState);
-                if (appState.lastEditingApp != null && appState.lastEditingApp !== FELFELE_APP_NAME) {
-                    this.state.store.dispatch(Actions.updateAppLastEditing(FELFELE_APP_NAME));
-                    restartApp();
-                }
-            }
         }
         this.setState({
             nativeAppState: nextAppState,

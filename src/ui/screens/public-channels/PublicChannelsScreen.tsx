@@ -20,7 +20,6 @@ export interface StateProps {
     navigation: TypedNavigation;
     posts: Post[];
     feeds: Feed[];
-    profileImage: ImageData;
     gatewayAddress: string;
 }
 

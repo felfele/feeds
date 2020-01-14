@@ -6,7 +6,7 @@ import { Feed } from '../models/Feed';
 import { AsyncActions } from '../actions/asyncActions';
 import { ModelHelper } from '../models/ModelHelper';
 import { TypedNavigation } from '../helpers/navigation';
-import { getAllFeeds, getContactFeeds } from '../selectors/selectors';
+import { getAllFeeds } from '../selectors/selectors';
 import { ContactFeed } from '../models/ContactFeed';
 import { isChildrenPostUploading } from '../helpers/postHelpers';
 import { Debug } from '../Debug';
@@ -59,12 +59,6 @@ const getAuthorFeed = (post: Post, state: AppState): AuthorFeed | undefined => {
     const postAuthor = post.author;
     const authorFeed = getAuthorFeedOrUndefined(
             state.feeds.find(feed => feed.feedUrl === postAuthor.uri),
-        ) ||
-        getAuthorFeedOrUndefined(
-            state.ownFeeds.find(feed => feed.name === postAuthor.name),
-        ) ||
-        getAuthorFeedOrUndefined(
-            getContactFeeds(state).find(feed => feed.feedUrl === postAuthor.uri),
         )
     ;
 
@@ -74,15 +68,12 @@ const getAuthorFeed = (post: Post, state: AppState): AuthorFeed | undefined => {
 const mapStateToProps = (state: AppState, ownProps: OwnProps): StateProps => {
     const authorFeed = getAuthorFeed(ownProps.post, state);
     const originalAuthorFeed = getOriginalAuthorFeed(ownProps.post, state);
-    const isUploading = ownProps.post.isUploading === true || isChildrenPostUploading(ownProps.post, state.localPosts);
     return {
         post: {
             ...ownProps.post,
-            isUploading,
         },
         currentTimestamp: state.currentTimestamp,
         isSelected: ownProps.isSelected,
-        author: state.author,
         modelHelper: ownProps.modelHelper,
         togglePostSelection: ownProps.togglePostSelection,
         navigation: ownProps.navigation,

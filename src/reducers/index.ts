@@ -4,30 +4,19 @@ import { ContentFilter } from '../models/ContentFilter';
 import { Feed } from '../models/Feed';
 import { Settings } from '../models/Settings';
 import { Post } from '../models/Post';
-import { Author } from '../models/Author';
-import { Metadata } from '../models/Metadata';
 import { Debug } from '../Debug';
-import { LocalFeed } from '../social/api';
 import {
     removeFromArray,
     updateArrayItem,
-    insertInArray,
     containsItem,
 } from '../helpers/immutable';
 import {
     defaultFeeds,
     defaultSettings,
-    defaultAuthor,
     defaultCurrentTimestamp,
-    defaultLocalPosts,
-    defaultMetadata,
     defaultState,
 } from './defaultData';
 import { AppState } from './AppState';
-import { contactsReducer } from './contactsReducer';
-import { ActionTypes } from '../actions/ActionTypes';
-import { PostListDict } from './version4';
-import { privatePostsReducer } from './privatePostsReducer';
 
 const contentFiltersReducer = (contentFilters: ContentFilter[] = [], action: Actions): ContentFilter[] => {
     switch (action.type) {
@@ -152,28 +141,6 @@ const feedsReducer = (feeds: Feed[] = defaultFeeds, action: Actions): Feed[] => 
     }
 };
 
-const ownFeedsReducer = (ownFeeds: LocalFeed[] = [], action: Actions): LocalFeed[] => {
-    switch (action.type) {
-        case 'ADD-OWN-FEED': {
-            return [...ownFeeds, action.payload.feed];
-        }
-        case 'UPDATE-OWN-FEED': {
-            const ind = ownFeeds.findIndex(feed => action.payload.partialFeed.feedUrl === feed.feedUrl);
-            if (ind === -1) {
-                return ownFeeds;
-            }
-            return updateArrayItem(ownFeeds, ind, (feed) => ({
-                ...feed,
-                ...action.payload.partialFeed,
-            }));
-
-        }
-        default: {
-            return ownFeeds;
-        }
-    }
-};
-
 const settingsReducer = (settings = defaultSettings, action: Actions): Settings => {
     switch (action.type) {
         case 'CHANGE-SETTING-SHOW-SQUARE-IMAGES': {
@@ -198,32 +165,6 @@ const settingsReducer = (settings = defaultSettings, action: Actions): Settings 
     return settings;
 };
 
-const authorReducer = (author = defaultAuthor, action: Actions): Author => {
-    switch (action.type) {
-        case 'UPDATE-AUTHOR-NAME': {
-            return {
-                ...author,
-                name: action.payload.name,
-            };
-        }
-        case 'UPDATE-AUTHOR-IMAGE': {
-            return {
-                ...author,
-                image: action.payload.image,
-            };
-        }
-        case 'UPDATE-AUTHOR-IDENTITY': {
-            return {
-                ...author,
-                identity: action.payload.privateIdentity,
-            };
-        }
-        default: {
-            return author;
-        }
-    }
-};
-
 const currentTimestampReducer = (currentTimestamp = defaultCurrentTimestamp, action: Actions): number => {
     switch (action.type) {
         case 'TIME-TICK': {
@@ -240,72 +181,6 @@ const rssPostsReducer = (rssPosts: Post[] = [], action: Actions): Post[] => {
         }
     }
     return rssPosts;
-};
-
-const localPostsReducer = (localPosts = defaultLocalPosts, action: Actions): Post[] => {
-    switch (action.type) {
-        case 'ADD-POST': {
-            return insertInArray(localPosts, action.payload.post, 0);
-        }
-        case 'DELETE-POST': {
-            const ind = localPosts.findIndex(post => post != null && action.payload.post._id === post._id);
-            if (ind === -1) {
-                return localPosts;
-            }
-            return removeFromArray(localPosts, ind);
-        }
-        case 'REMOVE-ALL-POSTS': {
-            return [];
-        }
-        case 'UPDATE-POST-LINK': {
-            const ind = localPosts.findIndex(post => post != null && action.payload.post._id === post._id);
-            if (ind === -1) {
-                return localPosts;
-            }
-            return updateArrayItem(localPosts, ind, (post => ({...post, link: action.payload.link})));
-        }
-        case 'UPDATE-POST-IS-UPLOADING': {
-            const ind = localPosts.findIndex(post => post != null && action.payload.post._id === post._id);
-            if (ind === -1) {
-                return localPosts;
-            }
-            return updateArrayItem(localPosts, ind, (post => ({...post, isUploading: action.payload.isUploading})));
-        }
-        case 'UPDATE-POST-IMAGES': {
-            const ind = localPosts.findIndex(post => post != null && action.payload.post._id === post._id);
-            if (ind === -1) {
-                return localPosts;
-            }
-            return updateArrayItem(localPosts, ind, (post => ({...post, images: action.payload.images})));
-        }
-    }
-    return localPosts;
-};
-
-const draftReducer = (draft: Post | null = null, action: Actions): Post | null => {
-    switch (action.type) {
-        case 'ADD-DRAFT': {
-            return action.payload.draft;
-        }
-        case 'REMOVE-DRAFT': {
-            return null;
-        }
-    }
-    return draft;
-};
-
-const metadataReducer = (metadata: Metadata = defaultMetadata, action: Actions): Metadata => {
-    switch (action.type) {
-        case 'INCREASE-HIGHEST-SEEN-POST-ID': {
-            return {
-                ...metadata,
-                highestSeenPostId: metadata.highestSeenPostId + 1,
-            };
-        }
-        default: {
-            return metadata;
-        }
-    }
 };
 
 let ignoreActionsAfterReset = false;
@@ -342,29 +217,10 @@ export const appStateReducer = (state: AppState = defaultState, action: Actions)
     }
 };
 
-export const lastEditingAppReducer = (lastEditingApp: string | null = null, action: Actions): string | null => {
-    switch (action.type) {
-        case ActionTypes.UPDATE_APP_LAST_EDITING: {
-            return action.payload.appName;
-        }
-        default: {
-            return lastEditingApp;
-        }
-    }
-};
-
 export const combinedReducers = combineReducers<AppState>({
     contentFilters: contentFiltersReducer,
     feeds: feedsReducer,
-    ownFeeds: ownFeedsReducer,
     settings: settingsReducer,
-    author: authorReducer,
     currentTimestamp: currentTimestampReducer,
     rssPosts: rssPostsReducer,
-    localPosts: localPostsReducer,
-    draft: draftReducer,
-    metadata: metadataReducer,
-    contacts: contactsReducer,
-    lastEditingApp: lastEditingAppReducer,
-    privatePosts: privatePostsReducer,
 });

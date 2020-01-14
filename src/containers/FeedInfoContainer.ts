@@ -12,18 +12,12 @@ const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigatio
     // it gets added to the state, and further changes to it are not reflected in the original object
     const navParamFeed = getFeedToOpen(state.feeds, ownProps.navigation);
     const isKnownFeed = state.feeds.find(feed => navParamFeed.feedUrl === feed.feedUrl) != null;
-    const profile = {
-        name: state.author.name,
-        image: state.author.image,
-        identity: state.author.identity!,
-    };
 
     return {
         feed: navParamFeed,
         swarmGateway: state.settings.swarmGatewayAddress,
         navigation: ownProps.navigation,
         isKnownFeed: isKnownFeed,
-        profile,
     };
 };
 

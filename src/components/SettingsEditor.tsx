@@ -8,7 +8,6 @@ import { Colors, ComponentColors } from '../styles';
 import { NavigationHeader } from './NavigationHeader';
 import { RowItem } from '../ui/buttons/RowButton';
 import { RegularText } from '../ui/misc/text';
-import { RecentPostFeed } from '../social/api';
 import { TabBarPlaceholder } from '../ui/misc/TabBarPlaceholder';
 import { TypedNavigation } from '../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
@@ -18,7 +17,6 @@ import { getBuildEnvironment } from '../BuildEnvironment';
 export interface StateProps {
     navigation: TypedNavigation;
     settings: Settings;
-    ownFeeds: RecentPostFeed[];
 }
 
 export interface DispatchProps {
