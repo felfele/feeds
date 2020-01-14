@@ -98,7 +98,6 @@ export class RSSFeedManager {
 
         try {
             const response = await safeFetch(url, {
-                redirect: 'follow',
                 headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
             });
 
