@@ -13,11 +13,6 @@ import { NavigationHeader } from './NavigationHeader';
 import { SimpleTextInput } from './SimpleTextInput';
 import { Debug } from '../Debug';
 import { Colors, ComponentColors, DefaultNavigationBarHeight, defaultMediumFont } from '../styles';
-import {
-    backupToSwarm,
-    encryptBackupLinkData,
-    generateBackupRandomSecret,
-} from '../helpers/backup';
 import { DateUtils } from '../DateUtils';
 import { getSerializedAppState } from '../store';
 import { AppState } from '../reducers/AppState';
@@ -39,7 +34,6 @@ export type Props = StateProps & DispatchProps;
 
 export interface State {
     backupPassword: string;
-    randomSecret: HexString;
     contentHash: HexString;
     backupData: HexString;
     serializedAppState?: string;
@@ -70,19 +64,10 @@ const BackupButton = (props: {
 export class Backup extends React.PureComponent<Props, State> {
     public state: State = {
         backupPassword: '',
-        randomSecret: '' as HexString,
         contentHash: '' as HexString,
         backupData: '' as HexString,
         serializedAppState: undefined,
     };
-
-    public componentDidMount = async () => {
-        const randomSecret = await generateBackupRandomSecret();
-
-        this.setState({
-            randomSecret,
-        });
-    }
 
     public render = () => (
         <FragmentSafeAreaViewWithoutTabBar>
@@ -153,7 +138,6 @@ export class Backup extends React.PureComponent<Props, State> {
 
     private getBackupText = () => {
         const backupText = `
-Random secret: ${this.state.randomSecret}
 Content hash: ${this.state.contentHash}
 Backup link: ${this.state.backupData}
 `;

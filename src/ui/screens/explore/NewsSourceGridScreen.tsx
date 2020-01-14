@@ -11,7 +11,6 @@ import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaVi
 import { getFeedImage } from '../../../helpers/feedHelpers';
 
 export interface StateProps {
-    gatewayAddress: string;
     subCategoryName: string;
     feeds: Feed[];
     navigation: TypedNavigation;
@@ -22,7 +21,7 @@ export interface DispatchProps {
 }
 
 export const NewsSourceGridScreen = (props: StateProps & DispatchProps) => {
-    const modelHelper = new ReactNativeModelHelper(props.gatewayAddress);
+    const modelHelper = new ReactNativeModelHelper();
     const itemDimension = getGridCardSize();
     return (
         <FragmentSafeAreaViewWithoutTabBar>

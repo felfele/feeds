@@ -27,7 +27,6 @@ export interface DispatchProps {
 export interface StateProps {
     feed: Feed;
     navigation: TypedNavigation;
-    swarmGateway: string;
 }
 
 type Props = DispatchProps & StateProps;
@@ -42,7 +41,7 @@ export class RSSFeedInfo extends React.Component<Props> {
     }
 
     public render() {
-        const modelHelper = new ReactNativeModelHelper(this.props.swarmGateway);
+        const modelHelper = new ReactNativeModelHelper();
         const imageWidth = Dimensions.get('window').width * 0.7;
         const followToggleButton = this.props.feed.followed
             ? {

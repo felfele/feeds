@@ -41,7 +41,6 @@ export const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNa
         navigation: ownProps.navigation,
         posts,
         feed: selectedFeed,
-        gatewayAddress: state.settings.swarmGatewayAddress,
     };
 };
 

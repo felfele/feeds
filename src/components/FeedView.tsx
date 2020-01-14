@@ -30,7 +30,6 @@ export interface StateProps {
     onBack: () => void;
     feed: ViewFeed;
     posts: Post[];
-    gatewayAddress: string;
 }
 
 type Props = StateProps & DispatchProps;
@@ -38,7 +37,7 @@ type Props = StateProps & DispatchProps;
 export const FeedView = (props: Props) => {
     const isOnboardingFeed = props.feed.feedUrl === FELFELE_ASSISTANT_URL;
 
-    const modelHelper = new ReactNativeModelHelper(props.gatewayAddress);
+    const modelHelper = new ReactNativeModelHelper();
     const icon = (name: string, color: string) => <Icon name={name} size={20} color={color} />;
     const button = (iconName: string, color: string, onPress: () => void) => ({
         label: icon(iconName, color),

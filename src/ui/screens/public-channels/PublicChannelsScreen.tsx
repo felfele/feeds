@@ -7,7 +7,6 @@ import { Feed } from '../../../models/Feed';
 import { Post } from '../../../models/Post';
 import { NavigationHeader } from '../../../components/NavigationHeader';
 import { ComponentColors } from '../../../styles';
-import { ImageData } from '../../../models/ImageData';
 import { ReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { TypedNavigation } from '../../../helpers/navigation';
 
@@ -28,7 +27,7 @@ type Props = StateProps & DispatchProps;
 export class PublicChannelsScreen extends React.Component<Props> {
     private ref?: RefreshableFeed = undefined;
     public render() {
-        const modelHelper = new ReactNativeModelHelper(this.props.gatewayAddress);
+        const modelHelper = new ReactNativeModelHelper();
         return (
             <RefreshableFeed
                 modelHelper={modelHelper} {...this.props}

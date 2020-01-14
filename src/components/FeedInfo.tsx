@@ -47,12 +47,9 @@ export class FeedInfo extends React.Component<Props, FeedInfoState> {
         url: '',
     };
 
-    private modelHelper: ModelHelper;
-
     constructor(props: Props) {
         super(props);
         this.state.url = this.props.feed.feedUrl;
-        this.modelHelper = new ReactNativeModelHelper(this.props.swarmGateway);
     }
 
     public render() {
@@ -86,7 +83,7 @@ export class FeedInfo extends React.Component<Props, FeedInfoState> {
                 <View style={styles.container}>
                     <ImageDataView
                         source={getFeedImage(this.props.feed)}
-                        modelHelper={this.modelHelper}
+                        modelHelper={new ReactNativeModelHelper()}
                         style={{
                             width: imageWidth,
                             height: imageWidth,

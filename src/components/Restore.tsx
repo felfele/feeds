@@ -4,10 +4,6 @@ import { NavigationHeader } from './NavigationHeader';
 import { SimpleTextInput } from './SimpleTextInput';
 import { Debug } from '../Debug';
 import { Colors, ComponentColors, DefaultNavigationBarHeight, defaultMediumFont } from '../styles';
-import {
-    isValidBackupLinkData,
-    downloadBackupFromSwarm,
-} from '../helpers/backup';
 import { getAppStateFromSerialized } from '../store';
 import { TypedNavigation } from '../helpers/navigation';
 import { AppState } from '../reducers/AppState';
@@ -71,11 +67,6 @@ export class Restore extends React.PureComponent<Props, State> {
     public componentWillMount = () => {
         Clipboard.getString().then(value => {
             Debug.log('Restore clipboard', value);
-            if (isValidBackupLinkData(value)) {
-                this.setState({
-                    backupLinkData: value as HexString,
-                }, () => this.onChangePassword(''));
-            }
         });
     }
 

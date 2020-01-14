@@ -11,7 +11,6 @@ const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigatio
 
     return {
         subCategoryName: subCategoryName,
-        gatewayAddress: state.settings.swarmGatewayAddress,
         feeds,
         navigation: ownProps.navigation,
     };

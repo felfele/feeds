@@ -23,7 +23,6 @@ const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigatio
         navigation: ownProps.navigation,
         posts,
         feed,
-        gatewayAddress: state.settings.swarmGatewayAddress,
     };
 };
 

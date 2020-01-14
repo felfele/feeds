@@ -36,8 +36,7 @@ const pingSwarm = async (props: Props) => {
     try {
         const url = props.swarmGatewayAddress + '/';
         const result = await safeFetch(url);
-        const swarmApi = Swarm.makeBzzApi(props.swarmGatewayAddress);
-        const hash = await swarmApi.uploadString('hello');
+        const hash = await Swarm.upload('hello', props.swarmGatewayAddress);
         Debug.log('SwarmSettings.pingSwarm', {result, hash});
     } catch (e) {
         Debug.log('SwarmSettings.pingSwarm', e);
