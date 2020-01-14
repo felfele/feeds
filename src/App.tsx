@@ -44,6 +44,7 @@ import { PublicChannelsContainer } from './ui/screens/public-channels/PublicChan
 import { PublicChannelsListContainer } from './ui/screens/public-channels/PublicChannelsListContainer';
 import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkReaderContainer';
 import { RSSFeedLoaderContainer } from './ui/screens/rss-feed/RSSFeedLoaderContainer';
+import { FeedViewContainer } from './containers/FeedViewContainer';
 
 YellowBox.ignoreWarnings([
     'Method `jumpToIndex` is deprecated.',
@@ -116,6 +117,9 @@ const Scenes: NavigationRouteConfigMap = {
         screen: ({navigation}: NavigationScreenProps) => (
             <BugReportViewWithTabBar navigation={navigation} errorView={false}/>
         ),
+    },
+    FeedFromList: {
+        screen: FeedViewContainer,
     },
 };
 
