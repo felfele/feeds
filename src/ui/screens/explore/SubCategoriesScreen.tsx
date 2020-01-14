@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
 import { ComponentColors } from '../../../styles';
 import { RegularText } from '../../misc/text';
 import { SubCategoryMap } from '../../../models/recommendation/NewsSource';
@@ -40,7 +40,7 @@ export const SubCategoriesScreen = (props: StateProps & DispatchProps) => {
     });
     return (
         <FragmentSafeAreaViewWithoutTabBar>
-            <SafeAreaView style={{flex: 1}}>
+            <View style={{flex: 1}}>
                 <NavigationHeader title={props.title} navigation={props.navigation}/>
                 <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR }}>
                     <RegularText style={styles.label}>
@@ -49,7 +49,7 @@ export const SubCategoriesScreen = (props: StateProps & DispatchProps) => {
                     {subCategories}
                 </ScrollView>
                 <TabBarPlaceholder color={ComponentColors.BACKGROUND_COLOR}/>
-            </SafeAreaView>
+            </View>
         </FragmentSafeAreaViewWithoutTabBar>
     );
 };

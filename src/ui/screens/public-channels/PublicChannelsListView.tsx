@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SuperGridSectionList } from 'react-native-super-grid';
 
@@ -40,7 +40,7 @@ export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & {
         const itemDimension = getGridCardSize();
         const modelHelper = new ReactNativeModelHelper(this.props.gatewayAddress);
         return (
-            <SafeAreaView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, flex: 1 }}>
+            <View style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, flex: 1 }}>
                 {this.props.children}
                 {
                 // @ts-ignore - SuperGridSectionList is passing props to internal SectionList, typings is missing
@@ -72,7 +72,7 @@ export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & {
                     ListHeaderComponent={this.props.headerComponent}
                 />
                 }
-            </SafeAreaView>
+            </View>
         );
     }
 }
