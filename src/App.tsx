@@ -27,10 +27,8 @@ import { FeedContainer } from './containers/FeedContainer';
 import { BackupRestore } from './components/BackupRestore';
 import { RestoreContainer } from './containers/RestoreContainer';
 import { BackupContainer } from './containers/BackupContainer';
-import { SettingsFeedViewContainer } from './containers/SettingsFeedViewContainer';
 import { BugReportViewWithTabBar } from './components/BugReportView';
 import { TopLevelErrorBoundary } from './components/TopLevelErrorBoundary';
-import { FeedSettingsContainer } from './ui/screens/feed-settings/FeedSettingsContainer';
 import { CategoriesContainer } from './ui/screens/explore/CategoriesContainer';
 import { SubCategoriesContainer } from './ui/screens/explore/SubCategoriesContainer';
 import { NewsSourceGridContainer } from './ui/screens/explore/NewsSourceGridContainer';
@@ -95,12 +93,6 @@ const Scenes: NavigationRouteConfigMap = {
     },
     NewsSourceFeed: {
         screen: NewsSourceFeedContainer,
-    },
-    FeedFromList: {
-        screen: SettingsFeedViewContainer,
-    },
-    FeedSettings: {
-        screen: FeedSettingsContainer,
     },
     Settings: {
         screen: SettingsEditorContainer,

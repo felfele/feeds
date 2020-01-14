@@ -10,7 +10,6 @@ import { ComponentColors, Colors } from '../styles';
 import { Feed } from '../models/Feed';
 import { CardContainer } from '../containers/CardContainer';
 import { Props as NavHeaderProps } from './NavigationHeader';
-import { Props as FeedHeaderProps } from './FeedHeader';
 import { ModelHelper } from '../models/ModelHelper';
 import { TypedNavigation } from '../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
@@ -27,7 +26,6 @@ export interface StateProps {
     modelHelper: ModelHelper;
     children: {
         // WARNING, type parameter included for reference, but it does not typecheck
-        listHeader?: React.ReactElement<FeedHeaderProps>,
         navigationHeader?: React.ReactElement<NavHeaderProps>,
         placeholder?: React.ReactElement<any>;
     };
@@ -68,7 +66,6 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                 {this.props.children.navigationHeader}
                 {this.props.feeds.length === 0 && this.props.children.placeholder}
                 <FlatList
-                    ListHeaderComponent={this.props.children.listHeader}
                     ListFooterComponent={this.renderListFooter}
                     data={this.props.posts}
                     renderItem={(obj) => (

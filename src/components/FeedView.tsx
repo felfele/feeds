@@ -60,16 +60,6 @@ export const FeedView = (props: Props) => {
         ...props,
         feeds: [props.feed],
     };
-    const listHeader = props.feed.isLocalFeed || isOnboardingFeed
-        ? undefined
-        : props.feed.followed !== true
-            ? <WideButton
-                label='Follow this channel'
-                icon={icon('link', ComponentColors.BUTTON_COLOR)}
-                onPress={() => props.onFollowFeed(props.feed)}
-            />
-            : undefined
-    ;
     return (
         <RefreshableFeed modelHelper={modelHelper} {...refreshableFeedProps}>
             {{
@@ -82,7 +72,6 @@ export const FeedView = (props: Props) => {
                     rightButton1={rightButton1}
                     title={props.feed.name}
                 />,
-                listHeader,
             }}
         </RefreshableFeed>
     );

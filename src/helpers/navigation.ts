@@ -11,9 +11,6 @@ import { ContactHelper } from './contactHelpers';
 
 export interface Routes {
     App: {};
-    Post: {
-        selectedFeeds: Feed[],
-    };
     Root: {};
     Settings: {};
     BugReportView: {};
@@ -27,9 +24,6 @@ export interface Routes {
     PublicChannelsListContainer: {
         showExplore: boolean,
         feeds?: Feed[],
-    };
-    FavoriteListViewerContainer: {
-        feeds: Feed[],
     };
     Feed: {
         feedUrl: string,
@@ -46,14 +40,8 @@ export interface Routes {
     RSSFeedInfo: {
         feed: Feed;
     };
-    InviteLink: {
-        params: string;
-    };
     EditFilter: {
         filter: ContentFilter,
-    };
-    FeedSettings: {
-        feed: LocalFeed,
     };
     FeedFromList: {
         feedUrl: string,
@@ -72,30 +60,6 @@ export interface Routes {
         feeds: Feed[],
         subCategoryName: string,
     };
-    YourFeed: {};
-    ContactView: {
-        publicKey: string;
-    };
-    ContactInfo: {
-        publicKey: string;
-    };
-    ShareWithContainer: {
-        post: Post;
-        selectedFeeds: Feed[];
-        onDoneSharing?: () => void;
-    };
-    ContactLoader: {
-        inviteCode: InviteCode;
-        contactHelper: ContactHelper;
-    };
-    ContactConfirm: {
-        inviteCode: InviteCode;
-    };
-    ContactSuccess: {
-        contact: MutualContact;
-        isReceiver: boolean;
-    };
-    EditProfileContainer: {};
 }
 
 export interface TypedNavigation {

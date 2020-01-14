@@ -99,10 +99,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedNavigati
         onSharePost: (post: Post) => {
             // dispatch(AsyncActions.sharePost(post));
             Debug.log('onSharePost', post);
-            ownProps.navigation.navigate('ShareWithContainer', {
-                post,
-                selectedFeeds: [],
-            });
         },
         onDownloadFeedPosts: (feed: Feed) => {
             dispatch(AsyncActions.downloadPostsFromFeeds([feed]));
