@@ -14,7 +14,6 @@ export const safeFetchWithTimeout = async (input: RequestInfo, init?: RequestIni
 
 export const safeFetchWithFollow = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
     let response = await fetch(input, {...init, redirect: 'manual'});
-    console.log('safeFetchWithFollow', {input, response, redirected: response.redirected});
     let numTries = 0;
     const maxTries = 10;
     const isFoundRedirected = (resp: Response) => resp.status >= 300 && resp.status < 400;
@@ -26,7 +25,6 @@ export const safeFetchWithFollow = async (input: RequestInfo, init?: RequestInit
         ;
         response = await fetch(redirectedUrl, {...init, redirect: 'manual'});
         numTries += 1;
-        console.log('safeFetchWithFollow', {redirectedUrl, response});
     }
     return response;
 };
