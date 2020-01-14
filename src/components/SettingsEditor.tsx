@@ -11,7 +11,7 @@ import { RegularText } from '../ui/misc/text';
 import { RecentPostFeed } from '../social/api';
 import { TabBarPlaceholder } from '../ui/misc/TabBarPlaceholder';
 import { TypedNavigation } from '../helpers/navigation';
-import { FragmentSafeAreaViewForTabBar } from '../ui/misc/FragmentSafeAreaView';
+import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
 import { TouchableView } from './TouchableView';
 import { getBuildEnvironment } from '../BuildEnvironment';
 
@@ -36,9 +36,9 @@ export const SettingsEditor = (props: Props) => {
         ? buildNumber
         : ''
     ;
-    const version = 'Version: ' + Version + buildEnvironment + buildInfo;
+    const versionLabel = 'Felfele News, Version: ' + Version + buildEnvironment + buildInfo;
     return (
-        <FragmentSafeAreaViewForTabBar>
+        <FragmentSafeAreaViewWithoutTabBar>
             <NavigationHeader
                 title='Settings'
                 navigation={props.navigation}
@@ -57,13 +57,19 @@ export const SettingsEditor = (props: Props) => {
                     buttonStyle='navigate'
                     onPress={() => Linking.openURL('https://felfele.org/legal')}
                 />
+                <RowItem
+                    title='Visit website'
+                    buttonStyle='navigate'
+                    onPress={() => Linking.openURL('https://felfele.org/')}
+                />
+
                 <TouchableView
                     onLongPress={() => {
                         Vibration.vibrate(500, false);
                         props.onShowDebugMenuValueChange(!props.settings.showDebugMenu);
                     }}
                 >
-                    <RegularText style={styles.versionLabel}>{version}</RegularText>
+                    <RegularText style={styles.versionLabel}>{versionLabel}</RegularText>
                 </TouchableView>
                 { props.settings.showDebugMenu &&
                 <RowItem
@@ -77,7 +83,7 @@ export const SettingsEditor = (props: Props) => {
                 }
             </ScrollView>
             <TabBarPlaceholder/>
-        </FragmentSafeAreaViewForTabBar>
+        </FragmentSafeAreaViewWithoutTabBar>
     );
 };
 
