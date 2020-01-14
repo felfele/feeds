@@ -60,7 +60,7 @@ test('Test url creation from urn without ending and trailing slash', async () =>
 });
 
 test('Test canonical url', () => {
-    const inputs = ['example.com', '//example.com', 'https://example.com', 'https://example.com/'];
+    const inputs = ['example.com', '//example.com', 'https://example.com', 'https://example.com/', 'https://example.com?abc=bcd'];
     const expectedResult = 'https://example.com/';
 
     for (const input of inputs) {
@@ -70,7 +70,7 @@ test('Test canonical url', () => {
 });
 
 test('Test canonical url with path', () => {
-    const inputs = ['example.com/1', '//example.com/1', 'https://example.com/1'];
+    const inputs = ['example.com/1', '//example.com/1', 'https://example.com/1', 'https://example.com/1?abc=bcd'];
     const expectedResult = 'https://example.com/1';
 
     for (const input of inputs) {

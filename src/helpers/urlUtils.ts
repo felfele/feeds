@@ -42,12 +42,16 @@ export const getBaseUrl = (url: string): string => {
         url = 'https:' + url;
     }
 
-    return url.replace(/(http.?:\/\/.*?\/).*/, '$1');
+    return url.replace(/(http.?:\/\/.*?)[\/\?].*/, '$1/');
 };
 
 export const getCanonicalUrl = (url: string): string => {
     if (url === '') {
         return '';
+    }
+    const queryParts = url.split('?', 2);
+    if (queryParts.length !== 1) {
+        url = queryParts[0];
     }
     const parts = url.split('//', 2);
     if (parts.length === 1) {

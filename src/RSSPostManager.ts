@@ -206,7 +206,7 @@ export class RSSFeedManager {
         Debug.log('RSSFeedManager.fetchFeedFromUrl', {baseUrl});
         const name = Utils.take(rssFeed.feed.title.split(' - '), 1, rssFeed.feed.title)[0];
         const feed: Feed = {
-            url: baseUrl,
+            url: urlUtils.getCanonicalUrl(baseUrl),
             feedUrl: url,
             name: name,
             favicon: rssFeed.feed.icon || '',
@@ -239,7 +239,7 @@ export class RSSFeedManager {
             return null;
         }
 
-        Debug.log('RSSFeedManager.fetchFeedFromUrl', {contentWithMimeType});
+        Debug.log('RSSFeedManager.fetchFeedFromUrl', {mimeType: contentWithMimeType.mimeType});
 
         if (contentWithMimeType.mimeType === 'text/html') {
             const baseUrl = urlUtils.getBaseUrl(url);
