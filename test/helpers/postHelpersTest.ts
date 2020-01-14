@@ -1,4 +1,4 @@
-import { mergeUpdatedPosts, isChildrenPostUploading, makePostId } from '../../src/helpers/postHelpers';
+import { mergeUpdatedPosts, isChildrenPostUploading } from '../../src/helpers/postHelpers';
 import { Post } from '../../src/models/Post';
 import { Author } from '../../src/models/Author';
 
@@ -221,52 +221,4 @@ test('is post uploading but children post not uploading', () => {
     const isUploading = isChildrenPostUploading(post, localPosts);
 
     expect(isUploading).toBeFalsy();
-});
-
-describe('post id generation', () => {
-    it('generates an id', () => {
-        const post: Post = {
-            images: [],
-            text: '',
-            createdAt: 1,
-        };
-
-        const id = makePostId(post);
-
-        expect(id).toBe('76e1f329fdd75682f63a26739d1bdc6c9c51f79fcae10e0ee82195383d792396');
-    });
-    it('generates the same id with other properties', () => {
-        const authorA: Author = {
-            name: 'A',
-            uri: 'A',
-            image: {},
-        };
-        const link = 'post1';
-        const post: Post = {
-            images: [],
-            text: '',
-            createdAt: 1,
-            link,
-            author: authorA,
-            isUploading: true,
-        };
-
-        const id = makePostId(post);
-
-        expect(id).toBe('76e1f329fdd75682f63a26739d1bdc6c9c51f79fcae10e0ee82195383d792396');
-    });
-    it('generates same id with different image', () => {
-        const image = {
-            uri: 'uri',
-        };
-        const post: Post = {
-            images: [image],
-            text: '',
-            createdAt: 1,
-        };
-
-        const id = makePostId(post);
-
-        expect(id).toBe('76e1f329fdd75682f63a26739d1bdc6c9c51f79fcae10e0ee82195383d792396');
-    });
 });

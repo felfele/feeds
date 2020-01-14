@@ -3,9 +3,6 @@ import { AppState } from '../reducers/AppState';
 import { Actions, InternalActions } from './Actions';
 import { migrateAppStateToCurrentVersion } from '../store';
 import { RSSPostManager } from '../RSSPostManager';
-import {
-    isPostFeedUrl,
-} from '../swarm-social/swarmStorage';
 import { FELFELE_ASSISTANT_URL } from '../reducers/defaultData';
 import {
     mergeUpdatedPosts,
@@ -81,6 +78,5 @@ export const AsyncActions = {
 };
 
 const loadRSSPostsFromFeeds = async (feeds: Feed[]): Promise<Post[]> => {
-    const rssFeeds = feeds.filter(feed => !isPostFeedUrl(feed.url));
-    return await RSSPostManager.loadPosts(rssFeeds);
+    return await RSSPostManager.loadPosts(feeds);
 };

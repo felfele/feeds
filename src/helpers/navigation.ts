@@ -1,13 +1,7 @@
 import { ContentFilter } from '../models/ContentFilter';
 import { Feed } from '../models/Feed';
 import { SubCategoryMap } from '../models/recommendation/NewsSource';
-import { LocalFeed } from '../social/api';
-import { Post } from '../models/Post';
-import { MutualContact } from '../models/Contact';
-import { ContactFeed } from '../models/ContactFeed';
 import { NavigationNavigateAction } from 'react-navigation';
-import { InviteCode } from '../models/InviteCode';
-import { ContactHelper } from './contactHelpers';
 
 export interface Routes {
     App: {};

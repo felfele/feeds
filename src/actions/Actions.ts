@@ -4,15 +4,9 @@ import { createAction } from './actionHelpers';
 import { Feed } from '../models/Feed';
 import { ContentFilter } from '../models/ContentFilter';
 import { AppState } from '../reducers/AppState';
-import { RSSPostManager } from '../RSSPostManager';
-import { Post, PrivatePost } from '../models/Post';
+import { Post } from '../models/Post';
 import { ImageData } from '../models/ImageData';
-import {
-    LocalFeed,
-    RecentPostFeed,
-} from '../social/api';
 import { PrivateIdentity } from '../models/Identity';
-import { HexString } from '../helpers/opaqueTypes';
 
 export type Actions = ActionsUnion<typeof Actions & typeof InternalActions>;
 
@@ -23,8 +17,6 @@ export const InternalActions = {
         createAction(ActionTypes.UPDATE_AUTHOR_IDENTITY, { privateIdentity }),
     updateFeedFavicon: (feed: Feed, favicon: string) =>
         createAction(ActionTypes.UPDATE_FEED_FAVICON, {feed, favicon}),
-    updateFeedsData: (feeds: RecentPostFeed[]) =>
-        createAction(ActionTypes.UPDATE_FEEDS_DATA, { feeds }),
     appStateSet: (appState: AppState) =>
         createAction(ActionTypes.APP_STATE_SET, { appState }),
 };

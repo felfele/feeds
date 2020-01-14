@@ -14,10 +14,6 @@ import { restartApp } from '../helpers/restart';
 import { Utils } from '../Utils';
 import { TypedNavigation } from '../helpers/navigation';
 import { Feed } from '../models/Feed';
-import { PrivatePost } from '../models/Post';
-
-import { MutualContact } from '../models/Contact';
-import { HexString } from '../helpers/opaqueTypes';
 import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
 
 export interface StateProps {

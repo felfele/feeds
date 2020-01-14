@@ -13,25 +13,18 @@ import { TouchableView } from './TouchableView';
 import { DateUtils } from '../DateUtils';
 import * as urlUtils from '../helpers/urlUtils';
 import { ImageDataView } from './ImageDataView';
-import { isSwarmLink } from '../swarm/Swarm';
 import { MediumText, RegularText } from '../ui/misc/text';
 import { Avatar } from '../ui/misc/Avatar';
 import { Carousel } from '../ui/misc/Carousel';
 import { CardMarkdown } from './CardMarkdown';
 import { calculateImageDimensions, ModelHelper } from '../models/ModelHelper';
-import { Author } from '../models/Author';
 import { Feed } from '../models/Feed';
 import { DEFAULT_AUTHOR_NAME } from '../reducers/defaultData';
 import { TypedNavigation } from '../helpers/navigation';
-import { ContactFeed } from '../models/ContactFeed';
 
-export type AuthorFeed = UIFeed | UIContactFeed;
+export type AuthorFeed = UIFeed;
 
 export interface UIFeed extends Feed {
-    isKnownFeed: boolean;
-}
-
-export interface UIContactFeed extends ContactFeed {
     isKnownFeed: boolean;
 }
 
@@ -245,9 +238,7 @@ const CardTop = (props: {
 
 const openPost = async (post: Post) => {
     if (post.link) {
-        if (!isSwarmLink(post.link)) {
-            await Linking.openURL(post.link);
-        }
+        await Linking.openURL(post.link);
     }
 };
 

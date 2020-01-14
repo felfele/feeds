@@ -1,5 +1,5 @@
-import { AppStateV4 } from './version4';
+import { AppStateV0 } from './version0';
 
-export const currentAppStateVersion = 4;
+export const currentAppStateVersion = 0;
 
-export type AppState = AppStateV4;
+export type AppState = AppStateV0;

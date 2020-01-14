@@ -1,6 +1,5 @@
 import { AppState } from './AppState';
 import { Settings } from '../models/Settings';
-import * as Swarm from '../swarm/Swarm';
 import { Author } from '../models/Author';
 import { Post } from '../models/Post';
 import { Feed } from '../models/Feed';
@@ -9,7 +8,7 @@ import { defaultImages } from '../defaultImages';
 export const defaultSettings: Settings = {
     showSquareImages: false,
     showDebugMenu: false,
-    swarmGatewayAddress: Swarm.defaultGateway,
+    swarmGatewayAddress: 'https://swarm.felfele.com/',
 };
 
 export const DEFAULT_AUTHOR_NAME = '';

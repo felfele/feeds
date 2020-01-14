@@ -22,7 +22,6 @@ import { DateUtils } from '../DateUtils';
 import { getSerializedAppState } from '../store';
 import { AppState } from '../reducers/AppState';
 import { TypedNavigation } from '../helpers/navigation';
-import * as Swarm from '../swarm/Swarm';
 import { HexString } from '../helpers/opaqueTypes';
 import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
 import { TouchableView } from './TouchableView';
@@ -163,16 +162,7 @@ Backup link: ${this.state.backupData}
 
     private onBackupData = async () => {
         try {
-            const bzz = Swarm.makeBzzApi(this.props.appState.settings.swarmGatewayAddress);
-            const serializedAppState = await this.getOrLoadSerializedAppState();
-            const contentHash = await backupToSwarm(bzz, serializedAppState, this.state.randomSecret);
-            const backupData = await encryptBackupLinkData(contentHash, this.state.randomSecret, this.state.backupPassword);
-            this.setState({
-                contentHash,
-                backupData,
-            });
-            Clipboard.setString(backupData);
-            await this.showShareDialog(backupData);
+
         } catch (e) {
             Debug.log('sendBackup error', e);
         }

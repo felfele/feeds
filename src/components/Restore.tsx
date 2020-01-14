@@ -10,7 +10,6 @@ import {
 } from '../helpers/backup';
 import { getAppStateFromSerialized } from '../store';
 import { TypedNavigation } from '../helpers/navigation';
-import * as Swarm from '../swarm/Swarm';
 import { AppState } from '../reducers/AppState';
 import { HexString } from '../helpers/opaqueTypes';
 import { TouchableView } from './TouchableView';
@@ -114,17 +113,6 @@ export class Restore extends React.PureComponent<Props, State> {
 
     private onChangePassword = async (password: string) => {
         try {
-            const bzz = Swarm.makeBzzApi(this.props.swarmGatewayAddress);
-            const serializedAppState = await downloadBackupFromSwarm(bzz, this.state.backupLinkData, password);
-            const appState = await getAppStateFromSerialized(serializedAppState);
-            Debug.log('Restore.onChangePassword', 'success');
-
-            const backupInfo = 'App state downloaded and decrypted';
-
-            this.setState({
-                appState,
-                backupInfo,
-            });
         } catch (e) {
             Debug.log('Restore.onChangePassword', 'failed', e);
             this.setState({

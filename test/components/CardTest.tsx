@@ -72,7 +72,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                author={testAuthor}
                 modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
@@ -94,7 +93,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                author={testAuthor}
                 modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
@@ -116,7 +114,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                author={testAuthor}
                 modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
@@ -139,7 +136,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                author={testAuthor}
                 modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
@@ -162,7 +158,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                author={testAuthor}
                 modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}

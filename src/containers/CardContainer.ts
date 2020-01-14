@@ -7,8 +7,6 @@ import { AsyncActions } from '../actions/asyncActions';
 import { ModelHelper } from '../models/ModelHelper';
 import { TypedNavigation } from '../helpers/navigation';
 import { getAllFeeds } from '../selectors/selectors';
-import { ContactFeed } from '../models/ContactFeed';
-import { isChildrenPostUploading } from '../helpers/postHelpers';
 import { Debug } from '../Debug';
 
 interface OwnProps {
@@ -41,7 +39,7 @@ const getOriginalAuthorFeed = (post: Post, state: AppState): AuthorFeed | undefi
 };
 
 const getAuthorFeedOrUndefined = (
-    feed: ContactFeed | Feed | undefined
+    feed: Feed | undefined
 ) => {
     return feed != null
         ? {

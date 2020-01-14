@@ -5,7 +5,6 @@ import { ImageData } from '../models/ImageData';
 import { HexString } from './opaqueTypes';
 import { getHttpLinkFromText } from './urlUtils';
 import { markdownEscape } from '../markdown';
-import { serialize } from '../social/serialization';
 import { byteArrayToHex } from './conversion';
 import { cryptoHash } from './crypto';
 
@@ -142,13 +141,4 @@ export const copyPostPrivately = (post: Post, author: Author, id: HexString, top
         updatedAt: undefined,
         references: undefined,
     };
-};
-
-export const makePostId = (post: Post): HexString => {
-    const publicPost = {
-        text: post.text,
-        createdAt: post.createdAt,
-    };
-    const postJSON = serialize(publicPost);
-    return byteArrayToHex(cryptoHash(postJSON), false);
 };
