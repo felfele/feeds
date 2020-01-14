@@ -42,7 +42,7 @@ export class FeedLoader extends React.Component<Props> {
                 />
                 <View style={styles.container}>
                         <View style={styles.centerIcon}>
-                            <Text style={styles.activityText}>{}</Text>
+                            <Text style={styles.activityText}>Fetching channel, hang tight...</Text>
                             <ActivityIndicator size='large' color='grey'/>
                         </View>
                 </View>
@@ -61,14 +61,14 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center',
         flexDirection: 'column',
-        height: 100,
+        height: 200,
         backgroundColor: ComponentColors.BACKGROUND_COLOR,
         paddingTop: 50,
     },
     activityText: {
-        fontSize: 14,
+        fontSize: 16,
         color: Colors.GRAY,
         alignSelf: 'center',
-        marginBottom: 10,
+        marginBottom: 30,
     },
 });
