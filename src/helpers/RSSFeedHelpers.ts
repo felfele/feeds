@@ -3,6 +3,7 @@ import { Utils } from '../Utils';
 import { Version } from '../Version';
 import { DateUtils } from '../DateUtils';
 import { loadRedditFeed, redditFeedUrl } from './redditFeedHelpers';
+import { Debug } from '../Debug';
 
 // tslint:disable-next-line:no-var-requires
 const util = require('react-native-util');
@@ -84,7 +85,7 @@ export const rssFeedHelper: RSSFeedHelper = {
             headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
         }));
         const downloadTime = Date.now();
-        if (response.status === 200) {
+        if (response.ok) {
             const text = await response.text();
             const feed = isRedditUrl
                 ? await loadRedditFeed(url, text, startTime, downloadTime)
@@ -93,6 +94,7 @@ export const rssFeedHelper: RSSFeedHelper = {
 
             return feed;
         } else {
+            Debug.log('rssFeedHelper.fetch', {fetchUrl, response});
             throw new Error('Bad status code: ' + response.status + ': ' + response.statusText);
         }
     },

@@ -16,6 +16,7 @@ import {
     RSSMedia,
     RSSEnclosure,
 } from './helpers/RSSFeedHelpers';
+import { safeFetch } from './Network';
 // tslint:disable-next-line:no-var-requires
 const he = require('he');
 
@@ -94,28 +95,31 @@ export class RSSFeedManager {
 
     public static async fetchContentWithMimeType(url: string): Promise<ContentWithMimeType | null> {
         const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
-        const response = await fetch(url, {
-            headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
-        });
-        if (response.status !== 200) {
-            Debug.log('fetch failed: ', response);
+
+        try {
+            const response = await safeFetch(url, {
+                redirect: 'follow',
+                headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
+            });
+
+            const contentType = response.headers.get('Content-Type');
+            if (!contentType) {
+                return null;
+            }
+
+            const parts = contentType.split(';', 2);
+            const mimeType = parts.length > 1 ? parts[0] : contentType;
+
+            const content = await response.text();
+
+            return {
+                content: content,
+                mimeType: mimeType,
+            };
+        } catch (e) {
+            Debug.log('fetchContentWithMimeType', {e});
             return null;
         }
-
-        const contentType = response.headers.get('Content-Type');
-        if (!contentType) {
-            return null;
-        }
-
-        const parts = contentType.split(';', 2);
-        const mimeType = parts.length > 1 ? parts[0] : contentType;
-
-        const content = await response.text();
-
-        return {
-            content: content,
-            mimeType: mimeType,
-        };
     }
 
     public static getFeedFromHtml(baseUrl: string, html: string): Feed {
@@ -143,17 +147,17 @@ export class RSSFeedManager {
         return false;
     }
 
-    public static async fetchRSSFeedUrlFromUrl(url: string): Promise<string> {
+    public static async fetchRSSFeedUrlFromUrl(url: string): Promise<ContentWithMimeType | null> {
         const contentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(url);
         if (!contentWithMimeType) {
-            return '';
+            return null;
         }
 
         if (RSSFeedManager.isRssMimeType(contentWithMimeType.mimeType)) {
-            return url;
+            return contentWithMimeType;
         }
 
-        return '';
+        return null;
     }
 
     public static async fetchFeedFromHtmlFromUrl(url: string): Promise<string> {
@@ -167,6 +171,65 @@ export class RSSFeedManager {
         }
 
         return '';
+    }
+
+    public static async tryFetchFeedFromAltLocations(baseUrl: string, feed: Feed): Promise<Feed | null> {
+        const altFeedLocations = [
+            '/rss',
+            '/rss/',
+            '/rss/index.rss',
+            '/feed',
+            '/social-media/feed/',
+            '/feed/',
+            '/feed/rss/',
+            '/',
+        ];
+        for (const altFeedLocation of altFeedLocations) {
+            const altUrl = urlUtils.createUrlFromUrn(altFeedLocation, baseUrl);
+            const rssContentWithMimeType = await RSSFeedManager.fetchRSSFeedUrlFromUrl(altUrl);
+            if (rssContentWithMimeType != null && RSSFeedManager.isRssMimeType(rssContentWithMimeType.mimeType)) {
+                feed.feedUrl = altUrl;
+                const rssFeed = await rssFeedHelper.load(altUrl, rssContentWithMimeType.content);
+                return {
+                    ...feed,
+                    name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
+                };
+            }
+        }
+        return null;
+    }
+
+    public static async augmentFeedWithMetadata(url: string, rssFeed: RSSFeedWithMetrics, html?: string): Promise<Feed | null> {
+        Debug.log('RSSFeedManager.fetchFeedFromUrl', {rssFeed});
+        const feedUrl = (rssFeed.feed && rssFeed.feed.url) || undefined;
+        const baseUrl = urlUtils.getBaseUrl(feedUrl || url).replace('http://', 'https://');
+        Debug.log('RSSFeedManager.fetchFeedFromUrl', {baseUrl});
+        const name = Utils.take(rssFeed.feed.title.split(' - '), 1, rssFeed.feed.title)[0];
+        const feed: Feed = {
+            url: baseUrl,
+            feedUrl: url,
+            name: name,
+            favicon: rssFeed.feed.icon || '',
+        };
+        // Fetch the website to augment the feed data with favicon and title
+        if (!html) {
+            const contentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(baseUrl);
+            if (contentWithMimeType == null) {
+                return null;
+            }
+            html = contentWithMimeType.content;
+        }
+        const feedFromHtml = RSSFeedManager.getFeedFromHtml(baseUrl, html);
+        if (feed.name === '') {
+            feed.name = feedFromHtml.name;
+        }
+        if (urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM) {
+            feed.favicon = await FaviconCache.getFavicon(url);
+        } else {
+            feed.favicon = feedFromHtml.favicon || rssFeed.feed.icon || '';
+        }
+        return feed;
+
     }
 
     // url can be either a website url or a feed url
@@ -185,35 +248,18 @@ export class RSSFeedManager {
             Debug.log('RSSFeedManager.fetchFeedFromUrl', {feed});
             if (feed.feedUrl !== '') {
                 const rssFeed = await rssFeedHelper.fetch(feed.feedUrl);
-                return {
-                    ...feed,
-                    name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
-                };
+                const augmentedFeed = await RSSFeedManager.augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content);
+                if (augmentedFeed != null) {
+                    return augmentedFeed;
+                }
             }
 
-            const altFeedLocations = [
-                '/rss',
-                '/rss/',
-                '/rss/index.rss',
-                '/feed',
-                '/social-media/feed/',
-                '/feed/',
-                '/feed/rss/',
-            ];
-            if (baseUrl !== url) {
-                altFeedLocations.unshift('/');
-            }
-            for (const altFeedLocation of altFeedLocations) {
-                const altUrl = urlUtils.createUrlFromUrn(altFeedLocation, baseUrl);
-                const altFeedUrl = await RSSFeedManager.fetchRSSFeedUrlFromUrl(altUrl);
-                const rssContentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(url);
-                if (rssContentWithMimeType != null && RSSFeedManager.isRssMimeType(contentWithMimeType.mimeType)) {
-                    feed.feedUrl = altFeedUrl;
-                    const rssFeed = await rssFeedHelper.load(altFeedUrl, rssContentWithMimeType.content);
-                    return {
-                        ...feed,
-                        name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
-                    };
+            const altFeed = await RSSFeedManager.tryFetchFeedFromAltLocations(baseUrl, feed);
+            if (altFeed?.feedUrl !== '') {
+                const rssFeed = await rssFeedHelper.fetch(feed.feedUrl);
+                const augmentedFeed = await RSSFeedManager.augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content);
+                if (augmentedFeed != null) {
+                    return augmentedFeed;
                 }
             }
         }
@@ -222,32 +268,11 @@ export class RSSFeedManager {
         if (RSSFeedManager.isRssMimeType(contentWithMimeType.mimeType)) {
             const rssFeed = await rssFeedHelper.load(url, contentWithMimeType.content);
             Debug.log('RSSFeedManager.fetchFeedFromUrl', {rssFeed});
-            const feedUrl = (rssFeed.feed && rssFeed.feed.url) || undefined;
-            const baseUrl = urlUtils.getBaseUrl(feedUrl || url).replace('http://', 'https://');
-            Debug.log('RSSFeedManager.fetchFeedFromUrl', {baseUrl});
-            const name = Utils.take(rssFeed.feed.title.split(' - '), 1, rssFeed.feed.title)[0];
-            const feed: Feed = {
-                url: baseUrl,
-                feedUrl: url,
-                name: name,
-                favicon: rssFeed.feed.icon || '',
-            };
-            // Fetch the website to augment the feed data with favicon and title
-            const htmlWithMimeType = await RSSFeedManager.fetchContentWithMimeType(baseUrl);
-            if (!htmlWithMimeType) {
-                return null;
+            const augmentedFeed = await RSSFeedManager.augmentFeedWithMetadata(url, rssFeed);
+            if (augmentedFeed != null) {
+                return augmentedFeed;
             }
-            const feedFromHtml = RSSFeedManager.getFeedFromHtml(baseUrl, htmlWithMimeType.content);
-            if (feed.name === '') {
-                feed.name = feedFromHtml.name;
-            }
-            if (urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM) {
-                feed.favicon = await FaviconCache.getFavicon(url);
-            } else {
-                feed.favicon = feedFromHtml.favicon || rssFeed.feed.icon || '';
-            }
-            return feed;
-        }
+    }
 
         return null;
     }

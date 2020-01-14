@@ -67,7 +67,7 @@ export class FeedLinkReader extends React.Component<Props, State> {
                         placeholder='Scan QR code or paste link here'
                         placeholderTextColor={Colors.MEDIUM_GRAY}
                         autoCapitalize='none'
-                        autoFocus={false}
+                        autoFocus={true}
                         autoCorrect={false}
                         returnKeyType='done'
                         onSubmitEditing={() => this.handleLink(this.state.url)}

@@ -28,23 +28,27 @@ export const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedN
                     name: feed.name,
                 });
             } else {
-                onFailedFeedLoad();
+                onFailedFeedLoad().then(() => ownProps.navigation.goBack(null));
             }
         },
     };
 };
 
-const onFailedFeedLoad = () => {
-    const options: any[] = [
-        { text: 'Cancel', onPress: () => Debug.log('Cancel Pressed'), style: 'cancel' },
-    ];
+const onFailedFeedLoad = (): Promise<void> => {
+    const promise = new Promise<void>((resolve, reject) => {
+        const options: any[] = [
+            { text: 'Cancel', onPress: () => resolve(), style: 'cancel' },
+        ];
 
-    Alert.alert(
-        'Failed to load channel!',
-        undefined,
-        options,
-        { cancelable: true },
-    );
+        Alert.alert(
+            'Failed to load channel!',
+            undefined,
+            options,
+            { cancelable: true },
+        );
+    });
+
+    return promise;
 };
 
 export const RSSFeedLoaderContainer = connect(
