@@ -6,7 +6,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { ComponentColors, Colors } from '../../styles';
-import { NavigationHeader } from '../../components/NavigationHeader';
+import { NavigationHeader } from '../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TypedNavigation } from '../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../ui/misc/FragmentSafeAreaView';

@@ -7,13 +7,13 @@ import {
 
 import { Feed } from '../../../models/Feed';
 import { ComponentColors, Colors } from '../../../styles';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as AreYouSureDialog from '../../../components/AreYouSureDialog';
+import * as AreYouSureDialog from '../../../helpers/AreYouSureDialog';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
 import { RegularText } from '../../misc/text';
-import { ImageDataView } from '../../../components/ImageDataView';
+import { ImageDataView } from '../../misc/ImageDataView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { WideButton } from '../../buttons/WideButton';

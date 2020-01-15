@@ -1,4 +1,4 @@
-import { escapePII, PIIKeys } from '../src/components/BugReportView';
+import { escapePII, PIIKeys } from '../src/ui/screens/bug-report/BugReportScreen';
 
 test('escapePII does not omit when filtered fields are empty', () => {
     const text = '{"privateKey":"secret"}';

@@ -2,10 +2,10 @@ import * as React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SplashScreen from 'react-native-splash-screen';
 
-import { RefreshableFeed } from '../../../components/RefreshableFeed';
+import { RefreshableFeed } from '../../misc/RefreshableFeed';
 import { Feed } from '../../../models/Feed';
 import { Post } from '../../../models/Post';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import { ComponentColors } from '../../../styles';
 import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { TypedNavigation } from '../../../helpers/navigation';

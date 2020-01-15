@@ -5,7 +5,7 @@ import { SuperGridSectionList } from 'react-native-super-grid';
 
 import { Feed } from '../../../models/Feed';
 import { Colors, ComponentColors } from '../../../styles';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import { GridCard, getGridCardSize } from '../../../ui/misc/GridCard';
 import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { MediumText } from '../../../ui/misc/text';

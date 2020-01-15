@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ImageStyle } from 'react-native';
 import { DefaultStyle } from '../../styles';
 import { defaultImages } from '../../defaultImages';
-import { ImageDataView } from '../../components/ImageDataView';
+import { ImageDataView } from './ImageDataView';
 import { ModelHelper } from '../../models/ModelHelper';
 import { ImageData } from '../../models/ImageData';
 

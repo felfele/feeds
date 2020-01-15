@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ShallowRenderer from 'react-test-renderer/shallow';
-import { Card } from '../../src/components/Card';
+import { Card } from '../../src/ui/card/Card';
 import { Post } from '../../src/models/Post';
 import { Author } from '../../src/models/Author';
 import TestRenderer from 'react-test-renderer';
@@ -10,7 +10,7 @@ import { TypedNavigation } from '../../src/helpers/navigation';
 
 Debug.setDebugMode(true);
 jest.mock('../../src/models/ReactNativeModelHelper');
-jest.mock('../../src/components/CardMarkdown');
+jest.mock('../../src/ui/card/CardMarkdown');
 jest.mock('../../src/ui/misc/Carousel');
 
 const mockNavigation: TypedNavigation = {

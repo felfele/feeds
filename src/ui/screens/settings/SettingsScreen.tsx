@@ -5,13 +5,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Settings } from '../../../models/Settings';
 import { Version, BuildNumber } from '../../../Version';
 import { Colors, ComponentColors } from '../../../styles';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import { RowItem } from '../../buttons/RowButton';
 import { RegularText } from '../../misc/text';
 import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
-import { TouchableView } from '../../../components/TouchableView';
+import { TouchableView } from '../../misc/TouchableView';
 import { getBuildEnvironment } from '../../../BuildEnvironment';
 
 export interface StateProps {

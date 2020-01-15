@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
-import { SimpleTextInput } from '../../../components/SimpleTextInput';
+import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { ComponentColors, Colors, defaultMediumFont } from '../../../styles';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';

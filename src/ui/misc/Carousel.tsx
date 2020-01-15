@@ -6,7 +6,7 @@ import { Post } from '../../models/Post';
 import { Rectangle, ModelHelper } from '../../models/ModelHelper';
 import { ImageData } from '../../models/ImageData';
 import { Colors } from '../../styles';
-import { ImageDataView } from '../../components/ImageDataView';
+import { ImageDataView } from './ImageDataView';
 
 interface Props {
     post: Post;

@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
 import { ComponentColors } from '../../../styles';
 import { RegularText } from '../../misc/text';
 import { SubCategoryMap } from '../../../models/recommendation/NewsSource';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import { RowItem } from '../../buttons/RowButton';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';

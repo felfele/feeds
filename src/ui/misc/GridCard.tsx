@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TouchableView, ZERO_HIT_SLOP } from '../../components/TouchableView';
+import { TouchableView, ZERO_HIT_SLOP } from './TouchableView';
 import {
     Image,
     View,
@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Colors } from '../../styles';
 import { MediumText } from './text';
-import { ImageDataView } from '../../components/ImageDataView';
+import { ImageDataView } from './ImageDataView';
 import { ModelHelper } from '../../models/ModelHelper';
 import { ImageData, BundledImage } from '../../models/ImageData';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

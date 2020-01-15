@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SafeAreaView } from 'react-native';
 import { ComponentColors } from '../../styles';
-import { StatusBarView } from '../../components/StatusBarView';
+import { StatusBarView } from './StatusBarView';
 
 interface Props {
     children: React.ReactNode | React.ReactNode[];
