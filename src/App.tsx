@@ -14,7 +14,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 // @ts-ignore
 import { setCustomText } from 'react-native-global-props';
 
-import { SettingsEditorContainer } from './containers/SettingsEditorContainer';
+import { SettingsEditorContainer } from './containers/SettingsScreenContainer';
 import { Debug } from './Debug';
 import { EditFeedContainer as FeedInfoContainer, RSSFeedInfoContainer } from './containers/FeedInfoContainer';
 import { FilterListEditorContainer } from './containers/FilterListEditorContainer';

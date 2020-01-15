@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { AppState } from '../reducers/AppState';
 import { Actions } from '../actions/Actions';
-import { StateProps, DispatchProps, SettingsEditor } from '../components/SettingsEditor';
+import { StateProps, DispatchProps, SettingsScreen } from '../components/SettingsScreen';
 import { TypedNavigation } from '../helpers/navigation';
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
@@ -25,4 +25,4 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
 export const SettingsEditorContainer = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(SettingsEditor);
+)(SettingsScreen);

@@ -26,7 +26,7 @@ export interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-export const SettingsEditor = (props: Props) => {
+export const SettingsScreen = (props: Props) => {
     const spacePrefix = (s: string) => s !== '' ? ' ' + s : '';
     const buildEnvironment = spacePrefix(getBuildEnvironment());
     const buildNumber = ` (Build number ${BuildNumber})`;
