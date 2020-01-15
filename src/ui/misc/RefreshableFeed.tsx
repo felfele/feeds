@@ -25,7 +25,8 @@ export interface StateProps {
     modelHelper: ModelHelper;
     children: {
         // WARNING, type parameter included for reference, but it does not typecheck
-        navigationHeader?: React.ReactElement<NavHeaderProps>,
+        listHeader?: React.ReactElement<any>;
+        navigationHeader?: React.ReactElement<NavHeaderProps>;
         placeholder?: React.ReactElement<any>;
     };
 }
@@ -66,6 +67,7 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                 {this.props.feeds.length === 0 && this.props.children.placeholder}
                 <FlatList
                     ListFooterComponent={this.renderListFooter}
+                    ListHeaderComponent={this.props.children.listHeader}
                     data={this.props.posts}
                     renderItem={(obj) => (
                         <CardContainer
