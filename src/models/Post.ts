@@ -25,12 +25,3 @@ export interface Post extends PublicPost {
     isUploading?: boolean;
     topic?: HexString;
 }
-
-export interface PostWithId extends Post {
-    _id: HexString;
-}
-
-export interface PrivatePost extends PostWithId {
-    author: Author;
-    topic: HexString;
-}

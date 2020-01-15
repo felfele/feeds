@@ -2,10 +2,8 @@ import { PersistedState } from 'redux-persist';
 import { Debug } from '../Debug';
 import { ContentFilter } from '../models/ContentFilter';
 import { Feed } from '../models/Feed';
-import { Post, PrivatePost } from '../models/Post';
+import { Post } from '../models/Post';
 import { Settings } from '../models/Settings';
-
-export type PostListDict = {[key: string]: PrivatePost[]};
 
 export interface AppStateV0 extends PersistedState {
     contentFilters: ContentFilter[];

@@ -1,12 +1,10 @@
-import { Post, PostReferences, PrivatePost, PublicPost } from '../models/Post';
+import { Post, PostReferences } from '../models/Post';
 import { Author } from '../models/Author';
 import { HtmlMetaData, fetchHtmlMetaData } from './htmlMetaData';
 import { ImageData } from '../models/ImageData';
 import { HexString } from './opaqueTypes';
 import { getHttpLinkFromText } from './urlUtils';
 import { markdownEscape } from '../markdown';
-import { byteArrayToHex } from './conversion';
-import { cryptoHash } from './crypto';
 
 export const mergeUpdatedPosts = (updatedPosts: Post[], oldPosts: Post[]): Post[] => {
     const uniqueAuthors = new Map<string, Author>();
@@ -128,17 +126,5 @@ export const copyPostWithReferences = (post: Post, author: Author, id: number | 
                     }
             ,
         },
-    };
-};
-
-export const copyPostPrivately = (post: Post, author: Author, id: HexString, topic: HexString): PrivatePost => {
-    return {
-        ...post,
-        _id: id,
-        author,
-        topic,
-        createdAt: Date.now(),
-        updatedAt: undefined,
-        references: undefined,
     };
 };

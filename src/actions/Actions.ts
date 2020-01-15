@@ -6,15 +6,12 @@ import { ContentFilter } from '../models/ContentFilter';
 import { AppState } from '../reducers/AppState';
 import { Post } from '../models/Post';
 import { ImageData } from '../models/ImageData';
-import { PrivateIdentity } from '../models/Identity';
 
 export type Actions = ActionsUnion<typeof Actions & typeof InternalActions>;
 
 export const InternalActions = {
     addFeed: (feed: Feed) =>
         createAction(ActionTypes.ADD_FEED, { feed }),
-    updateAuthorIdentity: (privateIdentity: PrivateIdentity) =>
-        createAction(ActionTypes.UPDATE_AUTHOR_IDENTITY, { privateIdentity }),
     updateFeedFavicon: (feed: Feed, favicon: string) =>
         createAction(ActionTypes.UPDATE_FEED_FAVICON, {feed, favicon}),
     appStateSet: (appState: AppState) =>

@@ -19,7 +19,6 @@ export const defaultAuthor: Author = {
     image: {
         uri: '',
     },
-    identity: undefined,
 };
 
 export const FELFELE_APP_NAME = 'Felfele';
