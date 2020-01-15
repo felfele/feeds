@@ -1,6 +1,5 @@
 import { AppState } from './AppState';
 import { Settings } from '../models/Settings';
-import * as Swarm from '../swarm/Swarm';
 import { Author } from '../models/Author';
 import { Post } from '../models/Post';
 import { Feed } from '../models/Feed';
@@ -9,7 +8,7 @@ import { defaultImages } from '../defaultImages';
 export const defaultSettings: Settings = {
     showSquareImages: false,
     showDebugMenu: false,
-    swarmGatewayAddress: Swarm.defaultGateway,
+    swarmGatewayAddress: 'https://swarm.felfele.com/',
 };
 
 export const DEFAULT_AUTHOR_NAME = '';
@@ -20,7 +19,6 @@ export const defaultAuthor: Author = {
     image: {
         uri: '',
     },
-    identity: undefined,
 };
 
 export const FELFELE_APP_NAME = 'Felfele';
@@ -97,27 +95,12 @@ export const defaultFeeds: Feed[] = [
         favicon: defaultImages.felfeleAssistant,
         followed: true,
     },
-    {
-        name: 'Felfele Foundation',
-        url: FELFELE_FOUNDATION_URL,
-        feedUrl: FELFELE_FOUNDATION_URL,
-        favicon: 'bzz:/f06957d9a208c1ef26b358e23726b16925f7f5eb32ab19438dfeaec1aa81b041/image.png',
-        followed: true,
-    },
 ];
 
 export const defaultState: AppState = {
     contentFilters: [],
     feeds: defaultFeeds,
-    ownFeeds: [],
     settings: defaultSettings,
-    author: defaultAuthor,
     currentTimestamp: defaultCurrentTimestamp,
     rssPosts: defaultLocalPosts,
-    localPosts: [],
-    draft: null,
-    metadata: defaultMetadata,
-    contacts: [],
-    lastEditingApp: null,
-    privatePosts: {},
 };

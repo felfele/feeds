@@ -5,9 +5,9 @@ import { SuperGridSectionList } from 'react-native-super-grid';
 
 import { Feed } from '../../../models/Feed';
 import { Colors, ComponentColors } from '../../../styles';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import { GridCard, getGridCardSize } from '../../../ui/misc/GridCard';
-import { ReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
+import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { MediumText } from '../../../ui/misc/text';
 import { TabBarPlaceholder } from '../../../ui/misc/TabBarPlaceholder';
 import { defaultImages } from '../../../defaultImages';
@@ -38,7 +38,6 @@ export interface StateProps {
 export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & { children?: React.ReactNode}> {
     public render() {
         const itemDimension = getGridCardSize();
-        const modelHelper = new ReactNativeModelHelper(this.props.gatewayAddress);
         return (
             <View style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, flex: 1 }}>
                 {this.props.children}
@@ -59,7 +58,7 @@ export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & {
                                 onPress={() => this.props.onPressFeed(item)}
                                 size={itemDimension}
                                 defaultImage={defaultImages.defaultUser}
-                                modelHelper={modelHelper}
+                                modelHelper={globalReactNativeModelHelper}
                                 isSelected={false}
                             />
                         );

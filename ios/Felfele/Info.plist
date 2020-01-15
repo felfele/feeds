@@ -7,7 +7,7 @@
 	<key>AppGroup</key>
 	<string>$(APP_GROUP)</string>
 	<key>LSApplicationCategoryType</key>
-	<string />
+	<string/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -29,7 +29,7 @@
 	<key>CFBundleVersion</key>
 	<string>25</string>
 	<key>LSRequiresIPhoneOS</key>
-	<true />
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -37,49 +37,19 @@
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true />
-			</dict>
-			<key>swarm.felfele.com</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true />
-			</dict>
-			<key>swarm.helmethair.co</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true />
+				<true/>
 			</dict>
 			<key>tumblr.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true />
+				<true/>
 				<key>NSIncludesSubdomains</key>
-				<true />
+				<true/>
 			</dict>
 		</dict>
 	</dict>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permissions library, which references this permission in its code.</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permissions library, which references this permission in its code.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permissions library, which references this permission in its code.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permissions library, which references this permission in its code.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Felfele uses the camera to take pictures that you can share</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native library, which references this permission in its code.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native library, which references this permission in its code.</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permissions library, which references this permission in its code.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Felfele will save photos to your library</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Felfele will let you choose which photos from your library to share</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permissions library, which references this permission in its code.</string>
+	<string>Felfele uses the camera to read QR codes</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -100,6 +70,7 @@
 		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Medium.ttf</string>
 		<string>Roboto-Regular.ttf</string>
+		<string>icomoon.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -118,6 +89,6 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false />
+	<false/>
 </dict>
 </plist>

@@ -2,13 +2,12 @@ import * as React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SplashScreen from 'react-native-splash-screen';
 
-import { RefreshableFeed } from '../../../components/RefreshableFeed';
+import { RefreshableFeed } from '../../misc/RefreshableFeed';
 import { Feed } from '../../../models/Feed';
 import { Post } from '../../../models/Post';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import { ComponentColors } from '../../../styles';
-import { ImageData } from '../../../models/ImageData';
-import { ReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
+import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { TypedNavigation } from '../../../helpers/navigation';
 
 export interface DispatchProps {
@@ -20,7 +19,6 @@ export interface StateProps {
     navigation: TypedNavigation;
     posts: Post[];
     feeds: Feed[];
-    profileImage: ImageData;
     gatewayAddress: string;
 }
 
@@ -29,10 +27,9 @@ type Props = StateProps & DispatchProps;
 export class PublicChannelsScreen extends React.Component<Props> {
     private ref?: RefreshableFeed = undefined;
     public render() {
-        const modelHelper = new ReactNativeModelHelper(this.props.gatewayAddress);
         return (
             <RefreshableFeed
-                modelHelper={modelHelper} {...this.props}
+                modelHelper={globalReactNativeModelHelper} {...this.props}
                 ref={value => this.ref = value || undefined}
             >
                 {{

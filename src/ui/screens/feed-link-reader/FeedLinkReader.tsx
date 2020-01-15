@@ -3,23 +3,17 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    Clipboard,
     RegisteredStyle,
     ViewStyle,
-    Alert,
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
-import { SimpleTextInput } from '../../../components/SimpleTextInput';
-import { Debug } from '../../../Debug';
+import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { ComponentColors, Colors, defaultMediumFont } from '../../../styles';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
-import { getInviteCodeFromInviteLink, isInviteLink } from '../../../helpers/deepLinking';
-import { getFelfeleLinkFromClipboardData } from '../../../helpers/feedInfoHelper';
-import { isInvitationValid } from '../../../helpers/contactHelpers';
 
 const QRCameraWidth = Dimensions.get('window').width;
 const QRCameraHeight = QRCameraWidth;

@@ -14,37 +14,33 @@ import { PersistGate } from 'redux-persist/integration/react';
 // @ts-ignore
 import { setCustomText } from 'react-native-global-props';
 
-import { SettingsEditorContainer } from './containers/SettingsEditorContainer';
+import { SettingsEditorContainer } from './ui/screens/settings/SettingsScreenContainer';
 import { Debug } from './Debug';
-import { EditFeedContainer as FeedInfoContainer, RSSFeedInfoContainer } from './containers/FeedInfoContainer';
-import { FilterListEditorContainer } from './containers/FilterListEditorContainer';
-import { EditFilterContainer } from './containers/EditFilterContainer';
-import { DebugScreenContainer } from './containers/DebugScreenContainer';
+import { EditFeedContainer as FeedInfoContainer, RSSFeedInfoContainer } from './ui/screens/feed-info/FeedInfoContainer';
+import { FilterListScreenContainer } from './ui/screens/filters/FilterListScreenContainer';
+import { FilterEditorContainer } from './ui/screens/filters/FilterEditorContainer';
+import { DebugScreenContainer } from './ui/screens/debug/DebugScreenContainer';
 import { appendToLog } from './log';
-import { LogViewerContainer } from './containers/LogViewerContainer';
+import { LogViewerScreenContainer } from './ui/screens/log-viewer/LogViewerScreenContainer';
 import { defaultTextProps } from './styles';
-import { FeedContainer } from './containers/FeedContainer';
-import { BackupRestore } from './components/BackupRestore';
-import { RestoreContainer } from './containers/RestoreContainer';
-import { BackupContainer } from './containers/BackupContainer';
-import { BugReportViewWithoutTabBar } from './components/BugReportView';
-import { TopLevelErrorBoundary } from './components/TopLevelErrorBoundary';
+import { FeedContainer } from './ui/screens/feed-view/FeedContainer';
+import { BackupRestore } from './ui/screens/backup-restore/BackupRestore';
+import { RestoreContainer } from './ui/screens/backup-restore/RestoreContainer';
+import { BackupContainer } from './ui/screens/backup-restore/BackupContainer';
+import { BugReportScren } from './ui/screens/bug-report/BugReportScreen';
+import { TopLevelErrorBoundary } from './ui/misc/TopLevelErrorBoundary';
 import { CategoriesContainer } from './ui/screens/explore/CategoriesContainer';
 import { SubCategoriesContainer } from './ui/screens/explore/SubCategoriesContainer';
 import { NewsSourceGridContainer } from './ui/screens/explore/NewsSourceGridContainer';
-import { NewsSourceFeedContainer } from './containers/NewSourceFeedContainer';
-import { initializeNotifications } from './helpers/notifications';
-import { initStore, getSerializedAppState, getAppStateFromSerialized } from './store';
+import { NewsSourceFeedContainer } from './ui/screens/feed-view/NewSourceFeedContainer';
+import { initStore } from './store';
 import { Persistor } from 'redux-persist';
-import { Actions } from './actions/Actions';
-import { restartApp } from './helpers/restart';
 import { felfeleInitAppActions } from './store/felfeleInit';
-import { FELFELE_APP_NAME } from './reducers/defaultData';
 import { PublicChannelsContainer } from './ui/screens/public-channels/PublicChannelsContainer';
 import { PublicChannelsListContainer } from './ui/screens/public-channels/PublicChannelsListContainer';
 import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkReaderContainer';
 import { RSSFeedLoaderContainer } from './ui/screens/rss-feed/RSSFeedLoaderContainer';
-import { FeedViewContainer } from './containers/FeedViewContainer';
+import { FeedViewContainer } from './ui/screens/feed-view/FeedViewContainer';
 
 YellowBox.ignoreWarnings([
     'Method `jumpToIndex` is deprecated.',
@@ -53,7 +49,6 @@ YellowBox.ignoreWarnings([
 Debug.setDebugMode(true);
 Debug.addLogger(appendToLog);
 setCustomText(defaultTextProps);
-initializeNotifications();
 
 const Scenes: NavigationRouteConfigMap = {
     PublicChannelsContainer: {
@@ -102,20 +97,20 @@ const Scenes: NavigationRouteConfigMap = {
         screen: DebugScreenContainer,
     },
     LogViewer: {
-        screen: LogViewerContainer,
+        screen: LogViewerScreenContainer,
     },
     BackupRestore: {
         screen: BackupRestore,
     },
     EditFilter: {
-        screen: EditFilterContainer,
+        screen: FilterEditorContainer,
     },
     FilterListEditorContainer: {
-        screen: FilterListEditorContainer,
+        screen: FilterListScreenContainer,
     },
     BugReportView: {
         screen: ({navigation}: NavigationScreenProps) => (
-            <BugReportViewWithoutTabBar navigation={navigation} errorView={false}/>
+            <BugReportScren navigation={navigation} errorView={false}/>
         ),
     },
     FeedFromList: {
@@ -176,14 +171,6 @@ export default class FelfeleApp extends React.Component<{}, FelfeleAppState> {
     private handleAppStateChange = async (nextAppState: AppStateStatus) => {
         if (this.state.nativeAppState.match(/inactive|background/) && nextAppState === 'active') {
             Debug.log('App has come to the foreground');
-            if (this.state.store != null) {
-                const serializedAppState = await getSerializedAppState();
-                const appState = await getAppStateFromSerialized(serializedAppState);
-                if (appState.lastEditingApp != null && appState.lastEditingApp !== FELFELE_APP_NAME) {
-                    this.state.store.dispatch(Actions.updateAppLastEditing(FELFELE_APP_NAME));
-                    restartApp();
-                }
-            }
         }
         this.setState({
             nativeAppState: nextAppState,

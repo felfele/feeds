@@ -7,15 +7,15 @@ import {
 
 import { Feed } from '../../../models/Feed';
 import { ComponentColors, Colors } from '../../../styles';
-import { NavigationHeader } from '../../../components/NavigationHeader';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as AreYouSureDialog from '../../../components/AreYouSureDialog';
+import * as AreYouSureDialog from '../../../helpers/AreYouSureDialog';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
 import { RegularText } from '../../misc/text';
-import { ImageDataView } from '../../../components/ImageDataView';
+import { ImageDataView } from '../../misc/ImageDataView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
-import { ReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
+import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { WideButton } from '../../buttons/WideButton';
 
 export interface DispatchProps {
@@ -27,7 +27,6 @@ export interface DispatchProps {
 export interface StateProps {
     feed: Feed;
     navigation: TypedNavigation;
-    swarmGateway: string;
 }
 
 type Props = DispatchProps & StateProps;
@@ -42,7 +41,6 @@ export class RSSFeedInfo extends React.Component<Props> {
     }
 
     public render() {
-        const modelHelper = new ReactNativeModelHelper(this.props.swarmGateway);
         const imageWidth = Dimensions.get('window').width * 0.7;
         const followToggleButton = this.props.feed.followed
             ? {
@@ -68,7 +66,7 @@ export class RSSFeedInfo extends React.Component<Props> {
                 <View style={styles.container}>
                     <ImageDataView
                         source={getFeedImage(this.props.feed)}
-                        modelHelper={modelHelper}
+                        modelHelper={globalReactNativeModelHelper}
                         style={{
                             width: imageWidth,
                             height: imageWidth,
