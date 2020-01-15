@@ -38,7 +38,6 @@ export interface StateProps {
 export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & { children?: React.ReactNode}> {
     public render() {
         const itemDimension = getGridCardSize();
-        const modelHelper = new ReactNativeModelHelper();
         return (
             <View style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, flex: 1 }}>
                 {this.props.children}
@@ -59,7 +58,7 @@ export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & {
                                 onPress={() => this.props.onPressFeed(item)}
                                 size={itemDimension}
                                 defaultImage={defaultImages.defaultUser}
-                                modelHelper={modelHelper}
+                                modelHelper={globalReactNativeModelHelper}
                                 isSelected={false}
                             />
                         );

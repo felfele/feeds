@@ -7,7 +7,7 @@ import { ComponentColors } from '../styles';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as AreYouSureDialog from './AreYouSureDialog';
-import { ReactNativeModelHelper } from '../models/ReactNativeModelHelper';
+import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../models/ReactNativeModelHelper';
 import { FELFELE_ASSISTANT_URL } from '../reducers/defaultData';
 import { TypedNavigation } from '../helpers/navigation';
 import { isFelfeleResource } from '../helpers/urlUtils';
@@ -37,7 +37,7 @@ type Props = StateProps & DispatchProps;
 export const FeedView = (props: Props) => {
     const isOnboardingFeed = props.feed.feedUrl === FELFELE_ASSISTANT_URL;
 
-    const modelHelper = new ReactNativeModelHelper();
+    const modelHelper = globalReactNativeModelHelper;
     const icon = (name: string, color: string) => <Icon name={name} size={20} color={color} />;
     const button = (iconName: string, color: string, onPress: () => void) => ({
         label: icon(iconName, color),

@@ -41,7 +41,6 @@ export class RSSFeedInfo extends React.Component<Props> {
     }
 
     public render() {
-        const modelHelper = new ReactNativeModelHelper();
         const imageWidth = Dimensions.get('window').width * 0.7;
         const followToggleButton = this.props.feed.followed
             ? {
@@ -67,7 +66,7 @@ export class RSSFeedInfo extends React.Component<Props> {
                 <View style={styles.container}>
                     <ImageDataView
                         source={getFeedImage(this.props.feed)}
-                        modelHelper={modelHelper}
+                        modelHelper={globalReactNativeModelHelper}
                         style={{
                             width: imageWidth,
                             height: imageWidth,

@@ -31,3 +31,5 @@ export class ReactNativeModelHelper implements ModelHelper {
         return '';
     }
 }
+
+export const globalReactNativeModelHelper = new ReactNativeModelHelper();

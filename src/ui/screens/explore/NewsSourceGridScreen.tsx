@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FlatGrid } from 'react-native-super-grid';
 import { GridCard, getGridCardSize } from '../../misc/GridCard';
-import { ReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
+import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { ComponentColors } from '../../../styles';
 import { NavigationHeader } from '../../../components/NavigationHeader';
 import { Feed } from '../../../models/Feed';
@@ -21,7 +21,6 @@ export interface DispatchProps {
 }
 
 export const NewsSourceGridScreen = (props: StateProps & DispatchProps) => {
-    const modelHelper = new ReactNativeModelHelper();
     const itemDimension = getGridCardSize();
     return (
         <FragmentSafeAreaViewWithoutTabBar>
@@ -45,7 +44,7 @@ export const NewsSourceGridScreen = (props: StateProps & DispatchProps) => {
                                         feed: item,
                                     });
                                 }}
-                                modelHelper={modelHelper}
+                                modelHelper={globalReactNativeModelHelper}
                                 size={itemDimension}
                                 isSelected={false}
                             />
