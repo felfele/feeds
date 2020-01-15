@@ -41,6 +41,11 @@ export const NavigationHeader = (props: Props) => (
                         ? () => props.navigation!.goBack(null)
                         : undefined
             }
+            onLongPress={
+                props.navigation != null
+                    ? () => props.navigation?.popToTop()
+                    : undefined
+            }
             style={styles.leftContainer}
             testID={(props.leftButton && props.leftButton.testID) || 'NavigationHeader/LeftButton'}
         >
