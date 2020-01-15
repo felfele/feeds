@@ -7,7 +7,7 @@ import { Feed } from '../../../models/Feed';
 import { Colors, ComponentColors } from '../../../styles';
 import { NavigationHeader } from '../../../components/NavigationHeader';
 import { GridCard, getGridCardSize } from '../../../ui/misc/GridCard';
-import { ReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
+import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { MediumText } from '../../../ui/misc/text';
 import { TabBarPlaceholder } from '../../../ui/misc/TabBarPlaceholder';
 import { defaultImages } from '../../../defaultImages';

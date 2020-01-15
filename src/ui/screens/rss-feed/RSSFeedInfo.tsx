@@ -15,7 +15,7 @@ import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaVi
 import { RegularText } from '../../misc/text';
 import { ImageDataView } from '../../../components/ImageDataView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
-import { ReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
+import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { WideButton } from '../../buttons/WideButton';
 
 export interface DispatchProps {
