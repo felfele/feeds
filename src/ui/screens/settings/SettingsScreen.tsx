@@ -2,17 +2,17 @@ import * as React from 'react';
 import { StyleSheet, ScrollView, Vibration, Linking } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { Settings } from '../models/Settings';
-import { Version, BuildNumber } from '../Version';
-import { Colors, ComponentColors } from '../styles';
-import { NavigationHeader } from './NavigationHeader';
-import { RowItem } from '../ui/buttons/RowButton';
-import { RegularText } from '../ui/misc/text';
-import { TabBarPlaceholder } from '../ui/misc/TabBarPlaceholder';
-import { TypedNavigation } from '../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../ui/misc/FragmentSafeAreaView';
-import { TouchableView } from './TouchableView';
-import { getBuildEnvironment } from '../BuildEnvironment';
+import { Settings } from '../../../models/Settings';
+import { Version, BuildNumber } from '../../../Version';
+import { Colors, ComponentColors } from '../../../styles';
+import { NavigationHeader } from '../../../components/NavigationHeader';
+import { RowItem } from '../../buttons/RowButton';
+import { RegularText } from '../../misc/text';
+import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
+import { TypedNavigation } from '../../../helpers/navigation';
+import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { TouchableView } from '../../../components/TouchableView';
+import { getBuildEnvironment } from '../../../BuildEnvironment';
 
 export interface StateProps {
     navigation: TypedNavigation;

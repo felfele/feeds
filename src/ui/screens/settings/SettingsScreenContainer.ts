@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import { AppState } from '../reducers/AppState';
-import { Actions } from '../actions/Actions';
-import { StateProps, DispatchProps, SettingsScreen } from '../components/SettingsScreen';
-import { TypedNavigation } from '../helpers/navigation';
+import { AppState } from '../../../reducers/AppState';
+import { Actions } from '../../../actions/Actions';
+import { StateProps, DispatchProps, SettingsScreen } from './SettingsScreen';
+import { TypedNavigation } from '../../../helpers/navigation';
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     return {
