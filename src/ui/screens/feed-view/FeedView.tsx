@@ -7,10 +7,11 @@ import { ComponentColors } from '../../../styles';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as AreYouSureDialog from '../../../helpers/AreYouSureDialog';
-import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
+import { globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { FELFELE_ASSISTANT_URL } from '../../../reducers/defaultData';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { isFelfeleResource } from '../../../helpers/urlUtils';
+import { WideButton } from '../../buttons/WideButton';
 
 export interface DispatchProps {
     onRefreshPosts: (feeds: Feed[]) => void;
@@ -57,6 +58,14 @@ export const FeedView = (props: Props) => {
         ...props,
         feeds: [props.feed],
     };
+    const listHeader = props.feed.followed !== true
+        ? <WideButton
+            label='Follow this channel'
+            icon={icon('link', ComponentColors.BUTTON_COLOR)}
+            onPress={() => props.onFollowFeed(props.feed)}
+        />
+        : undefined
+    ;
     return (
         <RefreshableFeed modelHelper={modelHelper} {...refreshableFeedProps}>
             {{
@@ -69,6 +78,7 @@ export const FeedView = (props: Props) => {
                     rightButton1={rightButton1}
                     title={props.feed.name}
                 />,
+                listHeader,
             }}
         </RefreshableFeed>
     );
