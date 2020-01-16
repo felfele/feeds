@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../reducers/AppState';
-import { StateProps, DispatchProps } from '../FeedLoader';
+import { StateProps, DispatchProps } from './RSSFeedLoader';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FeedLoader } from '../FeedLoader';
+import { RSSFeedLoader } from './RSSFeedLoader';
 import { Alert } from 'react-native';
 import { fetchRSSFeedFromUrl } from '../../../helpers/feedHelpers';
 import { Debug } from '../../../Debug';
@@ -54,4 +54,4 @@ const onFailedFeedLoad = (): Promise<void> => {
 export const RSSFeedLoaderContainer = connect(
     mapStateToProps,
     mapDispatchToProps,
-)(FeedLoader);
+)(RSSFeedLoader);

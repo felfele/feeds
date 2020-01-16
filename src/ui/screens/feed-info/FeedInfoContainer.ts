@@ -5,7 +5,7 @@ import { AsyncActions } from '../../../actions/asyncActions';
 import { StateProps, DispatchProps, FeedInfo } from './FeedInfo';
 import { Feed } from '../../../models/Feed';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { RSSFeedInfo } from '../rss-feed/RSSFeedInfo';
+import { RSSFeedInfo } from './RSSFeedInfo';
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     // this is needed because initally we receive the feed as a navigation param, and when we follow it,
@@ -15,7 +15,6 @@ const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigatio
 
     return {
         feed: navParamFeed,
-        swarmGateway: state.settings.swarmGatewayAddress,
         navigation: ownProps.navigation,
         isKnownFeed: isKnownFeed,
     };

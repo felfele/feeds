@@ -1,25 +1,17 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../reducers/AppState';
-import { StateProps, DispatchProps, FeedView, ViewFeed } from './FeedView';
+import { StateProps, DispatchProps, FeedView } from './FeedView';
 import { Actions } from '../../../actions/Actions';
 import { AsyncActions } from '../../../actions/asyncActions';
 import { Feed } from '../../../models/Feed';
 import { getFeedPosts } from '../../../selectors/selectors';
 import { TypedNavigation } from '../../../helpers/navigation';
 
-const emptyFeed = (name: string = '', isOwnFeed: boolean = false, isLocalFeed = false): ViewFeed => ({
+const emptyFeed = (name: string = '', isKnownFeed: boolean = false): Feed => ({
     name,
     feedUrl: '',
     url: '',
     favicon: '',
-    isOwnFeed,
-    isLocalFeed,
-});
-
-const feedToViewFeed = (feed: Feed): ViewFeed => ({
-    ...feed,
-    isOwnFeed: false,
-    isLocalFeed: false,
 });
 
 export const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
@@ -29,8 +21,8 @@ export const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNa
     const otherFeeds = state.feeds;
     const otherFeed = otherFeeds.find(feed => feed.feedUrl === feedUrl);
     const selectedFeed = otherFeed != null
-        ? feedToViewFeed(otherFeed)
-        : emptyFeed()
+        ? otherFeed
+        : emptyFeed(feedName)
     ;
     // Note: this is a moderately useful selector (recalculated if another feedUrl is opened (cache size == 1))
     // see https://github.com/reduxjs/reselect/blob/master/README.md#accessing-react-props-in-selectors

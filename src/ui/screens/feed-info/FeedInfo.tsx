@@ -32,7 +32,6 @@ export interface DispatchProps {
 }
 
 export interface StateProps {
-    swarmGateway: string;
     feed: Feed;
     navigation: TypedNavigation;
     isKnownFeed: boolean;

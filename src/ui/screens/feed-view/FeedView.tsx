@@ -20,15 +20,10 @@ export interface DispatchProps {
     onRemoveFeed: (feed: Feed) => void;
 }
 
-export interface ViewFeed extends Feed {
-    isOwnFeed: boolean;
-    isLocalFeed: boolean;
-}
-
 export interface StateProps {
     navigation: TypedNavigation;
     onBack: () => void;
-    feed: ViewFeed;
+    feed: Feed;
     posts: Post[];
 }
 
@@ -48,7 +43,7 @@ export const FeedView = (props: Props) => {
             feed: props.feed,
         }
     );
-    const rightButton1 = props.feed.isLocalFeed || isOnboardingFeed
+    const rightButton1 = isOnboardingFeed
         ? undefined
         : button('information', ComponentColors.NAVIGATION_BUTTON_COLOR, navigateToFeedInfo)
     ;
