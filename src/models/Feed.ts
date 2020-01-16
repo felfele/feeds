@@ -8,5 +8,4 @@ export interface Feed extends Model {
     favicon: string | BundledImage;
     followed?: boolean;
     favorite?: boolean;
-    contentHash?: string;
 }

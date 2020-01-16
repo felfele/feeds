@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../reducers/AppState';
-import { StateProps, DispatchProps, FeedView, ViewFeed } from './FeedView';
+import { StateProps, DispatchProps, FeedView } from './FeedView';
 import { Actions } from '../../../actions/Actions';
 import { AsyncActions } from '../../../actions/asyncActions';
 import { Feed } from '../../../models/Feed';
@@ -11,12 +11,7 @@ import { TypedNavigation } from '../../../helpers/navigation';
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     const navParamFeed = ownProps.navigation.getParam<'NewsSourceFeed', 'feed'>('feed');
     const addedFeed = state.feeds.find(value => value.feedUrl === navParamFeed.feedUrl);
-    const feedToAdd = addedFeed != null ? addedFeed : navParamFeed;
-    const feed: ViewFeed = {
-        ...feedToAdd,
-        isOwnFeed: false,
-        isLocalFeed: false,
-    };
+    const feed = addedFeed != null ? addedFeed : navParamFeed;
     const posts = getFeedPosts(state, navParamFeed.feedUrl);
     return {
         onBack: () => ownProps.navigation.goBack(),

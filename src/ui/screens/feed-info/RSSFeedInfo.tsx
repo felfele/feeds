@@ -16,6 +16,7 @@ import { RegularText } from '../../misc/text';
 import { ImageDataView } from '../../misc/ImageDataView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 import { WideButton } from '../../buttons/WideButton';
+import { TwoButton } from '../../buttons/TwoButton';
 
 export interface DispatchProps {
     onAddFeed: (feed: Feed) => void;
@@ -26,6 +27,7 @@ export interface DispatchProps {
 export interface StateProps {
     feed: Feed;
     navigation: TypedNavigation;
+    isKnownFeed: boolean;
 }
 
 type Props = DispatchProps & StateProps;
@@ -79,9 +81,23 @@ export class RSSFeedInfo extends React.Component<Props> {
                             ? FOLLOWED_STATUS
                             : NOT_FOLLOWED_STATUS
                     }</RegularText>
-                    <WideButton
-                        {...followToggleButton}
-                    />
+                    {
+                        this.props.isKnownFeed && this.props.feed.followed === false
+                        ? <TwoButton
+                            leftButton={followToggleButton}
+                            rightButton={{
+                                label: 'Delete',
+                                icon: <Icon name='delete' size={24} color={Colors.DARK_RED} />,
+                                style: styles.buttonStyle,
+                                fontStyle: { color: Colors.DARK_RED},
+                                onPress: this.onRemoveFeed,
+                            }}
+                        />
+                        : <WideButton
+                            {...followToggleButton}
+                        />
+
+                    }
                 </View>
             </FragmentSafeAreaViewWithoutTabBar>
         );
@@ -96,6 +112,17 @@ export class RSSFeedInfo extends React.Component<Props> {
             this.props.onUnfollowFeed(this.props.feed);
         }
     }
+
+    private onRemoveFeed = async () => {
+        const confirmUnfollow = await AreYouSureDialog.show(
+            'Are you sure you want to delete channel?',
+            'It will be removed from your channel list.'
+        );
+        if (confirmUnfollow) {
+            this.props.onRemoveFeed(this.props.feed);
+        }
+    }
+
 }
 
 const styles = StyleSheet.create({

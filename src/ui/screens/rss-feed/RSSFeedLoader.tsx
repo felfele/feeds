@@ -5,11 +5,11 @@ import {
     Text,
     ActivityIndicator,
 } from 'react-native';
-import { ComponentColors, Colors } from '../../styles';
-import { NavigationHeader } from '../misc/NavigationHeader';
+import { ComponentColors, Colors } from '../../../styles';
+import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TypedNavigation } from '../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../ui/misc/FragmentSafeAreaView';
+import { TypedNavigation } from '../../../helpers/navigation';
+import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
 
 export interface DispatchProps {
     onLoad: () => void;
@@ -22,7 +22,7 @@ export interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-export class FeedLoader extends React.Component<Props> {
+export class RSSFeedLoader extends React.Component<Props> {
     public async componentDidMount() {
         this.props.onLoad();
     }
