@@ -1,7 +1,4 @@
-// @ts-ignore
-import FSStorage from 'redux-persist-fs-storage';
-import * as RNFS from 'react-native-fs';
-import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import thunkMiddleware from 'redux-thunk';
 import {
     createMigrate,
@@ -17,25 +14,9 @@ import { migrateAppState } from '../reducers/migration';
 import { appStateReducer } from '../reducers';
 import { defaultState } from '../reducers/defaultData';
 import { Actions } from '../actions/Actions';
-import { getAppGroup } from '../BuildEnvironment';
-import { Debug } from '../Debug';
 
 // This is not very nice, but it's initialized at app startup
 export let persistConfig: FelfelePersistConfig;
-
-const getIOSStorageEngine = async () => {
-    const group = getAppGroup();
-    const path = await RNFS.pathForGroup(group);
-    Debug.log('getIOSStorageEngine', {group, path});
-    return FSStorage(path);
-};
-
-const getStorageEngine = async () => {
-    return Platform.OS === 'ios'
-        ? getIOSStorageEngine()
-        : FSStorage()
-    ;
-};
 
 class FelfelePersistConfig implements PersistConfig {
     public blacklist = ['currentTimestamp'];
@@ -48,8 +29,7 @@ class FelfelePersistConfig implements PersistConfig {
 }
 
 export const initStore = async (initCallback: (store: Store<AppState, Actions>) => void) => {
-    const storageEngine = await getStorageEngine();
-    persistConfig = new FelfelePersistConfig(storageEngine);
+    persistConfig = new FelfelePersistConfig(AsyncStorage);
     const persistedReducer = persistReducer(persistConfig, appStateReducer);
 
     const storeInner = createStore(

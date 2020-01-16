@@ -4,12 +4,10 @@ import { Card } from '../../src/ui/card/Card';
 import { Post } from '../../src/models/Post';
 import { Author } from '../../src/models/Author';
 import TestRenderer from 'react-test-renderer';
-import { ReactNativeModelHelper } from '../../src/models/ReactNativeModelHelper';
 import { Debug } from '../../src/Debug';
 import { TypedNavigation } from '../../src/helpers/navigation';
 
 Debug.setDebugMode(true);
-jest.mock('../../src/models/ReactNativeModelHelper');
 jest.mock('../../src/ui/card/CardMarkdown');
 jest.mock('../../src/ui/misc/Carousel');
 
@@ -60,8 +58,6 @@ describe('card test', () => {
         author: testAuthor,
     };
 
-    const modelHelper = new ReactNativeModelHelper();
-
     it('should render unselected post without images with the following components: Post, CardTop, without CardButtonList', () => {
         const result = TestRenderer.create(
             <Card
@@ -72,7 +68,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
@@ -93,7 +88,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
@@ -114,7 +108,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
@@ -136,7 +129,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
@@ -158,7 +150,6 @@ describe('card test', () => {
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
-                modelHelper={modelHelper}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}

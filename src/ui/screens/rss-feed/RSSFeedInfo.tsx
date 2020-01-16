@@ -15,7 +15,6 @@ import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaVi
 import { RegularText } from '../../misc/text';
 import { ImageDataView } from '../../misc/ImageDataView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
-import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { WideButton } from '../../buttons/WideButton';
 
 export interface DispatchProps {
@@ -66,7 +65,6 @@ export class RSSFeedInfo extends React.Component<Props> {
                 <View style={styles.container}>
                     <ImageDataView
                         source={getFeedImage(this.props.feed)}
-                        modelHelper={globalReactNativeModelHelper}
                         style={{
                             width: imageWidth,
                             height: imageWidth,

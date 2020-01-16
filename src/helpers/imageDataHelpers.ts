@@ -1,12 +1,15 @@
 import { ImageData, BundledImage } from '../models/ImageData';
-import { ModelHelper } from '../models/ModelHelper';
+
+export interface Rectangle {
+    width: number;
+    height: number;
+}
 
 export const getImageSource = (
     imageData: ImageData,
-    modelHelper: ModelHelper,
     defaultImage?: BundledImage,
 ): BundledImage | { uri: string } => {
-    const sourceImageUri = modelHelper.getImageUri(imageData);
+    const sourceImageUri = getImageUri(imageData);
     if (isBundledImage(sourceImageUri)) {
         return sourceImageUri;
     }
@@ -19,4 +22,32 @@ export const getImageSource = (
 
 export const isBundledImage = (path?: string | BundledImage): path is BundledImage => {
     return typeof path === 'number';
+};
+
+export const calculateImageDimensions = (image: ImageData, maxWidth: number, maxHeight: number): Rectangle => {
+    if (image.width == null || image.height == null) {
+        return {
+            width: maxWidth,
+            height: maxHeight,
+        };
+    }
+    const ratio = image.width / maxWidth;
+    const height = image.height / ratio;
+    return {
+        width: maxWidth,
+        height: height,
+    };
+};
+
+export const getImageUri = (image: ImageData): string | BundledImage => {
+    if (isBundledImage(image.localPath)) {
+        return image.localPath;
+    }
+    if (image.uri != null) {
+        return image.uri;
+    }
+    if (image.data != null) {
+        return `data:image/png;base64,${image.data}`;
+    }
+    return '';
 };

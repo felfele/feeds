@@ -10,7 +10,6 @@ import { ComponentColors, Colors } from '../../styles';
 import { Feed } from '../../models/Feed';
 import { CardContainer } from '../card/CardContainer';
 import { Props as NavHeaderProps } from './NavigationHeader';
-import { ModelHelper } from '../../models/ModelHelper';
 import { TypedNavigation } from '../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from './FragmentSafeAreaView';
 
@@ -22,7 +21,6 @@ export interface StateProps {
     navigation: TypedNavigation;
     posts: Post[];
     feeds: Array<Feed>;
-    modelHelper: ModelHelper;
     children: {
         // WARNING, type parameter included for reference, but it does not typecheck
         listHeader?: React.ReactElement<any>;
@@ -75,7 +73,6 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                             isSelected={this.isPostSelected(obj.item)}
                             navigation={this.props.navigation}
                             togglePostSelection={this.togglePostSelection}
-                            modelHelper={this.props.modelHelper}
                         />
                     )}
                     keyExtractor={(item) => '' + (item.link || '') + '/' + item._id + '/' + (item.topic || '')}

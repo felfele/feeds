@@ -3,16 +3,13 @@ import * as React from 'react';
 import SwipeableViews from 'react-swipeable-views-native';
 import { View, Dimensions, StyleSheet } from 'react-native';
 import { Post } from '../../models/Post';
-import { Rectangle, ModelHelper } from '../../models/ModelHelper';
-import { ImageData } from '../../models/ImageData';
 import { Colors } from '../../styles';
 import { ImageDataView } from './ImageDataView';
+import { calculateImageDimensions } from '../../helpers/imageDataHelpers';
 
 interface Props {
     post: Post;
-    calculateImageDimensions: (image: ImageData, maxWidth: number, maxHeight: number) => Rectangle;
     testID?: string;
-    modelHelper: ModelHelper;
 }
 
 export class Carousel extends React.PureComponent<Props, { index: number }> {
@@ -26,7 +23,7 @@ export class Carousel extends React.PureComponent<Props, { index: number }> {
             <View>
                 <SwipeableViews onChangeIndex={this.handleChangeIndex}>
                     {this.props.post.images.map((image, index) => {
-                        const { width, height } = this.props.calculateImageDimensions(image, windowWidth, windowWidth);
+                        const { width, height } = calculateImageDimensions(image, windowWidth, windowWidth);
                         return (
                             <ImageDataView
                                 testID={(image.uri || '') + index}
@@ -36,7 +33,6 @@ export class Carousel extends React.PureComponent<Props, { index: number }> {
                                     width: width,
                                     height: height,
                                 }}
-                                modelHelper={this.props.modelHelper}
                             />
                         );
                     })}

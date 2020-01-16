@@ -4,7 +4,6 @@ import { StateProps, DispatchProps, MemoizedCard, AuthorFeed } from './Card';
 import { Post } from '../../models/Post';
 import { Feed } from '../../models/Feed';
 import { AsyncActions } from '../../actions/asyncActions';
-import { ModelHelper } from '../../models/ModelHelper';
 import { TypedNavigation } from '../../helpers/navigation';
 import { getAllFeeds } from '../../selectors/selectors';
 import { Debug } from '../../Debug';
@@ -12,7 +11,6 @@ import { Debug } from '../../Debug';
 interface OwnProps {
     isSelected: boolean;
     post: Post;
-    modelHelper: ModelHelper;
     togglePostSelection: (post: Post) => void;
     navigation: TypedNavigation;
 }
@@ -72,7 +70,6 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps): StateProps => {
         },
         currentTimestamp: state.currentTimestamp,
         isSelected: ownProps.isSelected,
-        modelHelper: ownProps.modelHelper,
         togglePostSelection: ownProps.togglePostSelection,
         navigation: ownProps.navigation,
         authorFeed,

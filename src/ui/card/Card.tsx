@@ -17,10 +17,10 @@ import { MediumText, RegularText } from '../misc/text';
 import { Avatar } from '../misc/Avatar';
 import { Carousel } from '../misc/Carousel';
 import { CardMarkdown } from './CardMarkdown';
-import { calculateImageDimensions, ModelHelper } from '../../models/ModelHelper';
 import { Feed } from '../../models/Feed';
 import { DEFAULT_AUTHOR_NAME } from '../../reducers/defaultData';
 import { TypedNavigation } from '../../helpers/navigation';
+import { calculateImageDimensions } from '../../helpers/imageDataHelpers';
 
 export type AuthorFeed = UIFeed;
 
@@ -32,7 +32,6 @@ export interface StateProps {
     isSelected: boolean;
     post: Post;
     currentTimestamp: number;
-    modelHelper: ModelHelper;
     togglePostSelection: (post: Post) => void;
     navigation: TypedNavigation;
     authorFeed: AuthorFeed | undefined;
@@ -73,7 +72,6 @@ const CardBody = (props: {
     post: Post,
     currentTimestamp: number,
     width: number,
-    modelHelper: ModelHelper,
     navigation: TypedNavigation,
     originalAuthorFeed: AuthorFeed | undefined,
     authorFeed: AuthorFeed | undefined;
@@ -107,7 +105,6 @@ const CardBody = (props: {
             <CardTop
                 post={props.post}
                 currentTimestamp={props.currentTimestamp}
-                modelHelper={props.modelHelper}
                 togglePostSelection={props.togglePostSelection}
                 onPress={cardTopOnPress}
             />
@@ -117,7 +114,6 @@ const CardBody = (props: {
                     <View>
                         <DisplayImage
                             post={props.post}
-                            modelHelper={props.modelHelper}
                             width={props.width}
                         />
                         {
@@ -143,7 +139,6 @@ const CardBody = (props: {
 
 const DisplayImage = (props: {
     post: Post,
-    modelHelper: ModelHelper,
     width: number,
 }) => {
     if (props.post.images.length === 0) {
@@ -163,7 +158,6 @@ const DisplayImage = (props: {
                     width: width,
                     height: height,
                 }}
-                modelHelper={props.modelHelper}
             />
         );
     } else {
@@ -171,8 +165,6 @@ const DisplayImage = (props: {
             <Carousel
                 testID='carousel'
                 post={props.post}
-                calculateImageDimensions={calculateImageDimensions}
-                modelHelper={props.modelHelper}
             />
         );
     }
@@ -185,10 +177,10 @@ const ActionIcon = (props: { name: string, color: string, iconSize?: number }) =
     return <Icon name={props.name} size={iconSize} color={props.color}/>;
 };
 
-const CardTopIcon = (props: { post: Post, modelHelper: ModelHelper }) => {
+const CardTopIcon = (props: { post: Post }) => {
     if (props.post.author) {
         return (
-            <Avatar image={props.post.author.image} modelHelper={props.modelHelper} size='large'/>
+            <Avatar image={props.post.author.image} size='large'/>
         );
     } else {
         return <View/>;
@@ -198,7 +190,6 @@ const CardTopIcon = (props: { post: Post, modelHelper: ModelHelper }) => {
 const CardTop = (props: {
     post: Post,
     currentTimestamp: number,
-    modelHelper: ModelHelper,
     togglePostSelection?: (post: Post) => void,
     onPress?: () => void;
 }) => {
@@ -214,7 +205,7 @@ const CardTop = (props: {
             onPress={props.onPress}
             style={styles.infoContainer}
         >
-            <CardTopIcon post={props.post} modelHelper={props.modelHelper}/>
+            <CardTopIcon post={props.post} />
             <View style={styles.usernameContainer}>
                 <View style={{flexDirection: 'row'}}>
                     <MediumText style={styles.username} numberOfLines={1}>{authorName}</MediumText>

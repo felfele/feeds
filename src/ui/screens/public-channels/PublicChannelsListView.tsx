@@ -7,7 +7,6 @@ import { Feed } from '../../../models/Feed';
 import { Colors, ComponentColors } from '../../../styles';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { GridCard, getGridCardSize } from '../../../ui/misc/GridCard';
-import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 import { MediumText } from '../../../ui/misc/text';
 import { TabBarPlaceholder } from '../../../ui/misc/TabBarPlaceholder';
 import { defaultImages } from '../../../defaultImages';
@@ -58,7 +57,6 @@ export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & {
                                 onPress={() => this.props.onPressFeed(item)}
                                 size={itemDimension}
                                 defaultImage={defaultImages.defaultUser}
-                                modelHelper={globalReactNativeModelHelper}
                                 isSelected={false}
                             />
                         );

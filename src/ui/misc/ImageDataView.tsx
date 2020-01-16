@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 import { ImageData, BundledImage } from '../../models/ImageData';
-import { ModelHelper } from '../../models/ModelHelper';
 import { getImageSource } from '../../helpers/imageDataHelpers';
 import { ChildrenProps } from './ChildrenProps';
 
@@ -17,7 +16,6 @@ export interface StateProps extends ImageProps {
     source: ImageData;
     defaultImage?: BundledImage;
     style?: StyleProp<ImageStyle>;
-    modelHelper: ModelHelper;
     background?: boolean;
     backgroundImageStyle?: StyleProp<ImageStyle>;
 }
@@ -25,7 +23,7 @@ export interface StateProps extends ImageProps {
 export type Props = StateProps & Partial<ChildrenProps>;
 
 export const ImageDataView = (props: Props) => {
-    const source = getImageSource(props.source, props.modelHelper, props.defaultImage);
+    const source = getImageSource(props.source, props.defaultImage);
     const width = props.style
         ? StyleSheet.flatten(props.style).width != null
             ? StyleSheet.flatten(props.style).width

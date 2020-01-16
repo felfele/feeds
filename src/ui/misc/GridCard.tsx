@@ -12,7 +12,6 @@ import {
 import { Colors } from '../../styles';
 import { MediumText } from './text';
 import { ImageDataView } from './ImageDataView';
-import { ModelHelper } from '../../models/ModelHelper';
 import { ImageData, BundledImage } from '../../models/ImageData';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -23,7 +22,6 @@ interface Props {
     imageStyle?: StyleProp<ImageStyle>;
     defaultImage?: BundledImage;
     size: number;
-    modelHelper: ModelHelper;
     isSelected: boolean;
 }
 
@@ -40,7 +38,6 @@ export const GridCard = React.memo((props: Props) => (
         <ImageDataView
             source={props.image}
             defaultImage={props.defaultImage}
-            modelHelper={props.modelHelper}
             style={[{
                 width: props.size,
                 height: props.size,

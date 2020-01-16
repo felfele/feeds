@@ -9,14 +9,12 @@ import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.horcrux.svg.SvgPackage;
-import com.rnfs.RNFSPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.rngrp.RNGRPPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,10 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
         new SplashScreenReactPackage(),
         new ReactNativeRestartPackage(),
         new SvgPackage(),
-        new RNFSPackage(),
         new RNCameraPackage(),
-        new VectorIconsPackage(),
-        new RNGRPPackage()
+        new VectorIconsPackage()
       );
     }
   };

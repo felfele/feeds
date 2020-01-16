@@ -16,8 +16,6 @@ import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 import { ImageDataView } from '../../misc/ImageDataView';
-import { ModelHelper } from '../../../models/ModelHelper';
-import { ReactNativeModelHelper, globalReactNativeModelHelper } from '../../../models/ReactNativeModelHelper';
 
 const QRCodeWidth = Dimensions.get('window').width * 0.8;
 const QRCodeHeight = QRCodeWidth;
@@ -83,7 +81,6 @@ export class FeedInfo extends React.Component<Props, FeedInfoState> {
                 <View style={styles.container}>
                     <ImageDataView
                         source={getFeedImage(this.props.feed)}
-                        modelHelper={globalReactNativeModelHelper}
                         style={{
                             width: imageWidth,
                             height: imageWidth,
