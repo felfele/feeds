@@ -3,6 +3,7 @@ package org.felfele.mobile;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
 import com.ismaeld.RNBuildConfig.RNBuildConfigPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
@@ -39,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            new RNPermissionsPackage(),
         new RNBuildConfigPackage(BuildConfig.class),
         new AsyncStoragePackage(),
         new RNBackgroundFetchPackage(),
