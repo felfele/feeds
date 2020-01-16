@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native';
+import { View, TouchableNativeFeedback, TouchableWithoutFeedback, TouchableWithoutFeedbackProps, Platform, TouchableNativeFeedbackBase } from 'react-native';
 
 export const TOUCHABLE_VIEW_DEFAULT_HIT_SLOP = {
     top: 20,
@@ -15,12 +15,17 @@ export const ZERO_HIT_SLOP = {
     right: 0,
 };
 
+const Touchable = Platform.OS === 'ios'
+    ? TouchableWithoutFeedback
+    : TouchableNativeFeedback
+;
+
 export interface TouchableViewProps extends TouchableWithoutFeedbackProps {
     children: React.ReactNode;
 }
 
 export const TouchableView = (props: TouchableViewProps) => (
-    <TouchableWithoutFeedback
+    <Touchable
         onPress={props.onPress}
         onLongPress={props.onLongPress}
         hitSlop={props.hitSlop ? props.hitSlop : TOUCHABLE_VIEW_DEFAULT_HIT_SLOP}
@@ -29,5 +34,5 @@ export const TouchableView = (props: TouchableViewProps) => (
         <View {...props} >
             {props.children}
         </View>
-    </TouchableWithoutFeedback>
+    </Touchable>
 );
