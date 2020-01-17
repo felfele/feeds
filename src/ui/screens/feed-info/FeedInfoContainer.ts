@@ -34,6 +34,9 @@ const getFeedToOpen = (feeds: Feed[], navigation: TypedNavigation) => {
 
 export const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedNavigation }): DispatchProps => {
     return {
+        onFollowFeed: (feed: Feed) => {
+            dispatch(Actions.followFeed(feed));
+        },
         onRemoveFeed: (feed: Feed) => {
             dispatch(Actions.removeFeed(feed));
             dispatch(AsyncActions.downloadFollowedFeedPosts());

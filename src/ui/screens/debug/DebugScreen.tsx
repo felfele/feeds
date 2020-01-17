@@ -8,7 +8,7 @@ import { AppState } from '../../../reducers/AppState';
 import { Debug } from '../../../Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import * as Dialogs from '../../../helpers/dialogs';
-import { Colors } from '../../../styles';
+import { Colors, ComponentColors } from '../../../styles';
 import { RowItem } from '../../buttons/RowButton';
 import { restartApp } from '../../../helpers/restart';
 import { Utils } from '../../../Utils';
@@ -62,7 +62,7 @@ export const DebugScreen = (props: Props) => (
             navigation={props.navigation}
             title='Debug menu'
         />
-        <View style={{ backgroundColor: '#EFEFF4', flex: 1 }}>
+        <View style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, flex: 1 }}>
             <ScrollView>
                 <RowItem
                     icon={

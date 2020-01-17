@@ -22,7 +22,7 @@ import QRCode from 'react-native-qrcode-svg';
 const IMAGE_WIDTH = Dimensions.get('window').width * 0.6;
 
 export interface DispatchProps {
-    onAddFeed: (feed: Feed) => void;
+    onFollowFeed: (feed: Feed) => void;
     onRemoveFeed: (feed: Feed) => void;
     onUnfollowFeed: (feed: Feed) => void;
 }
@@ -76,7 +76,7 @@ export class RSSFeedInfo extends React.Component<Props, State> {
                 label: 'Follow',
                 icon: <Icon name='link' size={24} color={Colors.BRAND_PURPLE}/>,
                 style: styles.buttonStyle,
-                onPress: () => this.props.onAddFeed(this.props.feed),
+                onPress: () => this.props.onFollowFeed(this.props.feed),
             }
         ;
         const imageToShow = this.state.imageToShow === 'image'

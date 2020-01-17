@@ -28,6 +28,7 @@ interface FeedInfoState {
 
 export interface DispatchProps {
     onRemoveFeed: (feed: Feed) => void;
+    onFollowFeed: (feed: Feed) => void;
     onUnfollowFeed: (feed: Feed) => void;
 }
 
