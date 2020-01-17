@@ -4,9 +4,9 @@ import { StateProps, DispatchProps } from './RSSFeedLoader';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { RSSFeedLoader } from './RSSFeedLoader';
 import { Alert } from 'react-native';
-import { fetchRSSFeedFromUrl } from '../../../helpers/feedHelpers';
-import { Debug } from '../../../Debug';
+import { fetchFeedsFromUrl } from '../../../helpers/feedHelpers';
 import { AsyncActions } from '../../../actions/asyncActions';
+import { Actions } from '../../../actions/Actions';
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     return {
@@ -19,14 +19,22 @@ export const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedN
     return {
         onLoad: async () => {
             const feedUrl = ownProps.navigation.getParam<'RSSFeedLoader', 'feedUrl'>('feedUrl');
-            const feed = await fetchRSSFeedFromUrl(feedUrl);
-            if (feed != null && feed.feedUrl !== '') {
-                dispatch(AsyncActions.addFeed(feed));
-                dispatch(AsyncActions.downloadPostsFromFeeds([feed]));
-                ownProps.navigation.navigate('Feed', {
-                    feedUrl: feed.feedUrl,
-                    name: feed.name,
-                });
+            const feeds = await fetchFeedsFromUrl(feedUrl);
+            if (feeds != null) {
+                if (Array.isArray(feeds)) {
+                    dispatch(Actions.mergeFeedsWithExistingFeeds(feeds));
+                    dispatch(AsyncActions.downloadPostsFromFeeds(feeds));
+                    ownProps.navigation.popToTop();
+                } else {
+                    const feed = feeds;
+                    dispatch(AsyncActions.addFeed(feed));
+                    dispatch(AsyncActions.downloadPostsFromFeeds([feed]));
+                    ownProps.navigation.navigate('Feed', {
+                        feedUrl: feed.feedUrl,
+                        name: feed.name,
+                    });
+
+                }
             } else {
                 onFailedFeedLoad().then(() => ownProps.navigation.goBack(null));
             }
@@ -35,7 +43,7 @@ export const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedN
 };
 
 const onFailedFeedLoad = (): Promise<void> => {
-    const promise = new Promise<void>((resolve, reject) => {
+    const promise = new Promise<void>((resolve) => {
         const options: any[] = [
             { text: 'Cancel', onPress: () => resolve(), style: 'cancel' },
         ];

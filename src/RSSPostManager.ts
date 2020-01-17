@@ -237,7 +237,10 @@ export class RSSFeedManager {
         if (!contentWithMimeType) {
             return null;
         }
+        return await this.fetchFeedByContentWithMimeType(url, contentWithMimeType);
+    }
 
+    public static async fetchFeedByContentWithMimeType(url: string, contentWithMimeType: ContentWithMimeType): Promise<Feed | null> {
         Debug.log('RSSFeedManager.fetchFeedFromUrl', {mimeType: contentWithMimeType.mimeType});
 
         if (contentWithMimeType.mimeType === 'text/html') {

@@ -6,7 +6,7 @@ import { NavigationHeader, HeaderDefaultLeftButtonIcon } from '../../misc/Naviga
 import { ComponentColors } from '../../../styles';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as AreYouSureDialog from '../../../helpers/AreYouSureDialog';
+import * as Dialogs from '../../../helpers/dialogs';
 import { FELFELE_ASSISTANT_URL } from '../../../reducers/defaultData';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { isFelfeleResource } from '../../../helpers/urlUtils';
@@ -78,7 +78,7 @@ export const FeedView = (props: Props) => {
 };
 
 export const unfollowFeed = async (feed: Feed, onUnfollowFeed: (feed: Feed) => void) => {
-    const confirmUnfollow = await AreYouSureDialog.show('Are you sure you want to unfollow?');
+    const confirmUnfollow = await Dialogs.areYouSureDialog('Are you sure you want to unfollow?');
     if (confirmUnfollow) {
         onUnfollowFeed(feed);
     }

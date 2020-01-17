@@ -5,6 +5,8 @@ import { Debug } from '../Debug';
 import * as urlUtils from '../helpers/urlUtils';
 import { RSSFeedManager } from '../RSSPostManager';
 
+export const FELFELE_FEEDS_MIME_TYPE = 'application/felfele-feeds+json';
+
 export const getFeedImage = (feed: Feed): ImageData => {
     if (isBundledImage(feed.favicon)) {
         return {
@@ -45,4 +47,38 @@ export const fetchRSSFeedFromUrl = async (url: string): Promise<Feed | null> => 
         Debug.log(e);
         return null;
     }
+};
+
+export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | null> => {
+    const canonicalUrl = getCanonicalUrlForRSS(url);
+    const contentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(canonicalUrl);
+    if (contentWithMimeType == null) {
+        return null;
+    }
+
+    if (contentWithMimeType.mimeType === FELFELE_FEEDS_MIME_TYPE) {
+        try {
+            const data = JSON.parse(contentWithMimeType.content);
+            const feeds = data.feeds;
+            return feeds;
+        } catch (e) {
+            return null;
+        }
+    } else {
+        return RSSFeedManager.fetchFeedByContentWithMimeType(canonicalUrl, contentWithMimeType);
+    }
+};
+
+const areFeedsEqual = (feedA: Feed, feedB: Feed): boolean => feedA.feedUrl === feedB.feedUrl;
+
+export const mergeFeeds = (feedsA: Feed[], feedsB: Feed[]): Feed[] => {
+    return feedsA
+        .concat(feedsB)
+        .sort((a, b) => a.url.localeCompare(b.url))
+        .filter((value, i, feeds) =>
+            i + 1 < feeds.length
+            ? areFeedsEqual(value, feeds[i + 1]) === false
+            : true
+        )
+    ;
 };

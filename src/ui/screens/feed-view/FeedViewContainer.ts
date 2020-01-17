@@ -8,7 +8,7 @@ export const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNa
     return {
         ...defaultStateToProps(state, ownProps),
         onBack: () => {
-            ownProps.navigation.pop(2);
+            ownProps.navigation.goBack(null);
         },
     };
 };

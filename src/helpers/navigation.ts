@@ -11,8 +11,7 @@ export interface Routes {
     SwarmSettingsContainer: {};
     FilterListEditorContainer: {};
     Backup: {};
-    Restore: {};
-    BackupRestore: {};
+    ExportImport: {};
     LogViewer: {};
     Debug: {};
     PublicChannelsListContainer: {

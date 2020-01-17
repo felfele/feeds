@@ -11,7 +11,6 @@ import { TypedNavigation } from '../../../helpers/navigation';
 
 export interface DispatchProps {
     onRefreshPosts: (feeds: Feed[]) => void;
-    onSaveDraft: (post: Post) => void;
 }
 
 export interface StateProps {

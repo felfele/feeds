@@ -9,27 +9,32 @@ export const defaultUrlScheme = '/bzz-raw:/';
 export const defaultPrefix = 'bzz:/';
 export const defaultFeedPrefix = 'bzz-feed:/';
 
-export const upload = async (data: string, swarmGateway: string): Promise<string> => {
+export const upload = async (data: string, swarmGateway: string, headers?: {[key: string]: string}): Promise<string> => {
     try {
-        const hash = await uploadString(data, swarmGateway);
+        swarmGateway = swarmGateway.endsWith('/')
+            ? swarmGateway.substring(0, swarmGateway.length - 1)
+            : swarmGateway
+        ;
+        const hash = await uploadString(data, swarmGateway, headers);
         Debug.log('upload', {hash});
-        return hash;
+        return swarmGateway + '/' + defaultPrefix + hash + '/';
     } catch (e) {
         Debug.log('upload:', {e});
         throw e;
     }
 };
 
-const uploadString = async (data: string, swarmGateway: string): Promise<string> => {
+const uploadString = async (data: string, swarmGateway: string, headers?: {[key: string]: string}): Promise<string> => {
     Debug.log('uploadString', {data});
     const url = swarmGateway + '/bzz:/';
     const options: RequestInit = {
-        headers: {
+        headers: headers ?? {
             'Content-Type': 'text/plain',
         },
         method: 'POST',
     };
     options.body = data;
+    Debug.log('uploadString', {url});
     const response = await safeFetch(url, options);
     const text = await response.text();
     return text;

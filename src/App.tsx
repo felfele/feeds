@@ -24,9 +24,8 @@ import { appendToLog } from './log';
 import { LogViewerScreenContainer } from './ui/screens/log-viewer/LogViewerScreenContainer';
 import { defaultTextProps } from './styles';
 import { FeedContainer } from './ui/screens/feed-view/FeedContainer';
-import { BackupRestore } from './ui/screens/backup-restore/BackupRestore';
-import { RestoreContainer } from './ui/screens/backup-restore/RestoreContainer';
-import { BackupContainer } from './ui/screens/backup-restore/BackupContainer';
+import { ExportImportScreen } from './ui/screens/export-import/ExportImportScreen';
+import { ExportScreenContainer } from './ui/screens/export-import/ExportScreenContainer';
 import { BugReportScren } from './ui/screens/bug-report/BugReportScreen';
 import { TopLevelErrorBoundary } from './ui/misc/TopLevelErrorBoundary';
 import { CategoriesContainer } from './ui/screens/explore/CategoriesContainer';
@@ -41,6 +40,7 @@ import { PublicChannelsListContainer } from './ui/screens/public-channels/Public
 import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkReaderContainer';
 import { RSSFeedLoaderContainer } from './ui/screens/rss-feed/RSSFeedLoaderContainer';
 import { FeedViewContainer } from './ui/screens/feed-view/FeedViewContainer';
+import { SwarmSettingsContainer } from './ui/screens/settings/SwarmSettingsContainer';
 
 YellowBox.ignoreWarnings([
     'Method `jumpToIndex` is deprecated.',
@@ -54,11 +54,8 @@ const Scenes: NavigationRouteConfigMap = {
     PublicChannelsContainer: {
         screen: PublicChannelsContainer,
     },
-    Restore: {
-        screen: RestoreContainer,
-    },
     Backup: {
-        screen: BackupContainer,
+        screen: ExportScreenContainer,
     },
     FeedInfo: {
         screen: FeedInfoContainer,
@@ -93,14 +90,17 @@ const Scenes: NavigationRouteConfigMap = {
     Settings: {
         screen: SettingsEditorContainer,
     },
+    SwarmSettingsContainer: {
+        screen: SwarmSettingsContainer,
+    },
     Debug: {
         screen: DebugScreenContainer,
     },
     LogViewer: {
         screen: LogViewerScreenContainer,
     },
-    BackupRestore: {
-        screen: BackupRestore,
+    ExportImport: {
+        screen: ExportImportScreen,
     },
     EditFilter: {
         screen: FilterEditorContainer,

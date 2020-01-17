@@ -17,6 +17,7 @@ import {
     defaultState,
 } from './defaultData';
 import { AppState } from './AppState';
+import { mergeFeeds } from '../helpers/feedHelpers';
 
 const contentFiltersReducer = (contentFilters: ContentFilter[] = [], action: Actions): ContentFilter[] => {
     switch (action.type) {
@@ -120,6 +121,10 @@ const feedsReducer = (feeds: Feed[] = defaultFeeds, action: Actions): Feed[] => 
         }
         case 'REMOVE-ALL-FEEDS': {
             return [];
+        }
+        case 'MERGE_FEEDS_WITH_EXISTING_FEEDS': {
+            const updatedFeeds = mergeFeeds(action.payload.feeds, feeds);
+            return updatedFeeds;
         }
         default: {
             return feeds;

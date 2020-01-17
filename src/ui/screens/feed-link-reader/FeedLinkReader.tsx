@@ -5,6 +5,7 @@ import {
     Dimensions,
     RegisteredStyle,
     ViewStyle,
+    Clipboard,
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
@@ -14,6 +15,9 @@ import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { getHttpLinkFromText } from '../../../helpers/urlUtils';
+import { FEEDS_LINK_MESSAGE } from '../../../helpers/linkHelpers';
+import { errorDialog } from '../../../helpers/dialogs';
 
 const QRCameraWidth = Dimensions.get('window').width;
 const QRCameraHeight = QRCameraWidth;
@@ -70,8 +74,19 @@ export class FeedLinkReader extends React.Component<Props, State> {
         );
     }
 
-    private handleLink(link: string) {
-        this.props.navigation.replace('RSSFeedLoader', { feedUrl: link });
+    public async componentDidMount() {
+        const clipboardText = await Clipboard.getString();
+        if (clipboardText.startsWith(FEEDS_LINK_MESSAGE)) {
+            const link = getHttpLinkFromText(clipboardText);
+            if (link != null) {
+                this.props.navigation.replace('RSSFeedLoader', { feedUrl: link });
+            }
+        }
+    }
+
+    private handleLink(text: string) {
+        const feedUrl = text;
+        this.props.navigation.replace('RSSFeedLoader', { feedUrl });
     }
 
     private onScanSuccess = (data: any) => {

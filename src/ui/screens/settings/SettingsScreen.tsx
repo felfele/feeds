@@ -46,6 +46,11 @@ export const SettingsScreen = (props: Props) => {
                 paddingTop: 10,
             }}>
                 <RowItem
+                    title='Export & Import feeds'
+                    buttonStyle='navigate'
+                    onPress={() => props.navigation.navigate('ExportImport', {})}
+                />
+                <RowItem
                     title='Send bug report'
                     buttonStyle='navigate'
                     onPress={() => props.navigation.navigate('BugReportView', {})}
