@@ -77,14 +77,14 @@ export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & {
 const ActionButtons = (openExplore: () => void, openAddChannel: () => void) => (
     <TwoButton
         leftButton={{
-            label: 'Add channel',
-            icon: <Icon name='plus-box' size={24} color={Colors.BRAND_PURPLE} />,
-            onPress: openAddChannel,
-        }}
-        rightButton={{
             label: 'Explore',
             icon: <Icon name='compass' size={24} color={Colors.BRAND_PURPLE}/>,
             onPress: openExplore,
+        }}
+        rightButton={{
+            label: 'Add channel',
+            icon: <Icon name='plus-box' size={24} color={Colors.BRAND_PURPLE} />,
+            onPress: openAddChannel,
         }}
     />
 );
