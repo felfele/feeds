@@ -54,12 +54,15 @@ const ListHeader = (props: {
 
 const ListFooter = (props: {
     link: string,
+    showLink: boolean,
 }) => (
-    <WideButton
-        label='Visit website for more'
-        icon={icon('link', ComponentColors.BUTTON_COLOR)}
-        onPress={() => Linking.openURL(props.link)}
-    />
+    props.showLink
+        ? <WideButton
+            label='Visit website for more'
+            icon={icon('link', ComponentColors.BUTTON_COLOR)}
+            onPress={() => Linking.openURL(props.link)}
+        />
+        : null
 );
 
 export const FeedView = (props: Props) => {
@@ -100,7 +103,10 @@ export const FeedView = (props: Props) => {
                     onPressFollow={() => props.onFollowFeed(props.feed)}
                     isLoading={props.posts.length === 0}
                 />,
-                listFooter: <ListFooter link={props.feed.url} />,
+                listFooter: <ListFooter
+                    link={props.feed.url}
+                    showLink={props.posts.length > 0}
+                />,
             }}
         </RefreshableFeed>
     );
