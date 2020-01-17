@@ -1,11 +1,11 @@
 import * as React from 'react';
-import QRCode from 'react-native-qrcode-svg';
 import {
     View,
     StyleSheet,
     Dimensions,
     ActivityIndicator,
 } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { NavigationHeader } from '../../misc/NavigationHeader';
@@ -21,6 +21,7 @@ import { Debug } from '../../../Debug';
 import { errorDialog, shareDialog } from '../../../helpers/dialogs';
 import { FELFELE_FEEDS_MIME_TYPE } from '../../../helpers/feedHelpers';
 import { makeFeedsLinkMessage } from '../../../helpers/linkHelpers';
+import { LoadingView } from '../../misc/LoadingView';
 
 const QRCodeWidth = Dimensions.get('window').width * 0.6;
 
@@ -72,15 +73,6 @@ const QRCodeView = (props: {navigation: TypedNavigation, qrCodeValue: string, on
     </View>
 );
 
-const WaitView = () => (
-    <View style={styles.container}>
-        <View style={styles.centerIcon}>
-            <RegularText style={styles.activityText}>Exporting feeds, hang tight...</RegularText>
-            <ActivityIndicator size='large' color='grey'/>
-        </View>
-    </View>
-);
-
 const uploadFeeds = async (appState: AppState): Promise<string> => {
     const exportedData = {
         feeds: appState.feeds.filter(feed => !feed.url.startsWith('local/')),
@@ -128,7 +120,7 @@ export class ExportScreen extends React.PureComponent<Props, State> {
                 navigation={this.props.navigation}
             />
             { this.state.type === 'saving'
-            ? <WaitView />
+            ? <LoadingView text='Exporting feeds, hang tight...' />
             : <QRCodeView
                 navigation={this.props.navigation}
                 qrCodeValue={this.state.link}
@@ -201,24 +193,5 @@ const styles = StyleSheet.create({
         color: Colors.GRAY,
         fontSize: 14,
         alignSelf: 'center',
-    },
-    container: {
-        backgroundColor: ComponentColors.BACKGROUND_COLOR,
-        flex: 1,
-        flexDirection: 'column',
-    },
-    centerIcon: {
-        width: '100%',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        height: 200,
-        backgroundColor: ComponentColors.BACKGROUND_COLOR,
-        paddingTop: 50,
-    },
-    activityText: {
-        fontSize: 16,
-        color: Colors.GRAY,
-        alignSelf: 'center',
-        marginBottom: 30,
     },
 });
