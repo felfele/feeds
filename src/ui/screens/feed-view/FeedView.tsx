@@ -11,6 +11,7 @@ import { FELFELE_ASSISTANT_URL } from '../../../reducers/defaultData';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { isFelfeleResource } from '../../../helpers/urlUtils';
 import { WideButton } from '../../buttons/WideButton';
+import { View, GestureResponderEvent, ActivityIndicator } from 'react-native';
 
 export interface DispatchProps {
     onRefreshPosts: (feeds: Feed[]) => void;
@@ -29,10 +30,32 @@ export interface StateProps {
 
 type Props = StateProps & DispatchProps;
 
+const icon = (name: string, color: string) => <Icon name={name} size={20} color={color} />;
+
+const ListHeader = (props: {
+    isFollowed: boolean,
+    onPressFollow: () => void,
+    isLoading: boolean,
+}) => (
+    <View style={{flexDirection: 'row'}}>
+        { props.isFollowed &&
+            <WideButton
+                label='Follow this channel'
+                icon={icon('link', ComponentColors.BUTTON_COLOR)}
+                onPress={props.onPressFollow}
+            />
+        }
+        { props.isLoading &&
+            <View style={{alignContent: 'center', width: '100%', paddingVertical: 20}}>
+                <ActivityIndicator size='large' color='grey'/>
+            </View>
+        }
+    </View>
+);
+
 export const FeedView = (props: Props) => {
     const isOnboardingFeed = props.feed.feedUrl === FELFELE_ASSISTANT_URL;
 
-    const icon = (name: string, color: string) => <Icon name={name} size={20} color={color} />;
     const button = (iconName: string, color: string, onPress: () => void) => ({
         label: icon(iconName, color),
         onPress,
@@ -51,14 +74,6 @@ export const FeedView = (props: Props) => {
         ...props,
         feeds: [props.feed],
     };
-    const listHeader = props.feed.followed !== true
-        ? <WideButton
-            label='Follow this channel'
-            icon={icon('link', ComponentColors.BUTTON_COLOR)}
-            onPress={() => props.onFollowFeed(props.feed)}
-        />
-        : undefined
-    ;
     return (
         <RefreshableFeed {...refreshableFeedProps}>
             {{
@@ -71,7 +86,11 @@ export const FeedView = (props: Props) => {
                     rightButton1={rightButton1}
                     title={props.feed.name}
                 />,
-                listHeader,
+                listHeader: <ListHeader
+                    isFollowed={props.feed.followed === true}
+                    onPressFollow={() => props.onFollowFeed(props.feed)}
+                    isLoading={props.posts.length === 0}
+                />,
             }}
         </RefreshableFeed>
     );

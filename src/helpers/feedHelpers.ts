@@ -69,12 +69,13 @@ export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | nu
     }
 };
 
-const areFeedsEqual = (feedA: Feed, feedB: Feed): boolean => feedA.feedUrl === feedB.feedUrl;
+const feedId = (feed: Feed) => feed.feedUrl;
+const areFeedsEqual = (feedA: Feed, feedB: Feed): boolean => feedId(feedA) === feedId(feedB);
 
 export const mergeFeeds = (feedsA: Feed[], feedsB: Feed[]): Feed[] => {
     return feedsA
         .concat(feedsB)
-        .sort((a, b) => a.url.localeCompare(b.url))
+        .sort((a, b) => feedId(a).localeCompare(feedId(b)))
         .filter((value, i, feeds) =>
             i + 1 < feeds.length
             ? areFeedsEqual(value, feeds[i + 1]) === false
