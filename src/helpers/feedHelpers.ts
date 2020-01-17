@@ -58,9 +58,9 @@ export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | nu
 
     if (contentWithMimeType.mimeType === FELFELE_FEEDS_MIME_TYPE) {
         try {
-            const data = JSON.parse(contentWithMimeType.content);
-            const feeds = data.feeds;
-            return feeds;
+            const data = JSON.parse(contentWithMimeType.content) as {feeds: Feed[]};
+            const rssFeeds = data.feeds.filter(feed => urlUtils.getHttpLinkFromText(feed.feedUrl) === feed.feedUrl);
+            return rssFeeds;
         } catch (e) {
             return null;
         }
