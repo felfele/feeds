@@ -101,7 +101,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.felfele.mobile"
+        applicationId "org.felfele.feeds"
         versionCode 25
         versionName "1.0.7"
         minSdkVersion rootProject.ext.minSdkVersion

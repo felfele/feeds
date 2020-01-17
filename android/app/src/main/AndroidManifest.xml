@@ -1,7 +1,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.felfele.mobile"
+    package="org.felfele.feeds"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -49,31 +49,5 @@
             </intent-filter>
         </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-        <activity
-            android:noHistory="true"
-            android:name=".share.ShareActivity"
-            android:configChanges="orientation"
-            android:label="@string/title_activity_share"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Share.Transparent" >
-        <intent-filter>
-            <action android:name="android.intent.action.SEND" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <data android:mimeType="text/plain" />
-            <data android:mimeType="image/*" />
-        </intent-filter>
-        </activity>
-        <!-- Change the resource name to your App's accent color - or any other color you want -->
-        <meta-data
-            android:name="com.dieam.reactnativepushnotification.notification_color"
-            android:resource="@android:color/white"
-        />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
     </application>
 </manifest>
