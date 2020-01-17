@@ -36,6 +36,7 @@ export const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedN
     return {
         onFollowFeed: (feed: Feed) => {
             dispatch(Actions.followFeed(feed));
+            dispatch(AsyncActions.downloadFollowedFeedPosts());
         },
         onRemoveFeed: (feed: Feed) => {
             dispatch(Actions.removeFeed(feed));

@@ -24,6 +24,7 @@ export interface StateProps {
     children: {
         // WARNING, type parameter included for reference, but it does not typecheck
         listHeader?: React.ReactElement<any>;
+        listFooter?: React.ReactElement<any>;
         navigationHeader?: React.ReactElement<NavHeaderProps>;
         placeholder?: React.ReactElement<any>;
     };
@@ -64,8 +65,8 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                 {this.props.children.navigationHeader}
                 {this.props.feeds.length === 0 && this.props.children.placeholder}
                 <FlatList
-                    ListFooterComponent={this.renderListFooter}
                     ListHeaderComponent={this.props.children.listHeader}
+                    ListFooterComponent={this.renderListFooter}
                     data={this.props.posts}
                     renderItem={(obj) => (
                         <CardContainer
@@ -117,10 +118,13 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
 
     private renderListFooter = () => {
         return (
-            <View style={{
-                height: 100,
-            }}
-            />
+            <View style={{flexDirection: 'column'}}>
+                {this.props.children.listFooter}
+                <View style={{
+                    height: 100,
+                }}
+                />
+            </View>
         );
     }
 }

@@ -11,7 +11,8 @@ import { FELFELE_ASSISTANT_URL } from '../../../reducers/defaultData';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { isFelfeleResource } from '../../../helpers/urlUtils';
 import { WideButton } from '../../buttons/WideButton';
-import { View, GestureResponderEvent, ActivityIndicator } from 'react-native';
+import { View, GestureResponderEvent, ActivityIndicator, Linking } from 'react-native';
+import { LoadingView } from '../../misc/LoadingView';
 
 export interface DispatchProps {
     onRefreshPosts: (feeds: Feed[]) => void;
@@ -37,8 +38,8 @@ const ListHeader = (props: {
     onPressFollow: () => void,
     isLoading: boolean,
 }) => (
-    <View style={{flexDirection: 'row'}}>
-        { props.isFollowed &&
+    <View style={{flexDirection: 'column'}}>
+        { props.isFollowed === false &&
             <WideButton
                 label='Follow this channel'
                 icon={icon('link', ComponentColors.BUTTON_COLOR)}
@@ -46,11 +47,19 @@ const ListHeader = (props: {
             />
         }
         { props.isLoading &&
-            <View style={{alignContent: 'center', width: '100%', paddingVertical: 20}}>
-                <ActivityIndicator size='large' color='grey'/>
-            </View>
+            <LoadingView text='Loading posts...' />
         }
     </View>
+);
+
+const ListFooter = (props: {
+    link: string,
+}) => (
+    <WideButton
+        label='Visit website for more'
+        icon={icon('link', ComponentColors.BUTTON_COLOR)}
+        onPress={() => Linking.openURL(props.link)}
+    />
 );
 
 export const FeedView = (props: Props) => {
@@ -91,6 +100,7 @@ export const FeedView = (props: Props) => {
                     onPressFollow={() => props.onFollowFeed(props.feed)}
                     isLoading={props.posts.length === 0}
                 />,
+                listFooter: <ListFooter link={props.feed.url} />,
             }}
         </RefreshableFeed>
     );
