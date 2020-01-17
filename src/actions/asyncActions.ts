@@ -10,6 +10,7 @@ import {
 import { Debug } from '../Debug';
 import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
+import { mergeFeeds } from '../helpers/feedHelpers';
 
 export const AsyncActions = {
     addFeed: (feed: Feed): Thunk => {

@@ -41,10 +41,10 @@ export class RSSFeedLoader extends React.Component<Props> {
                     navigation={this.props.navigation}
                 />
                 <View style={styles.container}>
-                        <View style={styles.centerIcon}>
-                            <Text style={styles.activityText}>Fetching channel, hang tight...</Text>
-                            <ActivityIndicator size='large' color='grey'/>
-                        </View>
+                    <View style={styles.centerIcon}>
+                        <Text style={styles.activityText}>Fetching channel, hang tight...</Text>
+                        <ActivityIndicator size='large' color='grey'/>
+                    </View>
                 </View>
             </FragmentSafeAreaViewWithoutTabBar>
         );

@@ -9,7 +9,7 @@ import { Feed } from '../../../models/Feed';
 import { ComponentColors, Colors } from '../../../styles';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as AreYouSureDialog from '../../../helpers/AreYouSureDialog';
+import * as Dialogs from '../../../helpers/dialogs';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
 import { RegularText } from '../../misc/text';
@@ -17,6 +17,9 @@ import { ImageDataView } from '../../misc/ImageDataView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 import { WideButton } from '../../buttons/WideButton';
 import { TwoButton } from '../../buttons/TwoButton';
+import QRCode from 'react-native-qrcode-svg';
+
+const IMAGE_WIDTH = Dimensions.get('window').width * 0.6;
 
 export interface DispatchProps {
     onAddFeed: (feed: Feed) => void;
@@ -32,17 +35,35 @@ export interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
+interface State {
+    imageToShow: 'image' | 'qrcode';
+}
+
 const PUBLIC_CHANNEL_LABEL = 'This is a public channel.';
 const NOT_FOLLOWED_STATUS = 'You are not following it.';
 const FOLLOWED_STATUS = 'You are following it.';
 
-export class RSSFeedInfo extends React.Component<Props> {
+const QRCodeView = (props: {data: string}) => (
+    <View style={styles.imageStyle}>
+        <QRCode
+            value={props.data}
+            size={IMAGE_WIDTH}
+            color={Colors.BLACK}
+            backgroundColor={ComponentColors.BACKGROUND_COLOR}
+        />
+    </View>
+);
+
+export class RSSFeedInfo extends React.Component<Props, State> {
+    public state: State = {
+        imageToShow: 'image',
+    };
+
     constructor(props: Props) {
         super(props);
     }
 
     public render() {
-        const imageWidth = Dimensions.get('window').width * 0.7;
         const followToggleButton = this.props.feed.followed
             ? {
                 label: 'Unfollow',
@@ -58,23 +79,33 @@ export class RSSFeedInfo extends React.Component<Props> {
                 onPress: () => this.props.onAddFeed(this.props.feed),
             }
         ;
+        const imageToShow = this.state.imageToShow === 'image'
+            ? <ImageDataView
+                source={getFeedImage(this.props.feed)}
+                style={styles.imageStyle}
+                resizeMode='cover'
+            />
+            : <QRCodeView data={this.props.feed.feedUrl} />
+        ;
+        const rightButton = this.state.imageToShow === 'image'
+            ? {
+                label: <Icon name='qrcode' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
+                onPress: () => this.setState({imageToShow: 'qrcode'}),
+            }
+            : {
+                label: <Icon name='image' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
+                onPress: () => this.setState({imageToShow: 'image'}),
+            }
+        ;
         return (
             <FragmentSafeAreaViewWithoutTabBar>
                 <NavigationHeader
                     title={this.props.feed.name}
                     navigation={this.props.navigation}
+                    rightButton1={rightButton}
                 />
                 <View style={styles.container}>
-                    <ImageDataView
-                        source={getFeedImage(this.props.feed)}
-                        style={{
-                            width: imageWidth,
-                            height: imageWidth,
-                            alignSelf: 'center',
-                            marginVertical: 20,
-                        }}
-                        resizeMode='cover'
-                    />
+                    { imageToShow }
                     <RegularText style={styles.explanationText}>{PUBLIC_CHANNEL_LABEL}</RegularText>
                     <RegularText style={styles.explanationText}>{
                         this.props.feed.followed
@@ -104,7 +135,7 @@ export class RSSFeedInfo extends React.Component<Props> {
     }
 
     private onUnfollowFeed = async () => {
-        const confirmUnfollow = await AreYouSureDialog.show(
+        const confirmUnfollow = await Dialogs.areYouSureDialog(
             'Are you sure you want to unfollow?',
             'This will remove this channel from your Public channels feed and you will no longer get updates from it.'
         );
@@ -114,7 +145,7 @@ export class RSSFeedInfo extends React.Component<Props> {
     }
 
     private onRemoveFeed = async () => {
-        const confirmUnfollow = await AreYouSureDialog.show(
+        const confirmUnfollow = await Dialogs.areYouSureDialog(
             'Are you sure you want to delete channel?',
             'It will be removed from your channel list.'
         );
@@ -137,5 +168,11 @@ const styles = StyleSheet.create({
     },
     buttonStyle: {
         marginTop: 20,
+    },
+    imageStyle: {
+        width: IMAGE_WIDTH,
+        height: IMAGE_WIDTH,
+        alignSelf: 'center',
+        marginVertical: 20,
     },
 });

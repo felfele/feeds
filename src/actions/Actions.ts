@@ -23,6 +23,7 @@ export const Actions = {
         createAction(ActionTypes.ADD_CONTENT_FILTER, { text, createdAt, validUntil }),
     removeContentFilter: (filter: ContentFilter) =>
         createAction(ActionTypes.REMOVE_CONTENT_FILTER, { filter }),
+
     removeFeed: (feed: Feed) =>
         createAction(ActionTypes.REMOVE_FEED, { feed }),
     followFeed: (feed: Feed) =>
@@ -31,8 +32,16 @@ export const Actions = {
         createAction(ActionTypes.UNFOLLOW_FEED, { feed }),
     toggleFeedFavorite: (feedUrl: string) =>
         createAction(ActionTypes.TOGGLE_FEED_FAVORITE, { feedUrl }),
+    cleanFeedsFromOwnFeeds: (feedUrls: string[]) =>
+        createAction(ActionTypes.CLEAN_FEEDS_FROM_OWN_FEEDS, { feedUrls }),
+    removeAllFeeds: () =>
+        createAction(ActionTypes.REMOVE_ALL_FEEDS),
+    mergeFeedsWithExistingFeeds: (feeds: Feed[]) =>
+        createAction(ActionTypes.MERGE_FEEDS_WITH_EXISTING_FEEDS, { feeds }),
+
     timeTick: () =>
         createAction(ActionTypes.TIME_TICK),
+
     deletePost: (post: Post) =>
         createAction(ActionTypes.DELETE_POST, { post }),
     removeAllPosts: () =>
@@ -45,20 +54,14 @@ export const Actions = {
         createAction(ActionTypes.UPDATE_POST_IMAGES, {post, images}),
     updateRssPosts: (posts: Post[]) =>
         createAction(ActionTypes.UPDATE_RSS_POSTS, { posts }),
-    addDraft: (draft: Post) =>
-        createAction(ActionTypes.ADD_DRAFT, { draft }),
-    removeDraft: () =>
-        createAction(ActionTypes.REMOVE_DRAFT),
-    appStateReset: () =>
-        createAction(ActionTypes.APP_STATE_RESET),
+
     changeSettingShowSquareImages: (value: boolean) =>
         createAction(ActionTypes.CHANGE_SETTING_SHOW_SQUARE_IMAGES, { value }),
     changeSettingShowDebugMenu: (value: boolean) =>
         createAction(ActionTypes.CHANGE_SETTING_SHOW_DEBUG_MENU, { value }),
     changeSettingSwarmGatewayAddress: (value: string) =>
         createAction(ActionTypes.CHANGE_SETTING_SWARM_GATEWAY_ADDRESS, { value }),
-    cleanFeedsFromOwnFeeds: (feedUrls: string[]) =>
-        createAction(ActionTypes.CLEAN_FEEDS_FROM_OWN_FEEDS, { feedUrls }),
-    removeAllFeeds: () =>
-        createAction(ActionTypes.REMOVE_ALL_FEEDS),
+
+    appStateReset: () =>
+        createAction(ActionTypes.APP_STATE_RESET),
 };

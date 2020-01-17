@@ -8,7 +8,7 @@ import { NavigationHeader } from '../../misc/NavigationHeader';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewForTabBar } from '../../misc/FragmentSafeAreaView';
 import { TwoButton } from '../../buttons/TwoButton';
-import { Colors } from '../../../styles';
+import { Colors, ComponentColors } from '../../../styles';
 
 export interface StateProps {
     navigation: TypedNavigation;
@@ -22,23 +22,23 @@ export type Props = StateProps & DispatchProps;
 export interface State {
 }
 
-export const BackupRestore = (props: Props) => (
+export const ExportImportScreen = (props: Props) => (
     <FragmentSafeAreaViewForTabBar>
         <NavigationHeader
-            title='Backup & Restore'
+            title='Export & Import feeds'
             navigation={props.navigation}
         />
         <View style={styles.buttonContainer}>
             <TwoButton
                 leftButton={{
-                    label: 'Backup',
+                    label: 'Export',
                     icon: <Icon name='cloud-upload' color={Colors.BRAND_PURPLE} size={24} />,
                     onPress: () => props.navigation.navigate('Backup', {}),
                 }}
                 rightButton={{
-                    label: 'Restore',
+                    label: 'Import',
                     icon: <Icon name='cloud-download' color={Colors.BRAND_PURPLE} size={24} />,
-                    onPress: () => props.navigation.navigate('Restore', {}),
+                    onPress: () => props.navigation.navigate('FeedLinkReader', {}),
                 }}
             />
         </View>
@@ -51,5 +51,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        backgroundColor: ComponentColors.BACKGROUND_COLOR,
     },
 });

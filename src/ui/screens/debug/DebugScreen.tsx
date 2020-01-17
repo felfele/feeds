@@ -7,7 +7,7 @@ import { getSerializedAppState, getAppStateFromSerialized } from '../../../store
 import { AppState } from '../../../reducers/AppState';
 import { Debug } from '../../../Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
-import * as AreYouSureDialog from '../../../helpers/AreYouSureDialog';
+import * as Dialogs from '../../../helpers/dialogs';
 import { Colors } from '../../../styles';
 import { RowItem } from '../../buttons/RowButton';
 import { restartApp } from '../../../helpers/restart';
@@ -98,14 +98,6 @@ export const DebugScreen = (props: Props) => (
                 />
                 <RowItem
                     icon={
-                        <MaterialCommunityIcon name='backup-restore' />
-                    }
-                    title='Backup & Restore'
-                    onPress={() => props.navigation.navigate('BackupRestore', {})}
-                    buttonStyle='navigate'
-                />
-                <RowItem
-                    icon={
                         <MaterialCommunityIcon name='server-network' />
                     }
                     title='Swarm settings'
@@ -134,7 +126,7 @@ export const DebugScreen = (props: Props) => (
 );
 
 const onAppStateReset = async (props: Props) => {
-    const confirmed = await AreYouSureDialog.show(
+    const confirmed = await Dialogs.areYouSureDialog(
         'Are you sure you want to reset the app state?',
         'This will delete all your data and there is no undo!'
     );
@@ -148,7 +140,7 @@ const onAppStateReset = async (props: Props) => {
 };
 
 const onDeleteFeeds = async (props: Props) => {
-    const confirmed = await AreYouSureDialog.show(
+    const confirmed = await Dialogs.areYouSureDialog(
         'Are you sure you want to delete feeds?',
         'This will delete all your feeds and there is no undo!'
     );
@@ -158,7 +150,7 @@ const onDeleteFeeds = async (props: Props) => {
 };
 
 const onDeletePosts = async (props: Props) => {
-    const confirmed = await AreYouSureDialog.show(
+    const confirmed = await Dialogs.areYouSureDialog(
         'Are you sure you want to delete all posts?',
         'This will delete all your posts and there is no undo!'
     );

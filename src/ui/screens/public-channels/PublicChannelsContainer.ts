@@ -28,9 +28,6 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
         onRefreshPosts: (feeds: Feed[]) => {
             dispatch(AsyncActions.downloadPostsFromFeeds(feeds));
         },
-        onSaveDraft: (draft: Post) => {
-            dispatch(Actions.addDraft(draft));
-        },
     };
 };
 
