@@ -15,7 +15,6 @@ import * as urlUtils from '../../helpers/urlUtils';
 import { ImageDataView } from '../misc/ImageDataView';
 import { MediumText, RegularText } from '../misc/text';
 import { Avatar } from '../misc/Avatar';
-import { Carousel } from '../misc/Carousel';
 import { CardMarkdown } from './CardMarkdown';
 import { Feed } from '../../models/Feed';
 import { DEFAULT_AUTHOR_NAME } from '../../reducers/defaultData';
@@ -143,7 +142,7 @@ const DisplayImage = (props: {
 }) => {
     if (props.post.images.length === 0) {
         return null;
-    } else if (props.post.images.length === 1) {
+    } else {
         const image = props.post.images[0];
         const defaultImageWidth = props.width;
         const defaultImageHeight = Math.floor(defaultImageWidth * 0.66);
@@ -158,13 +157,6 @@ const DisplayImage = (props: {
                     width: width,
                     height: height,
                 }}
-            />
-        );
-    } else {
-        return (
-            <Carousel
-                testID='carousel'
-                post={props.post}
             />
         );
     }
