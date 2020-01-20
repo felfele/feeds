@@ -9,7 +9,6 @@ import { TypedNavigation } from '../../src/helpers/navigation';
 
 Debug.setDebugMode(true);
 jest.mock('../../src/ui/card/CardMarkdown');
-jest.mock('../../src/ui/misc/Carousel');
 
 const mockNavigation: TypedNavigation = {
     goBack: (routeKey?: string | null) => true,
@@ -119,7 +118,7 @@ describe('card test', () => {
         expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0);
     });
 
-    it('should render unselected post with multiple images with the following components: Post, CardTop, Carousel, without CardButtonList', () => {
+    it('should render unselected post with multiple images with the following components: Post, CardTop, without CardButtonList', () => {
         const result = TestRenderer.create(
             <Card
                 post={testPostWithMultipleImages}
@@ -136,7 +135,6 @@ describe('card test', () => {
         ).root;
         expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
         expect(result.findByProps({ testID: 'CardTop' }));
-        expect(result.findByProps({ testID: 'carousel' }));
         expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0);
     });
 
