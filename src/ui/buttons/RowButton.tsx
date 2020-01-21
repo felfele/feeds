@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'white',
         borderBottomColor: 'lightgray',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         paddingHorizontal: 10,
-        height: 44,
+        height: 50,
     },
     title: {
         fontSize: 14,

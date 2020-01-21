@@ -1,19 +1,14 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../reducers/AppState';
-import { RSSPostManager } from '../../../RSSPostManager';
-import { Actions } from '../../../actions/Actions';
 import { Feed } from '../../../models/Feed';
 import { StateProps, DispatchProps, PublicChannelsScreen } from './PublicChannelsScreen';
 import { getAllFeeds, getAllPostsSorted } from '../../../selectors/selectors';
-import { Post } from '../../../models/Post';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { AsyncActions } from '../../../actions/asyncActions';
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     const followedFeeds = getAllFeeds(state);
     const filteredPosts = getAllPostsSorted(state);
-
-    RSSPostManager.setContentFilters(state.contentFilters);
 
     return {
         navigation: ownProps.navigation,
