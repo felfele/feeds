@@ -26,11 +26,11 @@ interface Props {
 }
 
 export const GRID_SPACING = 10;
-export const GRID_CARD_COUNT_IN_ROW = 2;
+export const GRID_CARD_COUNT_IN_ROW = 3;
 
 export const getGridCardSize = () => {
     const windowWidth = Dimensions.get('window').width;
-    return Math.floor((windowWidth - GRID_SPACING * 3) / GRID_CARD_COUNT_IN_ROW);
+    return Math.floor((windowWidth - GRID_SPACING * (GRID_CARD_COUNT_IN_ROW + 1)) / GRID_CARD_COUNT_IN_ROW);
 };
 
 export const GridCard = React.memo((props: Props) => (
