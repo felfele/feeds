@@ -106,14 +106,6 @@ export const DebugScreen = (props: Props) => (
                 />
                 <RowItem
                     icon={
-                        <MaterialCommunityIcon name='filter-outline' />
-                    }
-                    title='Mute keywords and phrases'
-                    buttonStyle='navigate'
-                    onPress={() => props.navigation.navigate('FilterListEditorContainer', {})}
-                />
-                <RowItem
-                    icon={
                         <IonIcon name='md-list' />
                     }
                     title='View logs'
