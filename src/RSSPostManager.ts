@@ -9,7 +9,7 @@ import { ContentFilter } from './models/ContentFilter';
 import { Debug } from './Debug';
 import {
     HEADERS_WITH_FELFELE,
-    HEADERS_WITH_CURL,
+    HEADERS_WITH_SAFARI,
     rssFeedHelper,
     RSSFeedWithMetrics,
     RSSFeed,
@@ -98,7 +98,7 @@ export class RSSFeedManager {
 
         try {
             const response = await safeFetch(url, {
-                headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
+                headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI,
             });
 
             const contentType = response.headers.get('Content-Type');
