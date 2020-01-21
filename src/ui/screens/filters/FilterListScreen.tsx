@@ -22,31 +22,29 @@ export class FilterListScreen extends React.Component<StateProps & DispatchProps
     public render() {
         return (
             <FragmentSafeAreaViewWithoutTabBar>
-                <View style={styles.container}>
-                    <NavigationHeader
-                        title='Mute keywords'
-                        navigation={this.props.navigation}
-                        rightButton1={{
-                            onPress: this.onAddFilter,
-                            label: <MaterialIcon name='add-box' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
-                        }}
-                    />
-                    <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR }}>
-                        {this.props.filters.map(filter => (
-                            <RowItem
-                                title={filter.text}
-                                description={
-                                    'Expires in ' +
-                                    DateUtils.printableElapsedTime(Date.now(), filter.createdAt + filter.validUntil)}
-                                key={filter.text}
-                                buttonStyle='navigate'
-                                onPress={() => {
-                                    this.editFilter(filter);
-                                }}
-                            />
-                        ))}
-                    </ScrollView>
-                </View>
+                <NavigationHeader
+                    title='Mute keywords'
+                    navigation={this.props.navigation}
+                    rightButton1={{
+                        onPress: this.onAddFilter,
+                        label: <MaterialIcon name='add-box' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
+                    }}
+                />
+                <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR }}>
+                    {this.props.filters.map(filter => (
+                        <RowItem
+                            title={filter.text}
+                            description={
+                                'Expires in ' +
+                                DateUtils.printableElapsedTime(Date.now(), filter.createdAt + filter.validUntil)}
+                            key={filter.text}
+                            buttonStyle='navigate'
+                            onPress={() => {
+                                this.editFilter(filter);
+                            }}
+                        />
+                    ))}
+                </ScrollView>
             </FragmentSafeAreaViewWithoutTabBar>
         );
     }
@@ -68,6 +66,5 @@ export class FilterListScreen extends React.Component<StateProps & DispatchProps
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: ComponentColors.HEADER_COLOR,
     },
 });

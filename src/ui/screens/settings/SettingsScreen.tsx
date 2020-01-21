@@ -46,6 +46,11 @@ export const SettingsScreen = (props: Props) => {
                 paddingTop: 10,
             }}>
                 <RowItem
+                    title='Mute keywords'
+                    buttonStyle='navigate'
+                    onPress={() => props.navigation.navigate('FilterListEditorContainer', {})}
+                />
+                <RowItem
                     title='Export & Import feeds'
                     buttonStyle='navigate'
                     onPress={() => props.navigation.navigate('ExportImport', {})}
