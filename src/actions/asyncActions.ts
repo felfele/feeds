@@ -10,7 +10,7 @@ import {
 import { Debug } from '../Debug';
 import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
-import { mergeFeeds } from '../helpers/feedHelpers';
+import { ContentFilter } from '../models/ContentFilter';
 
 export const AsyncActions = {
     addFeed: (feed: Feed): Thunk => {
@@ -28,6 +28,14 @@ export const AsyncActions = {
                     dispatch(Actions.removeContentFilter(filter));
                 }
             });
+        };
+    },
+    applyContentFilters: (): Thunk => {
+        return async (dispatch, getState) => {
+            const rssPosts = getState().rssPosts;
+            const contentFilters = getState().contentFilters;
+            const filteredPosts = applyContentFiltersToPosts(rssPosts, contentFilters);
+            dispatch(Actions.updateRssPosts(filteredPosts));
         };
     },
     downloadFollowedFeedPosts: (): Thunk => {
@@ -48,7 +56,9 @@ export const AsyncActions = {
                 loadRSSPostsFromFeeds(feedsWithoutOnboarding),
             ]);
             const posts = mergeUpdatedPosts(allPosts[0], previousPosts);
-            dispatch(Actions.updateRssPosts(posts));
+            const contentFilters = getState().contentFilters;
+            const filteredPosts = applyContentFiltersToPosts(posts, contentFilters);
+            dispatch(Actions.updateRssPosts(filteredPosts));
         };
     },
     removePost: (post: Post): Thunk => {
@@ -80,4 +90,18 @@ export const AsyncActions = {
 
 const loadRSSPostsFromFeeds = async (feeds: Feed[]): Promise<Post[]> => {
     return await RSSPostManager.loadPosts(feeds);
+};
+
+const matchContentFilters = (text: string, contentFilters: ContentFilter[]): boolean => {
+    for (const filter of contentFilters) {
+        const regexp = new RegExp(filter.text, 'i');
+        if (text.search(regexp) !== -1) {
+            return true;
+        }
+    }
+    return false;
+};
+
+const applyContentFiltersToPosts = (posts: Post[], contentFilters: ContentFilter[]): Post[] => {
+    return posts.filter(post => matchContentFilters(post.text, contentFilters) === false);
 };

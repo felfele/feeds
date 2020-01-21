@@ -4,6 +4,7 @@ import { Actions } from '../../../actions/Actions';
 import { StateProps, DispatchProps, FilterEditorScreen } from './FilterEditorScreen';
 import { ContentFilter } from '../../../models/ContentFilter';
 import { TypedNavigation } from '../../../helpers/navigation';
+import { AsyncActions } from '../../../actions/asyncActions';
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     return {
@@ -20,6 +21,7 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
                 filter.createdAt,
                 filter.validUntil,
             ));
+            dispatch(AsyncActions.applyContentFilters());
         },
         onRemoveFilter: (filter: ContentFilter) => {
             dispatch(Actions.removeContentFilter(filter));

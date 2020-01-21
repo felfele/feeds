@@ -5,6 +5,7 @@ import {
     View,
     Text,
     Slider,
+    KeyboardAvoidingView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -16,15 +17,19 @@ import { Debug } from '../../../Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { WideButton } from '../../buttons/WideButton';
+import { TwoButton } from '../../buttons/TwoButton';
 
-type SliderValue = 0 | 1 | 2 | 3;
+type SliderValue = 0 | 1 | 2 | 3 | 4 | 5;
 
 const sliderValueToDateDiff = (value: SliderValue): number => {
     switch (value) {
         case 0: return DAY;
         case 1: return WEEK;
-        case 2: return MONTH31;
-        case 3: return YEAR;
+        case 2: return 2 * WEEK;
+        case 3: return MONTH31;
+        case 4: return 3 * MONTH31;
+        case 5: return 6 * MONTH31;
     }
 };
 
@@ -37,9 +42,11 @@ const filterValidUntilToSliderValue = (dateDiff: number): SliderValue => {
     switch (dateDiff) {
         case DAY: return 0;
         case WEEK: return 1;
-        case MONTH31: return 2;
-        case YEAR: return 3;
-        default: return 0;
+        case 2 * WEEK: return 2;
+        case MONTH31: return 3;
+        case 3 * MONTH31: return 4;
+        case 6 * MONTH31: return 5;
+        default: return 2;
     }
 };
 
@@ -69,54 +76,79 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
         };
     }
     public render() {
-        const sliderText = 'Filter until: ' + sliderValueToText(this.state.filterSliderValue);
+        const sliderText = 'Mute until: ' + sliderValueToText(this.state.filterSliderValue);
         const isDelete = this.props.filter.text.length > 0;
-        const rightButtonText = isDelete
-            ? <Icon
-                name='delete'
-                size={20}
-                color={ComponentColors.NAVIGATION_BUTTON_COLOR}
+        const addOrEditFilter = isDelete
+            ? () => {
+                this.props.onRemoveFilter(this.props.filter);
+                this.onAddFilter();
+            }
+            : this.onAddFilter
+        ;
+        const button = isDelete
+            ? <TwoButton
+                leftButton={{
+                    label: 'Edit keyword',
+                    icon: <Icon
+                        name='edit'
+                        size={20}
+                        color={ComponentColors.BUTTON_COLOR}
+                    />,
+                    onPress: addOrEditFilter,
+                }}
+                rightButton={{
+                    label: 'Delete',
+                    icon: <Icon
+                        name='delete'
+                        size={20}
+                        color={ComponentColors.WARNING_BUTTON_COLOR}
+                    />,
+                    onPress: this.onDeleteFilter,
+                    fontStyle: { color: ComponentColors.WARNING_BUTTON_COLOR},
+                }}
             />
-            : <Icon
-                name='add-box'
-                size={20}
-                color={ComponentColors.NAVIGATION_BUTTON_COLOR}
+            : <WideButton
+                label='Add keyword'
+                icon={<Icon
+                    name='add-box'
+                    size={20}
+                    color={ComponentColors.BUTTON_COLOR}
+                />}
+                onPress={addOrEditFilter}
             />
-            ;
-        const rightButtonAction = isDelete ? this.onDeleteFilter : this.onAddFilter;
+        ;
         return (
             <FragmentSafeAreaViewWithoutTabBar>
                 <NavigationHeader
-                    title='Edit keyword'
+                    title='Mute keyword'
                     navigation={this.props.navigation}
-                    rightButton1={{
-                        onPress: rightButtonAction,
-                        label: rightButtonText,
-                    }}
                 />
-                <SimpleTextInput
-                    defaultValue={this.state.filterText}
-                    style={styles.linkInput}
-                    onChangeText={(text) => this.setState({ filterText: text })}
-                    placeholder='Keywords to be filtered'
-                    autoCapitalize='none'
-                    returnKeyType='done'
-                    onSubmitEditing={rightButtonAction}
-                    onEndEditing={() => {}}
-                    autoFocus={true}
-                    autoCorrect={false}
-                />
-                <View style={styles.sliderContainer}>
-                    <Text style={styles.sliderText}>{sliderText}</Text>
-                    <Slider
-                        style={styles.slider}
-                        minimumValue={0}
-                        maximumValue={3}
-                        step={1}
-                        value={this.state.filterSliderValue}
-                        onValueChange={(value) => this.setState({ filterSliderValue: value as SliderValue })}
+                <KeyboardAvoidingView style={{flex: 1, backgroundColor: ComponentColors.BACKGROUND_COLOR}}>
+                    <SimpleTextInput
+                        defaultValue={this.state.filterText}
+                        style={styles.linkInput}
+                        onChangeText={(text) => this.setState({ filterText: text })}
+                        placeholder='Keywords to be muted'
+                        autoCapitalize='none'
+                        returnKeyType='done'
+                        onSubmitEditing={addOrEditFilter}
+                        onEndEditing={() => {}}
+                        autoFocus={true}
+                        autoCorrect={false}
                     />
-                </View>
+                    <View style={styles.sliderContainer}>
+                        <Text style={styles.sliderText}>{sliderText}</Text>
+                        <Slider
+                            style={styles.slider}
+                            minimumValue={0}
+                            maximumValue={5}
+                            step={1}
+                            value={this.state.filterSliderValue}
+                            onValueChange={(value) => this.setState({ filterSliderValue: value as SliderValue })}
+                        />
+                    </View>
+                    {button}
+                </KeyboardAvoidingView>
             </FragmentSafeAreaViewWithoutTabBar>
         );
     }
@@ -141,7 +173,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
             { text: 'Cancel', onPress: () => Debug.log('Cancel Pressed'), style: 'cancel' },
         ];
 
-        Alert.alert('Are you sure you want to delete the filter?',
+        Alert.alert('Are you sure you want to delete the keyword?',
             undefined,
             options,
             { cancelable: true },
@@ -168,6 +200,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         color: 'gray',
         fontSize: 16,
+        marginTop: 12,
     },
     deleteButtonContainer: {
         backgroundColor: 'white',

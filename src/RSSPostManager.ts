@@ -5,7 +5,6 @@ import { FaviconCache } from './FaviconCache';
 import { Utils } from './Utils';
 import * as urlUtils from './helpers/urlUtils';
 import { HtmlUtils } from './HtmlUtils';
-import { ContentFilter } from './models/ContentFilter';
 import { Debug } from './Debug';
 import {
     HEADERS_WITH_FELFELE,
@@ -289,11 +288,6 @@ class _RSSPostManager {
     public readonly feedManager = new RSSFeedManager();
 
     private id = FirstId;
-    private contentFilters: ContentFilter[] = [];
-
-    public setContentFilters(contentFilters: ContentFilter[]) {
-        this.contentFilters = contentFilters;
-    }
 
     public async loadPosts(storedFeeds: Feed[]): Promise<PublicPost[]> {
         const startTime = Date.now();
@@ -471,9 +465,6 @@ class _RSSPostManager {
             };
             return post;
         }).filter(post => {
-            if (this.matchContentFilters(post.text)) {
-                return false;
-            }
             if (post.link != null && links.has(post.link)) {
                 return false;
             }
@@ -515,16 +506,6 @@ class _RSSPostManager {
                         .map(enclosure => ({uri: enclosure.url}))
                         ;
         return images;
-    }
-
-    private matchContentFilters(text: string): boolean {
-        for (const filter of this.contentFilters) {
-            const regexp = new RegExp(filter.text, 'i');
-            if (text.search(regexp) !== -1) {
-                return true;
-            }
-        }
-        return false;
     }
 }
 
