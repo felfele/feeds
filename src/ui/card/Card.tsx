@@ -239,6 +239,9 @@ const CardTop = (props: {
                             <RowItem
                                 title={`Share...`}
                                 buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
                                 onPress={async () => {
                                     await shareDialog('Share link', props.post.link || '');
                                     actionSheet?.setModalVisible();
@@ -247,6 +250,9 @@ const CardTop = (props: {
                             <RowItem
                                 title={`Open link in browser`}
                                 buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
                                 onPress={() => {
                                     Linking.openURL(props.post.link || '');
                                     actionSheet?.setModalVisible();
@@ -255,8 +261,11 @@ const CardTop = (props: {
                             <RowItem
                                 title={`Show less like this`}
                                 buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
                                 onPress={() => {
-                                    // actionSheet?.setModalVisible();
+                                    // removing the post automatically removes the action sheet
                                     props.onRemovePost(props.post);
                                 }}
                             />
