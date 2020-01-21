@@ -11,8 +11,8 @@ const util = require('react-native-util');
 const xml2js = require('react-native-xml2js');
 
 // this is needed for tumblr
-export const HEADERS_WITH_CURL = {
-    'User-Agent': 'curl/7.54.0',
+export const HEADERS_WITH_SAFARI = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15',
     'Accept': '*/*',
 };
 
@@ -82,7 +82,7 @@ export const rssFeedHelper: RSSFeedHelper = {
         const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
         const fetchUrl = isRedditUrl ? redditFeedUrl(url) : url;
         const response = await Utils.timeout(rssFeedHelper.DefaultTimeout, fetch(fetchUrl, {
-            headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
+            headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI,
         }));
         const downloadTime = Date.now();
         if (response.ok) {
