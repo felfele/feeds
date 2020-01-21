@@ -104,7 +104,7 @@ export class FeedInfo extends React.Component<Props, FeedInfoState> {
             { text: 'Cancel', onPress: () => Debug.log('Cancel Pressed'), style: 'cancel' },
         ];
 
-        Alert.alert('Are you sure you want to delete the channel?',
+        Alert.alert('Are you sure you want to delete the feed?',
             undefined,
             options,
             { cancelable: true },

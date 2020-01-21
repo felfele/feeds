@@ -72,7 +72,7 @@ const defaultPost3: Post = {
     _id: 2,
     createdAt: Date.now(),
     images: [],
-    text: `You can also find new content if you press the All channels button on the top left, then the Explore button.
+    text: `You can also find new content if you press the All feeds button on the top left, then the Explore button.
 
 Enjoy!
 `,

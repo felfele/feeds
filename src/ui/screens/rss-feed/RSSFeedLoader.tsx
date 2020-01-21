@@ -33,7 +33,7 @@ export class RSSFeedLoader extends React.Component<Props> {
         return (
             <FragmentSafeAreaViewWithoutTabBar>
                 <NavigationHeader
-                    title={this.props.title || 'Add channel'}
+                    title={this.props.title || 'Add feed'}
                     leftButton={{
                         label: icon('close', 24),
                         onPress: () => this.props.navigation.goBack(null),
@@ -42,7 +42,7 @@ export class RSSFeedLoader extends React.Component<Props> {
                 />
                 <View style={styles.container}>
                     <View style={styles.centerIcon}>
-                        <Text style={styles.activityText}>Fetching channel, hang tight...</Text>
+                        <Text style={styles.activityText}>Fetching feed, hang tight...</Text>
                         <ActivityIndicator size='large' color='grey'/>
                     </View>
                 </View>

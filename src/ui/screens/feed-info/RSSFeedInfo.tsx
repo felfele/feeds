@@ -39,7 +39,7 @@ interface State {
     imageToShow: 'image' | 'qrcode';
 }
 
-const PUBLIC_CHANNEL_LABEL = 'This is a public channel.';
+const PUBLIC_CHANNEL_LABEL = 'This is a public feed.';
 const NOT_FOLLOWED_STATUS = 'You are not following it.';
 const FOLLOWED_STATUS = 'You are following it.';
 
@@ -137,7 +137,7 @@ export class RSSFeedInfo extends React.Component<Props, State> {
     private onUnfollowFeed = async () => {
         const confirmUnfollow = await Dialogs.areYouSureDialog(
             'Are you sure you want to unfollow?',
-            'This will remove this channel from your Public channels feed and you will no longer get updates from it.'
+            'This will remove this feed from your feeds and you will no longer get updates from it.'
         );
         if (confirmUnfollow) {
             this.props.onUnfollowFeed(this.props.feed);
@@ -146,8 +146,8 @@ export class RSSFeedInfo extends React.Component<Props, State> {
 
     private onRemoveFeed = async () => {
         const confirmUnfollow = await Dialogs.areYouSureDialog(
-            'Are you sure you want to delete channel?',
-            'It will be removed from your channel list.'
+            'Are you sure you want to delete feed?',
+            'It will be removed from your feed list.'
         );
         if (confirmUnfollow) {
             this.props.onRemoveFeed(this.props.feed);
