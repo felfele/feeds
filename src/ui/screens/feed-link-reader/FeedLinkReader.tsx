@@ -41,7 +41,7 @@ export class FeedLinkReader extends React.Component<Props, State> {
         return (
             <FragmentSafeAreaViewWithoutTabBar>
                 <NavigationHeader
-                    title={'Add channel'}
+                    title={'Add feed'}
                     leftButton={{
                         label: icon('close', 24),
                         onPress: () => this.props.navigation.goBack(null),

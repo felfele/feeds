@@ -41,7 +41,7 @@ const ListHeader = (props: {
     <View style={{flexDirection: 'column'}}>
         { props.isFollowed === false &&
             <WideButton
-                label='Follow this channel'
+                label='Follow this feed'
                 icon={icon('link', ComponentColors.BUTTON_COLOR)}
                 onPress={props.onPressFollow}
             />
@@ -59,7 +59,7 @@ const ListFooter = (props: {
     props.showLink
         ? <WideButton
             label='Visit website for more'
-            icon={icon('link', ComponentColors.BUTTON_COLOR)}
+            icon={icon('open-in-new', ComponentColors.BUTTON_COLOR)}
             onPress={() => Linking.openURL(props.link)}
         />
         : null

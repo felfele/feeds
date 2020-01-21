@@ -10,7 +10,7 @@ import { Actions } from '../../../actions/Actions';
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     return {
-        title: 'Add channel',
+        title: 'Add feed',
         navigation: ownProps.navigation,
     };
 };
@@ -49,7 +49,7 @@ const onFailedFeedLoad = (): Promise<void> => {
         ];
 
         Alert.alert(
-            'Failed to load channel!',
+            'Failed to load feed!',
             undefined,
             options,
             { cancelable: true },

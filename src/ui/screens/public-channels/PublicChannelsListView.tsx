@@ -82,7 +82,7 @@ const ActionButtons = (openExplore: () => void, openAddChannel: () => void) => (
             onPress: openExplore,
         }}
         rightButton={{
-            label: 'Add channel',
+            label: 'Add feed',
             icon: <Icon name='plus-box' size={24} color={Colors.BRAND_PURPLE} />,
             onPress: openAddChannel,
         }}
