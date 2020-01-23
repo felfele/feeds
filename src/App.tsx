@@ -127,14 +127,14 @@ const AppNavigator = createStackNavigator(Scenes,
     },
 );
 
-interface FelfeleAppState {
+interface FeedsAppState {
     store: any;
     persistor: Persistor | null;
     nativeAppState: AppStateStatus;
 }
 
-export default class FelfeleApp extends React.Component<{}, FelfeleAppState> {
-    public state: FelfeleAppState = {
+export default class FeedsApp extends React.Component<{}, FeedsAppState> {
+    public state: FeedsAppState = {
         store: null,
         persistor: null,
         nativeAppState: AppState.currentState,
