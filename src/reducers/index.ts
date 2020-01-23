@@ -170,6 +170,9 @@ const rssPostsReducer = (rssPosts: Post[] = [], action: Actions): Post[] => {
         case 'UPDATE-RSS-POSTS': {
             return action.payload.posts;
         }
+        case 'REMOVE-RSS-POST': {
+            return rssPosts.filter(rssPost => rssPost.link !== action.payload.post.link);
+        }
     }
     return rssPosts;
 };

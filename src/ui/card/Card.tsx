@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Post } from '../../models/Post';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ActionSheet from 'react-native-actions-sheet';
+
 import { Colors } from '../../styles';
 import {
     View,
@@ -8,6 +10,7 @@ import {
     Dimensions,
     StyleSheet,
     Linking,
+    TextInput,
 } from 'react-native';
 import { TouchableView } from '../misc/TouchableView';
 import { DateUtils } from '../../DateUtils';
@@ -20,6 +23,8 @@ import { Feed } from '../../models/Feed';
 import { DEFAULT_AUTHOR_NAME } from '../../reducers/defaultData';
 import { TypedNavigation } from '../../helpers/navigation';
 import { calculateImageDimensions } from '../../helpers/imageDataHelpers';
+import { RowItem } from '../buttons/RowButton';
+import { shareDialog } from '../../helpers/dialogs';
 
 export type AuthorFeed = UIFeed;
 
@@ -31,6 +36,7 @@ export interface StateProps {
     isSelected: boolean;
     post: Post;
     currentTimestamp: number;
+    showActions: boolean;
     togglePostSelection: (post: Post) => void;
     navigation: TypedNavigation;
     authorFeed: AuthorFeed | undefined;
@@ -38,7 +44,7 @@ export interface StateProps {
 }
 
 export interface DispatchProps {
-    onDeletePost: (post: Post) => void;
+    onRemovePost: (post: Post) => void;
     onSharePost: (post: Post) => void;
     onDownloadFeedPosts: (feed: Feed) => void;
 }
@@ -74,7 +80,8 @@ const CardBody = (props: {
     navigation: TypedNavigation,
     originalAuthorFeed: AuthorFeed | undefined,
     authorFeed: AuthorFeed | undefined;
-    togglePostSelection?: (post: Post) => void;
+    showActions: boolean,
+    onRemovePost: (post: Post) => void,
     onDownloadFeedPosts: (feed: Feed) => void;
 }) => {
     const isOriginalPost = props.post.references == null;
@@ -104,7 +111,8 @@ const CardBody = (props: {
             <CardTop
                 post={props.post}
                 currentTimestamp={props.currentTimestamp}
-                togglePostSelection={props.togglePostSelection}
+                showActions={props.showActions}
+                onRemovePost={props.onRemovePost}
                 onPress={cardTopOnPress}
             />
             {
@@ -125,7 +133,7 @@ const CardBody = (props: {
                             {...props}
                             authorFeed={props.originalAuthorFeed}
                             originalAuthorFeed={undefined}
-                            togglePostSelection={undefined}
+                            onRemovePost={props.onRemovePost}
                             post={originalPost}
                             currentTimestamp={originalPost.createdAt}
                             width={props.width - 22}
@@ -182,7 +190,8 @@ const CardTopIcon = (props: { post: Post }) => {
 const CardTop = (props: {
     post: Post,
     currentTimestamp: number,
-    togglePostSelection?: (post: Post) => void,
+    showActions: boolean,
+    onRemovePost: (post: Post) => void,
     onPress?: () => void;
 }) => {
     const postUpdateTime = props.post.updatedAt || props.post.createdAt;
@@ -191,6 +200,7 @@ const CardTop = (props: {
     const url = props.post.link || '';
     const hostnameText = url === '' ? '' : urlUtils.getHumanHostname(url);
     const timeHostSeparator = printableTime !== '' && hostnameText !== '' ? ' - ' : '';
+    let actionSheet: any;
     return (
         <TouchableOpacity
             testID={'CardTop'}
@@ -204,16 +214,74 @@ const CardTop = (props: {
                 </View>
                 <RegularText numberOfLines={1} style={styles.location}>{printableTime}{timeHostSeparator}{hostnameText}</RegularText>
             </View>
-            {
-                props.togglePostSelection &&
-                <TouchableView
-                    style={{
-                        paddingRight: 10,
-                    }}
-                    onPress={() => props.togglePostSelection!(props.post)}>
-                    <ActionIcon name='dots-vertical' color={Colors.PINKISH_GRAY}/>
-                </TouchableView>
 
+            { props.showActions &&
+            <TouchableView
+                style={{
+                    paddingRight: 10,
+                }}
+                onPress={() => actionSheet?.setModalVisible()}>
+                <ActionIcon name='dots-vertical' color={Colors.PINKISH_GRAY}/>
+                <ActionSheet
+                    initialOffsetFromBottom={1}
+                    ref={ref => (actionSheet = ref)}
+                    bounceOnOpen={false}
+                    gestureEnabled={true}
+                    defaultOverlayOpacity={0.3}
+                    closeAnimationDuration={100}
+                    children={
+                        <View
+                            style={{
+                                width: '100%',
+                                padding: 12,
+                                flex: 0.5,
+                            }}>
+                            <RowItem
+                                title={`Share...`}
+                                buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
+                                onPress={async () => {
+                                    await shareDialog('Share link', props.post.link || '');
+                                    actionSheet?.setModalVisible();
+                                }}
+                            />
+                            <RowItem
+                                title={`Open link in browser`}
+                                buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
+                                onPress={() => {
+                                    Linking.openURL(props.post.link || '');
+                                    actionSheet?.setModalVisible();
+                                }}
+                            />
+                            <RowItem
+                                title={`Show less like this`}
+                                buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
+                                onPress={() => {
+                                    // removing the post automatically removes the action sheet
+                                    props.onRemovePost(props.post);
+                                }}
+                            />
+                            <RowItem
+                                title={`Cancel`}
+                                buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
+                                onPress={() => actionSheet?.setModalVisible()}
+                            />
+                            <View style={{paddingBottom: 20}}/>
+                        </View>
+                    }
+                />
+            </TouchableView>
             }
         </TouchableOpacity>
     );

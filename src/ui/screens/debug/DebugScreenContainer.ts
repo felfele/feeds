@@ -22,7 +22,6 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
             dispatch(Actions.removeAllFeeds());
         },
         onDeletePosts: () => {
-            dispatch(Actions.removeAllPosts());
             dispatch(Actions.updateRssPosts([]));
         },
         onAddFeed: (feed: Feed) => {

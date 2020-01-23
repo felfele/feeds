@@ -7,6 +7,7 @@ import { AsyncActions } from '../../actions/asyncActions';
 import { TypedNavigation } from '../../helpers/navigation';
 import { getAllFeeds } from '../../selectors/selectors';
 import { Debug } from '../../Debug';
+import { Actions } from '../../actions/Actions';
 
 interface OwnProps {
     isSelected: boolean;
@@ -71,6 +72,7 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps): StateProps => {
         currentTimestamp: state.currentTimestamp,
         isSelected: ownProps.isSelected,
         togglePostSelection: ownProps.togglePostSelection,
+        showActions: state.settings.showDebugMenu,
         navigation: ownProps.navigation,
         authorFeed,
         originalAuthorFeed,
@@ -79,8 +81,8 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps): StateProps => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedNavigation }): DispatchProps => {
     return {
-        onDeletePost: (post: Post) => {
-            dispatch(AsyncActions.removePost(post));
+        onRemovePost: (post: Post) => {
+            dispatch(Actions.removeRssPost(post));
         },
         onSharePost: (post: Post) => {
             // dispatch(AsyncActions.sharePost(post));

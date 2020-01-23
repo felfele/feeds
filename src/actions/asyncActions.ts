@@ -61,11 +61,6 @@ export const AsyncActions = {
             dispatch(Actions.updateRssPosts(filteredPosts));
         };
     },
-    removePost: (post: Post): Thunk => {
-        return async (dispatch) => {
-            dispatch(Actions.deletePost(post));
-        };
-    },
     chainActions: (thunks: ThunkTypes[], callback?: () => void): Thunk => {
         return async (dispatch, getState) => {
             for (const thunk of thunks) {
