@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
-import FelfeleApp from './src/App';
+import Feeds from './src/App';
 
-AppRegistry.registerComponent('Feeds', () => FelfeleApp);
+AppRegistry.registerComponent('Feeds', () => Feeds);
