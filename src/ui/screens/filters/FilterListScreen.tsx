@@ -7,7 +7,7 @@ import { NavigationHeader } from '../../misc/NavigationHeader';
 import { ComponentColors } from '../../../styles';
 import { RowItem } from '../../buttons/RowButton';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 
 export interface StateProps {
     navigation: TypedNavigation;
@@ -21,7 +21,7 @@ export interface DispatchProps {
 export class FilterListScreen extends React.Component<StateProps & DispatchProps, any> {
     public render() {
         return (
-            <FragmentSafeAreaViewWithoutTabBar>
+            <FragmentSafeAreaView>
                 <NavigationHeader
                     title='Mute keywords'
                     navigation={this.props.navigation}
@@ -45,7 +45,7 @@ export class FilterListScreen extends React.Component<StateProps & DispatchProps
                         />
                     ))}
                 </ScrollView>
-            </FragmentSafeAreaViewWithoutTabBar>
+            </FragmentSafeAreaView>
         );
     }
 

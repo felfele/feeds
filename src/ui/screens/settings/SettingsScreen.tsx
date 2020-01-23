@@ -10,7 +10,7 @@ import { RowItem } from '../../buttons/RowButton';
 import { RegularText } from '../../misc/text';
 import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { TouchableView } from '../../misc/TouchableView';
 import { getBuildEnvironment } from '../../../BuildEnvironment';
 
@@ -36,7 +36,7 @@ export const SettingsScreen = (props: Props) => {
     ;
     const versionLabel = 'Felfele News, Version: ' + Version + buildEnvironment + buildInfo;
     return (
-        <FragmentSafeAreaViewWithoutTabBar>
+        <FragmentSafeAreaView>
             <NavigationHeader
                 title='Settings'
                 navigation={props.navigation}
@@ -91,7 +91,7 @@ export const SettingsScreen = (props: Props) => {
                 }
             </ScrollView>
             <TabBarPlaceholder/>
-        </FragmentSafeAreaViewWithoutTabBar>
+        </FragmentSafeAreaView>
     );
 };
 

@@ -14,7 +14,7 @@ import { Colors, ComponentColors } from '../../../styles';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { RowItem } from '../../buttons/RowButton';
 import * as Swarm from '../../../swarm/Swarm';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { safeFetch } from '../../../Network';
 import { Debug } from '../../../Debug';
 
@@ -44,7 +44,7 @@ const pingSwarm = async (props: Props) => {
 };
 
 export const SwarmSettings = (props: Props) => (
-    <FragmentSafeAreaViewWithoutTabBar>
+    <FragmentSafeAreaView>
         <NavigationHeader
             navigation={props.navigation}
             title={'Swarm settings'}
@@ -104,7 +104,7 @@ export const SwarmSettings = (props: Props) => (
 
             </KeyboardAvoidingView>
         </ScrollView>
-    </FragmentSafeAreaViewWithoutTabBar>
+    </FragmentSafeAreaView>
 );
 
 const styles = StyleSheet.create({

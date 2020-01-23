@@ -11,7 +11,7 @@ import { Feed } from '../../models/Feed';
 import { CardContainer } from '../card/CardContainer';
 import { Props as NavHeaderProps } from './NavigationHeader';
 import { TypedNavigation } from '../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from './FragmentSafeAreaView';
+import { FragmentSafeAreaView } from './FragmentSafeAreaView';
 
 export interface DispatchProps {
     onRefreshPosts: (feeds: Array<Feed>) => void;
@@ -61,7 +61,7 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
 
     public render() {
         return (
-            <FragmentSafeAreaViewWithoutTabBar>
+            <FragmentSafeAreaView>
                 {this.props.children.navigationHeader}
                 {this.props.feeds.length === 0 && this.props.children.placeholder}
                 <FlatList
@@ -92,7 +92,7 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                     }}
                     ref={value => this.flatList = value || undefined}
                 />
-            </FragmentSafeAreaViewWithoutTabBar>
+            </FragmentSafeAreaView>
         );
     }
 

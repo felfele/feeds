@@ -11,7 +11,7 @@ import { MediumText } from '../../../ui/misc/text';
 import { TabBarPlaceholder } from '../../../ui/misc/TabBarPlaceholder';
 import { defaultImages } from '../../../defaultImages';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../../ui/misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../../ui/misc/FragmentSafeAreaView';
 import { TwoButton } from '../../../ui/buttons/TwoButton';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 
@@ -90,7 +90,7 @@ const ActionButtons = (openExplore: () => void, openAddChannel: () => void) => (
 );
 
 export const PublicChannelsListView = (props: DispatchProps & StateProps) => (
-    <FragmentSafeAreaViewWithoutTabBar>
+    <FragmentSafeAreaView>
         <FeedGrid
             headerComponent={props.showExplore
                 ? ActionButtons(props.openExplore, () => props.navigation.navigate('FeedLinkReader', {}))
@@ -107,7 +107,7 @@ export const PublicChannelsListView = (props: DispatchProps & StateProps) => (
                 }}
             />
         </FeedGrid>
-    </FragmentSafeAreaViewWithoutTabBar>
+    </FragmentSafeAreaView>
 );
 
 const styles = StyleSheet.create({

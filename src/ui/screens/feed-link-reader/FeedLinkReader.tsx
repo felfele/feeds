@@ -14,7 +14,7 @@ import { ComponentColors, Colors, defaultMediumFont } from '../../../styles';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { getHttpLinkFromText } from '../../../helpers/urlUtils';
 import { FEEDS_LINK_MESSAGE } from '../../../helpers/linkHelpers';
 import { errorDialog } from '../../../helpers/dialogs';
@@ -39,7 +39,7 @@ export class FeedLinkReader extends React.Component<Props, State> {
             <Icon name={name} size={size} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />;
 
         return (
-            <FragmentSafeAreaViewWithoutTabBar>
+            <FragmentSafeAreaView>
                 <NavigationHeader
                     title={'Add feed'}
                     leftButton={{
@@ -70,7 +70,7 @@ export class FeedLinkReader extends React.Component<Props, State> {
                         />
                     </View>
                 </View>
-            </FragmentSafeAreaViewWithoutTabBar>
+            </FragmentSafeAreaView>
         );
     }
 
