@@ -5,7 +5,6 @@ import { Feed } from '../models/Feed';
 import { ContentFilter } from '../models/ContentFilter';
 import { AppState } from '../reducers/AppState';
 import { Post } from '../models/Post';
-import { ImageData } from '../models/ImageData';
 
 export type Actions = ActionsUnion<typeof Actions & typeof InternalActions>;
 
@@ -42,18 +41,10 @@ export const Actions = {
     timeTick: () =>
         createAction(ActionTypes.TIME_TICK),
 
-    deletePost: (post: Post) =>
-        createAction(ActionTypes.DELETE_POST, { post }),
-    removeAllPosts: () =>
-        createAction(ActionTypes.REMOVE_ALL_POSTS),
-    updatePostLink: (post: Post, link?: string) =>
-        createAction(ActionTypes.UPDATE_POST_LINK, {post, link}),
-    updatePostIsUploading: (post: Post, isUploading?: boolean) =>
-        createAction(ActionTypes.UPDATE_POST_IS_UPLOADING, { post, isUploading }),
-    updatePostImages: (post: Post, images: ImageData[]) =>
-        createAction(ActionTypes.UPDATE_POST_IMAGES, {post, images}),
     updateRssPosts: (posts: Post[]) =>
         createAction(ActionTypes.UPDATE_RSS_POSTS, { posts }),
+    removeRssPost: (post: Post) =>
+        createAction(ActionTypes.REMOVE_RSS_POST, { post }),
 
     changeSettingShowSquareImages: (value: boolean) =>
         createAction(ActionTypes.CHANGE_SETTING_SHOW_SQUARE_IMAGES, { value }),

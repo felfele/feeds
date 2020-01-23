@@ -63,13 +63,14 @@ describe('card test', () => {
                 post={testPostWithoutImage}
                 isSelected={false}
                 navigation={mockNavigation}
-                onDeletePost={(_) => {}}
+                onRemovePost={(_) => {}}
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
+                showActions={false}
             />
         ).root;
         expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
@@ -83,13 +84,14 @@ describe('card test', () => {
                 post={testPostWithoutImage}
                 isSelected={true}
                 navigation={mockNavigation}
-                onDeletePost={(_) => {}}
+                onRemovePost={(_) => {}}
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
+                showActions={false}
             />
         ).root;
         expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
@@ -103,13 +105,14 @@ describe('card test', () => {
                 post={testPostWithImage}
                 isSelected={false}
                 navigation={mockNavigation}
-                onDeletePost={(_) => {}}
+                onRemovePost={(_) => {}}
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
+                showActions={false}
             />
         ).root;
         expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
@@ -124,13 +127,14 @@ describe('card test', () => {
                 post={testPostWithMultipleImages}
                 isSelected={false}
                 navigation={mockNavigation}
-                onDeletePost={(_) => {}}
+                onRemovePost={(_) => {}}
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
+                showActions={false}
             />
         ).root;
         expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
@@ -144,13 +148,14 @@ describe('card test', () => {
                 post={testPostWithImage}
                 isSelected={false}
                 navigation={mockNavigation}
-                onDeletePost={(_) => {}}
+                onRemovePost={(_) => {}}
                 onSharePost={(_) => {}}
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
                 originalAuthorFeed={undefined}
                 authorFeed={undefined}
+                showActions={false}
             />
         ).root;
         expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
