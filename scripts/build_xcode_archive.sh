@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-SCHEME=Felfele
+SCHEME=Feeds
 TARGET=archive
 if [ "$1" != "" ]; then
     SCHEME="$1"

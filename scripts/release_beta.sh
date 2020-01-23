@@ -39,7 +39,7 @@ commit_message="Bumped build number to $build"
 git commit -am "$commit_message"
 
 output "Build the iOS version with XCode for archive..."
-./scripts/build_xcode_archive.sh FelfeleBeta archive
+./scripts/build_xcode_archive.sh FeedsBeta archive
 
 ask "Upload the build to the App Store"
 
