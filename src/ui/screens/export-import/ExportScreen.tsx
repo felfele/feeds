@@ -12,7 +12,7 @@ import { NavigationHeader } from '../../misc/NavigationHeader';
 import { Colors, ComponentColors, DefaultNavigationBarHeight, defaultMediumFont } from '../../../styles';
 import { AppState } from '../../../reducers/AppState';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { TouchableView } from '../../misc/TouchableView';
 import { MediumText, RegularText } from '../../misc/text';
 import { WideButton } from '../../buttons/WideButton';
@@ -114,7 +114,7 @@ export class ExportScreen extends React.PureComponent<Props, State> {
     }
 
     public render = () => (
-        <FragmentSafeAreaViewWithoutTabBar>
+        <FragmentSafeAreaView>
             <NavigationHeader
                 title='Export all feeds'
                 navigation={this.props.navigation}
@@ -127,7 +127,7 @@ export class ExportScreen extends React.PureComponent<Props, State> {
                 onPressShare={() => showShareFeedsLinkDialog((this.state as any).link)}
             />
             }
-        </FragmentSafeAreaViewWithoutTabBar>
+        </FragmentSafeAreaView>
     )
 }
 

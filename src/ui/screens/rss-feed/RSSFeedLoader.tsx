@@ -9,7 +9,7 @@ import { ComponentColors, Colors } from '../../../styles';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 
 export interface DispatchProps {
     onLoad: () => void;
@@ -31,7 +31,7 @@ export class RSSFeedLoader extends React.Component<Props> {
         const icon = (name: string, size: number = 20) =>
             <Icon name={name} size={size} color={ComponentColors.NAVIGATION_BUTTON_COLOR}/>;
         return (
-            <FragmentSafeAreaViewWithoutTabBar>
+            <FragmentSafeAreaView>
                 <NavigationHeader
                     title={this.props.title || 'Add feed'}
                     leftButton={{
@@ -46,7 +46,7 @@ export class RSSFeedLoader extends React.Component<Props> {
                         <ActivityIndicator size='large' color='grey'/>
                     </View>
                 </View>
-            </FragmentSafeAreaViewWithoutTabBar>
+            </FragmentSafeAreaView>
         );
     }
 }

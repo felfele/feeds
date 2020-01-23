@@ -9,7 +9,7 @@ interface Props {
     bottomBackgroundColor?: string;
 }
 
-export const FragmentSafeAreaViewWithoutTabBar = (props: Props) => (
+export const FragmentSafeAreaView = (props: Props) => (
     <React.Fragment>
         <StatusBarView
             backgroundColor={props.topBackgroundColor || ComponentColors.HEADER_COLOR}
@@ -20,21 +20,5 @@ export const FragmentSafeAreaViewWithoutTabBar = (props: Props) => (
         />
         <SafeAreaView style={{ flex: 0, backgroundColor: ComponentColors.HEADER_COLOR }} />
         {props.children}
-    </React.Fragment>
-);
-
-export const FragmentSafeAreaViewForTabBar = (props: Props) => (
-    <React.Fragment>
-        <StatusBarView
-                backgroundColor={props.topBackgroundColor || ComponentColors.HEADER_COLOR}
-                hidden={false}
-                translucent={false}
-                barStyle='light-content'
-                networkActivityIndicatorVisible={true}
-            />
-        <SafeAreaView style={{ flex: 0, backgroundColor: ComponentColors.HEADER_COLOR }}/>
-        <SafeAreaView style={{ flex: 1, backgroundColor: props.bottomBackgroundColor || 'transparent' }}>
-            {props.children}
-        </SafeAreaView>
     </React.Fragment>
 );

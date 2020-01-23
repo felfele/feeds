@@ -11,7 +11,7 @@ import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Dialogs from '../../../helpers/dialogs';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { RegularText } from '../../misc/text';
 import { ImageDataView } from '../../misc/ImageDataView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
@@ -98,7 +98,7 @@ export class RSSFeedInfo extends React.Component<Props, State> {
             }
         ;
         return (
-            <FragmentSafeAreaViewWithoutTabBar>
+            <FragmentSafeAreaView>
                 <NavigationHeader
                     title={this.props.feed.name}
                     navigation={this.props.navigation}
@@ -130,7 +130,7 @@ export class RSSFeedInfo extends React.Component<Props, State> {
 
                     }
                 </View>
-            </FragmentSafeAreaViewWithoutTabBar>
+            </FragmentSafeAreaView>
         );
     }
 

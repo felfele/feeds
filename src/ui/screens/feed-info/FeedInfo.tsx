@@ -13,7 +13,7 @@ import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { unfollowFeed } from '../feed-view/FeedView';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 import { ImageDataView } from '../../misc/ImageDataView';
 
@@ -68,7 +68,7 @@ export class FeedInfo extends React.Component<Props, FeedInfoState> {
         ;
 
         return (
-            <FragmentSafeAreaViewWithoutTabBar>
+            <FragmentSafeAreaView>
                 <NavigationHeader
                     title={this.props.feed.name}
                     leftButton={{
@@ -90,7 +90,7 @@ export class FeedInfo extends React.Component<Props, FeedInfoState> {
                         resizeMode='cover'
                     />
                 </View>
-            </FragmentSafeAreaViewWithoutTabBar>
+            </FragmentSafeAreaView>
         );
     }
 

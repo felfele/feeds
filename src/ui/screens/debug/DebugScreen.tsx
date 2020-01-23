@@ -14,7 +14,7 @@ import { restartApp } from '../../../helpers/restart';
 import { Utils } from '../../../Utils';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { Feed } from '../../../models/Feed';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 
 export interface StateProps {
     appState: AppState;
@@ -57,7 +57,7 @@ const MaterialCommunityIcon = (props: IconProps) => (
 );
 
 export const DebugScreen = (props: Props) => (
-    <FragmentSafeAreaViewWithoutTabBar>
+    <FragmentSafeAreaView>
         <NavigationHeader
             navigation={props.navigation}
             title='Debug menu'
@@ -114,7 +114,7 @@ export const DebugScreen = (props: Props) => (
                 />
             </ScrollView>
         </View>
-    </FragmentSafeAreaViewWithoutTabBar>
+    </FragmentSafeAreaView>
 );
 
 const onAppStateReset = async (props: Props) => {

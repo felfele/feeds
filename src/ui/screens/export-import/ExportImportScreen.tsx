@@ -6,7 +6,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewForTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { TwoButton } from '../../buttons/TwoButton';
 import { Colors, ComponentColors } from '../../../styles';
 
@@ -23,7 +23,7 @@ export interface State {
 }
 
 export const ExportImportScreen = (props: Props) => (
-    <FragmentSafeAreaViewForTabBar>
+    <FragmentSafeAreaView>
         <NavigationHeader
             title='Export & Import feeds'
             navigation={props.navigation}
@@ -42,7 +42,7 @@ export const ExportImportScreen = (props: Props) => (
                 }}
             />
         </View>
-    </FragmentSafeAreaViewForTabBar>
+    </FragmentSafeAreaView>
 );
 
 const styles = StyleSheet.create({

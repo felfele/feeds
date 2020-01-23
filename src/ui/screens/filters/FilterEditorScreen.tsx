@@ -16,7 +16,7 @@ import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { Debug } from '../../../Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { WideButton } from '../../buttons/WideButton';
 import { TwoButton } from '../../buttons/TwoButton';
 
@@ -118,7 +118,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
             />
         ;
         return (
-            <FragmentSafeAreaViewWithoutTabBar>
+            <FragmentSafeAreaView>
                 <NavigationHeader
                     title='Mute keyword'
                     navigation={this.props.navigation}
@@ -149,7 +149,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
                     </View>
                     {button}
                 </KeyboardAvoidingView>
-            </FragmentSafeAreaViewWithoutTabBar>
+            </FragmentSafeAreaView>
         );
     }
 

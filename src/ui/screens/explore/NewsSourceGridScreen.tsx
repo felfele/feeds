@@ -6,7 +6,7 @@ import { NavigationHeader } from '../../misc/NavigationHeader';
 import { Feed } from '../../../models/Feed';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
-import { FragmentSafeAreaViewWithoutTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 
 export interface StateProps {
@@ -22,7 +22,7 @@ export interface DispatchProps {
 export const NewsSourceGridScreen = (props: StateProps & DispatchProps) => {
     const itemDimension = getGridCardSize();
     return (
-        <FragmentSafeAreaViewWithoutTabBar>
+        <FragmentSafeAreaView>
             <NavigationHeader title={props.subCategoryName} navigation={props.navigation}/>
             {props.feeds.length > 0 &&
                 <FlatGrid
@@ -51,6 +51,6 @@ export const NewsSourceGridScreen = (props: StateProps & DispatchProps) => {
                 />
             }
             <TabBarPlaceholder color={ComponentColors.BACKGROUND_COLOR}/>
-        </FragmentSafeAreaViewWithoutTabBar>
+        </FragmentSafeAreaView>
     );
 };

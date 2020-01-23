@@ -21,7 +21,7 @@ import { Debug } from '../../../Debug';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { WideButton } from '../../buttons/WideButton';
-import { FragmentSafeAreaViewWithoutTabBar, FragmentSafeAreaViewForTabBar } from '../../misc/FragmentSafeAreaView';
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { TwoButton } from '../../buttons/TwoButton';
 
@@ -78,9 +78,9 @@ interface State {
 }
 
 export const BugReportScren = (props: Props) => (
-    <FragmentSafeAreaViewWithoutTabBar>
+    <FragmentSafeAreaView>
         <BugReportView {...props}/>
-    </FragmentSafeAreaViewWithoutTabBar>
+    </FragmentSafeAreaView>
 );
 
 class BugReportView extends React.Component<Props, State> {
