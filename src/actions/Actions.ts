@@ -22,6 +22,8 @@ export const Actions = {
         createAction(ActionTypes.ADD_CONTENT_FILTER, { text, createdAt, validUntil }),
     removeContentFilter: (filter: ContentFilter) =>
         createAction(ActionTypes.REMOVE_CONTENT_FILTER, { filter }),
+    removeAllContentFilters: () =>
+        createAction(ActionTypes.REMOVE_ALL_CONTENT_FILTERS),
 
     removeFeed: (feed: Feed) =>
         createAction(ActionTypes.REMOVE_FEED, { feed }),

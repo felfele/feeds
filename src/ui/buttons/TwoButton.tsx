@@ -22,6 +22,7 @@ export interface ButtonProps {
     onPress?: (event?: GestureResponderEvent) => void;
     style?: StyleProp<ViewStyle>;
     fontStyle?: StyleProp<TextStyle>;
+    disabled?: boolean;
 }
 
 export const TwoButton = (props: Props) => {
