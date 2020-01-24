@@ -6,11 +6,13 @@ import {
     Text,
     Slider,
     KeyboardAvoidingView,
+    Picker,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import RNPickerSelect from 'react-native-picker-select';
 
 import { ContentFilter, filterValidUntilToText } from '../../../models/ContentFilter';
-import { ComponentColors } from '../../../styles';
+import { ComponentColors, defaultFont, defaultTextProps, Colors } from '../../../styles';
 import { DAY, MONTH31, WEEK, YEAR } from '../../../DateUtils';
 import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { Debug } from '../../../Debug';
@@ -19,36 +21,7 @@ import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { WideButton } from '../../buttons/WideButton';
 import { TwoButton } from '../../buttons/TwoButton';
-
-type SliderValue = 0 | 1 | 2 | 3 | 4 | 5;
-
-const sliderValueToDateDiff = (value: SliderValue): number => {
-    switch (value) {
-        case 0: return DAY;
-        case 1: return WEEK;
-        case 2: return 2 * WEEK;
-        case 3: return MONTH31;
-        case 4: return 3 * MONTH31;
-        case 5: return 6 * MONTH31;
-    }
-};
-
-const sliderValueToText = (value: SliderValue): string => {
-    const dateDiff = sliderValueToDateDiff(value);
-    return filterValidUntilToText(dateDiff);
-};
-
-const filterValidUntilToSliderValue = (dateDiff: number): SliderValue => {
-    switch (dateDiff) {
-        case DAY: return 0;
-        case WEEK: return 1;
-        case 2 * WEEK: return 2;
-        case MONTH31: return 3;
-        case 3 * MONTH31: return 4;
-        case 6 * MONTH31: return 5;
-        default: return 2;
-    }
-};
+import { errorDialog } from '../../../helpers/dialogs';
 
 export interface DispatchProps {
     onAddFilter: (filter: ContentFilter) => void;
@@ -64,7 +37,7 @@ type Props = DispatchProps & StateProps;
 
 interface EditFilterState {
     filterText: string;
-    filterSliderValue: SliderValue;
+    filterValue: number;
 }
 
 export class FilterEditorScreen extends React.Component<DispatchProps & StateProps, EditFilterState> {
@@ -72,11 +45,10 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
         super(props);
         this.state = {
             filterText: this.props.filter.text,
-            filterSliderValue: filterValidUntilToSliderValue(this.props.filter.validUntil),
+            filterValue: 2 * WEEK,
         };
     }
     public render() {
-        const sliderText = 'Mute until: ' + sliderValueToText(this.state.filterSliderValue);
         const isDelete = this.props.filter.text.length > 0;
         const addOrEditFilter = isDelete
             ? () => {
@@ -123,7 +95,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
                     title='Mute keyword'
                     navigation={this.props.navigation}
                 />
-                <KeyboardAvoidingView style={{flex: 1, backgroundColor: ComponentColors.BACKGROUND_COLOR}}>
+                <View style={styles.mainContainer}>
                     <SimpleTextInput
                         defaultValue={this.state.filterText}
                         style={styles.linkInput}
@@ -137,26 +109,38 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
                         autoCorrect={false}
                     />
                     <View style={styles.sliderContainer}>
-                        <Text style={styles.sliderText}>{sliderText}</Text>
-                        <Slider
-                            style={styles.slider}
-                            minimumValue={0}
-                            maximumValue={5}
-                            step={1}
-                            value={this.state.filterSliderValue}
-                            onValueChange={(value) => this.setState({ filterSliderValue: value as SliderValue })}
+                        <Text style={styles.sliderText}>Mute until</Text>
+                        <RNPickerSelect
+                            onValueChange={(value) => this.setState({filterValue: value})}
+                            value={this.state.filterValue}
+                            style={{
+                                inputIOS: styles.pickerInput,
+                                inputAndroid: styles.pickerInput,
+                            }}
+                            items={[
+                                { label: 'One day', value: DAY },
+                                { label: 'One week', value: WEEK },
+                                { label: 'Two weeks', value: 2 * WEEK },
+                                { label: 'One month', value: MONTH31 },
+                                { label: 'Three months', value: 3 * MONTH31 },
+                                { label: 'Six months', value: 6 * MONTH31 },
+                            ]}
                         />
                     </View>
                     {button}
-                </KeyboardAvoidingView>
+                </View>
             </FragmentSafeAreaView>
         );
     }
 
-    private onAddFilter = () => {
+    private onAddFilter = async () => {
+        if (this.state.filterText.match(/^ ?$/) != null) {
+            await errorDialog('Keyword is empty!', 'Please enter a keyword');
+            return;
+        }
         const filter: ContentFilter = {
             text: this.state.filterText,
-            validUntil: sliderValueToDateDiff(this.state.filterSliderValue),
+            validUntil: this.state.filterValue,
             createdAt: Date.now(),
         };
         this.props.onAddFilter(filter);
@@ -187,6 +171,12 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: ComponentColors.BACKGROUND_COLOR,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+    },
     titleInfo: {
         fontSize: 14,
         color: '#8e8e93',
@@ -194,8 +184,6 @@ const styles = StyleSheet.create({
     linkInput: {
         width: '100%',
         backgroundColor: 'white',
-        borderBottomColor: 'lightgray',
-        borderBottomWidth: 1,
         paddingHorizontal: 8,
         paddingVertical: 8,
         color: 'gray',
@@ -220,16 +208,20 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     sliderContainer: {
-        paddingHorizontal: 20,
-        flexDirection: 'column',
-        height: 80,
+        paddingHorizontal: 10,
     },
     sliderText: {
-        flex: 1,
         color: ComponentColors.TEXT_COLOR,
-        paddingTop: 20,
+        paddingTop: 10,
     },
     slider: {
         flex: 1,
+    },
+    pickerInput: {
+        ...defaultTextProps.style,
+        padding: 10,
+        marginVertical: 5,
+        backgroundColor: Colors.WHITE,
+        color: ComponentColors.TEXT_COLOR,
     },
 });

@@ -25,6 +25,7 @@ export interface DispatchProps {
     onAppStateReset: () => void;
     onDeleteFeeds: () => void;
     onDeletePosts: () => void;
+    onDeleteFilters: () => void;
     onAddFeed: (feed: Feed) => void;
     onRefreshFeeds: (feeds: Feed[]) => void;
 }
@@ -90,6 +91,14 @@ export const DebugScreen = (props: Props) => (
                 />
                 <RowItem
                     icon={
+                        <MaterialCommunityIcon name='trash-can-outline' />
+                    }
+                    title='Delete all filters'
+                    onPress={async () => await onDeleteFilters(props)}
+                    buttonStyle='none'
+                />
+                <RowItem
+                    icon={
                         <IonIcon name='md-information-circle-outline' />
                     }
                     title='Log app state persist info'
@@ -148,6 +157,16 @@ const onDeletePosts = async (props: Props) => {
     );
     if (confirmed) {
         props.onDeletePosts();
+    }
+};
+
+const onDeleteFilters = async (props: Props) => {
+    const confirmed = await Dialogs.areYouSureDialog(
+        'Are you sure you want to delete all posts?',
+        'This will delete all your filters and there is no undo!'
+    );
+    if (confirmed) {
+        props.onDeleteFilters();
     }
 };
 

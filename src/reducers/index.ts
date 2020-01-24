@@ -36,6 +36,9 @@ const contentFiltersReducer = (contentFilters: ContentFilter[] = [], action: Act
             }
             return removeFromArray(contentFilters, ind);
         }
+        case 'REMOVE-ALL-CONTENT-FILTERS': {
+            return [];
+        }
         default: {
             return contentFilters;
         }
