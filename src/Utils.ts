@@ -8,7 +8,9 @@ export class Utils {
     public static async timeout<T>(ms: number, promise: Promise<T>): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             const timeout = ms > 0
-                ? setTimeout(() => reject(new Error('timeout')), ms)
+                ? setTimeout(() => {
+                    reject(new Error('timeout'));
+                }, ms)
                 : undefined
             ;
             promise.then((value) => {
