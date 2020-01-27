@@ -5,7 +5,6 @@ import { ComponentColors } from '../../../styles';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { Feed } from '../../../models/Feed';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
 
@@ -50,7 +49,6 @@ export const NewsSourceGridScreen = (props: StateProps & DispatchProps) => {
                     }}
                 />
             }
-            <TabBarPlaceholder color={ComponentColors.BACKGROUND_COLOR}/>
         </FragmentSafeAreaView>
     );
 };
