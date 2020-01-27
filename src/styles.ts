@@ -61,12 +61,12 @@ export const DefaultStyle = StyleSheet.create({
         justifyContent: 'center',
     },
     faviconLarge: {
-        borderRadius : 20,
+        borderRadius : 3,
         width: IconSize.LARGE_LIST_ICON,
         height: IconSize.LARGE_LIST_ICON,
     },
     faviconMedium: {
-        borderRadius : 12,
+        borderRadius : 3,
         width: IconSize.MEDIUM_LIST_ICON,
         height: IconSize.MEDIUM_LIST_ICON,
     },
