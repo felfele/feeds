@@ -1,11 +1,19 @@
-Felfele [![Build Status](https://travis-ci.org/felfele/felfele.svg?branch=master)](https://travis-ci.org/felfele/felfele)
-[![Gitter](https://badges.gitter.im/felfele/purple-lounge.svg)](https://gitter.im/felfele/purple-lounge)
+Feeds [![Build Status](https://travis-ci.org/felfele/felfele.svg?branch=master)](https://travis-ci.org/felfele/feeds)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-blueviolet.svg)](https://join.slack.com/t/felfele/shared_invite/enQtNTM1MjUwNTI1NzI5LTY5Yjg0YmVjN2MyN2MzMzc0Y2RkMGRiYzE0N2U0ZjgwNmYxMTQ3YjUwMDg1MGFiZTZlMWViZjU2MWJjY2Y0OTY)
 =======
 
 [<img src="screenshot-mobile.png" width=400>](screenshot-mobile.png)
 
-Felfele is a social app that lets you share and receive information easily, offers strong privacy and is affordable for everyone.
+Feeds is a completely free and independent mobile RSS reader with no algorithmic timeline -- just like in the good ol' days.
+
+### Features
+- Follow news sites and blogs (e.g. Wordpress) with RSS
+- You can also follow Reddit subs and Youtube channels
+- No signup or registration, everything happens and stays on your phone
+- Export and import feeds between your devices or with your friends
+- No algorithmic timeline: what you see is what you follow
+- Mute content with keywords
+- Explore new content with the built-in category browser
 
 The project is developed by a core team funded by a non-profit organization and volunteers from all over the world.
 
