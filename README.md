@@ -11,6 +11,7 @@ Features:
 - You can also follow Reddit subs and Youtube channels
 - No signup or registration, everything happens and stays on your phone
 - Export and import feeds between your devices or with your friends
+- No algorithmic timeline: what you see is what you follow
 - Mute content with keywords
 - Explore new content with the built-in category browser
 
