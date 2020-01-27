@@ -87,11 +87,11 @@ export const rssFeedHelper: RSSFeedHelper = {
         const downloadTime = Date.now();
         if (response.ok) {
             const text = await response.text();
-            const feed = isRedditUrl
-                ? await loadRedditFeed(url, text, startTime, downloadTime)
-                : await rssFeedHelper.load(url, text, startTime, downloadTime)
+            const feedLoader = isRedditUrl
+                ? Promise.resolve(loadRedditFeed(url, text, startTime, downloadTime))
+                : rssFeedHelper.load(url, text, startTime, downloadTime)
             ;
-
+            const feed = await Utils.timeout(rssFeedHelper.DefaultTimeout, feedLoader);
             return feed;
         } else {
             Debug.log('rssFeedHelper.fetch', {fetchUrl, response});

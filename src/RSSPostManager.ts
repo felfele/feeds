@@ -420,7 +420,7 @@ class _RSSPostManager {
             const rss = await rssFeedHelper.fetch(feedUrl);
             return rss;
         } catch (e) {
-            Debug.log(e, feedUrl);
+            Debug.log('RSSPostManager.loadFeed', {e, feedUrl});
             return null;
         }
     }
