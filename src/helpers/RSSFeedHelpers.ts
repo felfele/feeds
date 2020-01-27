@@ -166,6 +166,7 @@ export const rssFeedHelper: RSSFeedHelper = {
                 created: entryDate ? DateUtils.parseDateString(entryDate) : Date.now(),
                 link: entry.link ? entry.link[0].href[0] : '',
                 url: entry.link ? entry.link[0].href[0] : '',
+                media: getAtomEntryMedia(entry),
             };
             return item;
         });
@@ -230,4 +231,23 @@ export const rssFeedHelper: RSSFeedHelper = {
         }
         return rss;
     },
+};
+
+const getAtomEntryMedia = (entry: any): RSSMedia | undefined => {
+    const atomMediaGroup = entry['media:group'];
+    const atomMediaThumbnail = atomMediaGroup?.[0]?.['media:thumbnail']?.[0];
+    if (atomMediaThumbnail != null) {
+        try {
+            return {
+                thumbnail: [{
+                    url: [atomMediaThumbnail.url[0]],
+                    width: [parseInt(atomMediaThumbnail.width[0], 10)],
+                    height: [parseInt(atomMediaThumbnail.height[0], 10)],
+                }],
+            };
+        } catch (e) {
+            return undefined;
+        }
+    }
+    return undefined;
 };

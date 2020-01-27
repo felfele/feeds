@@ -50,6 +50,10 @@ export const fetchRSSFeedFromUrl = async (url: string): Promise<Feed | null> => 
 };
 
 export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | null> => {
+    const originalContentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(url);
+    if (originalContentWithMimeType != null && RSSFeedManager.isRssMimeType(originalContentWithMimeType?.mimeType)) {
+        return RSSFeedManager.fetchFeedByContentWithMimeType(url, originalContentWithMimeType);
+    }
     const canonicalUrl = getCanonicalUrlForRSS(url);
     const contentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(canonicalUrl);
     if (contentWithMimeType == null) {
