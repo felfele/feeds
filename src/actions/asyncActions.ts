@@ -11,6 +11,7 @@ import { Debug } from '../Debug';
 import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
 import { ContentFilter } from '../models/ContentFilter';
+import { Utils } from '../Utils';
 
 export const AsyncActions = {
     addFeed: (feed: Feed): Thunk => {
@@ -84,7 +85,8 @@ export const AsyncActions = {
 };
 
 const loadRSSPostsFromFeeds = async (feeds: Feed[]): Promise<Post[]> => {
-    return await RSSPostManager.loadPosts(feeds);
+    const posts = await Utils.timeout(60000, RSSPostManager.loadPosts(feeds));
+    return posts;
 };
 
 const matchContentFilters = (text: string, contentFilters: ContentFilter[]): boolean => {
