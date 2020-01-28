@@ -149,7 +149,7 @@ export const rssFeedHelper: RSSFeedHelper = {
         const rss: any = { items: [] };
 
         if (feed.title) {
-            rss.title = feed.title[0];
+            rss.title = typeof feed.title[0] === 'string' ? feed.title[0] : feed.title[0]?._ ?? '';
         }
         if (feed.icon) {
             rss.icon = feed.icon[0];
