@@ -34,7 +34,7 @@ export interface StateProps {
     headerComponent?: React.ComponentType<any> | React.ReactElement<any> | null;
 }
 
-export class FeedGrid extends React.PureComponent<DispatchProps & StateProps & { children?: React.ReactNode}> {
+class FeedGrid extends React.PureComponent<DispatchProps & StateProps & { children?: React.ReactNode}> {
     public render() {
         const itemDimension = getGridCardSize();
         return (

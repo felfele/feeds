@@ -6,9 +6,9 @@ import { SubCategoryMap } from '../../../models/recommendation/NewsSource';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { RowItem } from '../../buttons/RowButton';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { FragmentSafeAreaView} from '../../misc/FragmentSafeAreaView';
 import { Feed } from '../../../models/Feed';
+import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 
 const SUBCATEGORIES_LABEL = 'SUBCATEGORIES';
 
@@ -47,8 +47,8 @@ export const SubCategoriesScreen = (props: StateProps & DispatchProps) => {
                         {SUBCATEGORIES_LABEL}
                     </RegularText>
                     {subCategories}
+                    <TabBarPlaceholder/>
                 </ScrollView>
-                <TabBarPlaceholder color={ComponentColors.BACKGROUND_COLOR}/>
             </View>
         </FragmentSafeAreaView>
     );

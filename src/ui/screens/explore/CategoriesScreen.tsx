@@ -6,9 +6,9 @@ import { CategoryMap } from '../../../models/recommendation/NewsSource';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { RowItem } from '../../buttons/RowButton';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { Feed } from '../../../models/Feed';
+import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 
 const CATEGORIES_LABEL = 'CATEGORIES';
 
@@ -44,8 +44,8 @@ export const CategoriesScreen = (props: StateProps & DispatchProps) => {
                         {CATEGORIES_LABEL}
                     </RegularText>
                     {categories}
+                    <TabBarPlaceholder/>
                 </ScrollView>
-                <TabBarPlaceholder color={ComponentColors.BACKGROUND_COLOR}/>
             </View>
         </FragmentSafeAreaView>
     );
