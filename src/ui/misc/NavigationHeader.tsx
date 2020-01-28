@@ -38,7 +38,7 @@ export const NavigationHeader = (props: Props) => (
                 props.leftButton != null
                     ? props.leftButton.onPress
                     : props.navigation != null
-                        ? () => props.navigation!.goBack(null)
+                        ? () => props.navigation?.goBack(null)
                         : undefined
             }
             onLongPress={

@@ -89,8 +89,8 @@ export const SettingsScreen = (props: Props) => {
                     onPress={() => props.navigation.navigate('Debug', {})}
                 />
                 }
+                <TabBarPlaceholder/>
             </ScrollView>
-            <TabBarPlaceholder/>
         </FragmentSafeAreaView>
     );
 };
