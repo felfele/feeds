@@ -8,7 +8,7 @@ Feeds is a completely free and independent mobile RSS reader with no algorithmic
 
 ### Features
 - Follow news sites and blogs (e.g. Wordpress) with RSS
-- You can also follow Reddit subs and Youtube channels
+- You can also follow Reddit subs, Youtube channels, Tumblr and Mastodon
 - No signup or registration, everything happens and stays on your phone
 - Export and import feeds between your devices or with your friends
 - No algorithmic timeline: what you see is what you follow
