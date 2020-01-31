@@ -1,4 +1,4 @@
-Feeds [![Build Status](https://travis-ci.org/felfele/felfele.svg?branch=master)](https://travis-ci.org/felfele/feeds)
+Feeds – RSS reader by Felfele  [![Build Status](https://travis-ci.org/felfele/felfele.svg?branch=master)](https://travis-ci.org/felfele/feeds)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-blueviolet.svg)](https://join.slack.com/t/felfele/shared_invite/enQtNTM1MjUwNTI1NzI5LTY5Yjg0YmVjN2MyN2MzMzc0Y2RkMGRiYzE0N2U0ZjgwNmYxMTQ3YjUwMDg1MGFiZTZlMWViZjU2MWJjY2Y0OTY)
 =======
 
