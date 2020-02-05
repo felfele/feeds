@@ -1,8 +1,13 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'feeds' do
-  # Pods for feeds
+target 'Feeds' do
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
+  # permission pods
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+
+  # React Native pods
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -34,20 +39,8 @@ target 'feeds' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'feedsTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+  # App specific pods
 
   use_native_modules!
-end
-
-target 'feeds-tvOS' do
-  # Pods for feeds-tvOS
-
-  target 'feeds-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
 
 end

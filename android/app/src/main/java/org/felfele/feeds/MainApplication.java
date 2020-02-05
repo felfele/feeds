@@ -3,14 +3,6 @@ package org.felfele.feeds;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.ismaeld.RNBuildConfig.RNBuildConfigPackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.avishayil.rnrestart.ReactNativeRestartPackage;
-import com.horcrux.svg.SvgPackage;
-import org.reactnative.camera.RNCameraPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
