@@ -48,6 +48,7 @@ jobs:
         - npm install
         - brew install watchman
         - npm run link
+        - (cd ios && pod install)
       script:
         - npm run check
         - npm run build:ios
