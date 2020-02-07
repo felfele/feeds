@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
-SCHEME=Feeds
+NAME=feeds
+SCHEME=$NAME
 TARGET=archive
 if [ "$1" != "" ]; then
     SCHEME="$1"
@@ -9,4 +10,4 @@ if [ "$1" != "" ]; then
 fi
 
 # shellcheck disable=SC2086
-(cd ios && xcodebuild -allowProvisioningUpdates -quiet -scheme $SCHEME $TARGET)
+(cd ios && xcodebuild -workspace $NAME.xcworkspace -allowProvisioningUpdates -scheme $SCHEME $TARGET)
