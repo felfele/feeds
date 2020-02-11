@@ -8,6 +8,16 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import com.ismaeld.RNBuildConfig.RNBuildConfigPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
+import com.horcrux.svg.SvgPackage;
+import org.reactnative.camera.RNCameraPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,8 +40,14 @@ public class MainApplication extends Application implements ReactApplication {
         new ReactNativeRestartPackage(),
         new SvgPackage(),
         new RNCameraPackage(),
-        new VectorIconsPackage()
+        new VectorIconsPackage(),
+        new RNPermissionsPackage()
       );
+    }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
     }
   };
 
