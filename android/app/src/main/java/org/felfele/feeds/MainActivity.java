@@ -1,4 +1,4 @@
-package org.felfele.mobile;
+package org.felfele.feeds;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "Felfele";
+        return "Feeds";
     }
 
     @Override

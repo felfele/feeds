@@ -34,7 +34,7 @@ export const SettingsScreen = (props: Props) => {
         ? buildNumber
         : ''
     ;
-    const versionLabel = 'Felfele News, Version: ' + Version + buildEnvironment + buildInfo;
+    const versionLabel = 'Felfele Feeds, Version: ' + Version + buildEnvironment + buildInfo;
     return (
         <FragmentSafeAreaView>
             <NavigationHeader

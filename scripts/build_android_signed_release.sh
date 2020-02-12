@@ -9,7 +9,7 @@ android_release_dir='android/app/build/outputs/apk/release'
 unsigned_apk_name='app-release-unsigned.apk'
 signed_apk_name='app-release.apk'
 debug_signed_apk_name='debug-release.apk'
-target_apk_name='felfele.apk'
+target_apk_name='feeds.apk'
 
 cp -f $android_release_dir/$unsigned_apk_name $android_release_dir/$debug_signed_apk_name
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore android/debug.keystore -storepass android -keypass android $android_release_dir/$debug_signed_apk_name androiddebugkey

@@ -1,5 +1,5 @@
 {
-  "name": "felfele",
+  "name": "feeds",
   "version": "1.0.7",
   "private": true,
   "devDependencies": {
@@ -57,7 +57,7 @@
     "build": "npm run clean && npm run tsc --",
     "clean": "rm -rf build ios/build android/build node_modules",
     "build:android": "scripts/build_android_unsigned_release.sh",
-    "build:ios": "scripts/build_xcode_archive.sh Felfele build CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=\"NO\" CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=\"NO\"",
+    "build:ios": "scripts/build_xcode_archive.sh feeds build CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=\"NO\" CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=\"NO\"",
     "bundle:android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "e2e:build:ios": "detox build",
     "e2e:ios": "detox test -c ios.sim.debug --cleanup",
@@ -74,25 +74,25 @@
     "he": "1.2.0",
     "node-libs-browser": "2.1.0",
     "node-libs-react-native": "1.0.3",
-    "react": "16.8.3",
-    "react-native": "0.59.9",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
     "react-native-actions-sheet": "0.1.6",
     "react-native-build-config": "0.3.1",
-    "react-native-camera": "1.3.1",
+    "react-native-camera": "3.17.0",
     "react-native-device-info": "0.29.1",
     "react-native-global-props": "1.1.5",
     "react-native-markdown-renderer": "3.2.8",
     "react-native-parse-html": "2.2.6",
-    "react-native-permissions": "1.2.1",
+    "react-native-permissions": "^2.0.9",
     "react-native-picker-select": "6.3.4",
-    "react-native-qrcode-scanner": "1.1.2",
+    "react-native-qrcode-scanner": "1.3.1",
     "react-native-qrcode-svg": "5.1.2",
     "react-native-restart": "0.0.9",
     "react-native-splash-screen": "3.2.0",
     "react-native-super-grid": "3.0.1",
     "react-native-svg": "9.5.1",
     "react-native-util": "1.0.2",
-    "react-native-vector-icons": "6.4.1",
+    "react-native-vector-icons": "^6.6.0",
     "react-native-xml2js": "1.0.3",
     "react-navigation": "2.18.3",
     "react-redux": "6.0.0",
@@ -109,12 +109,6 @@
     "utf8-encoder": "1.0.1",
     "util": "0.10.4",
     "vm-browserify": "1.1.0"
-  },
-  "rnpm": {
-    "assets": [
-      "fonts",
-      "images/assets"
-    ]
   },
   "jest": {
     "preset": "react-native"

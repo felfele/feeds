@@ -1,18 +1,16 @@
 env:
-matrix:
+jobs:
   fast_finish: true
 
   include:
     - language: node_js
-      node_js:
-        - "10"
+      node_js: 10
       script:
         - npm run check
 
     - os: linux
       language: android
       jdk: oraclejdk8
-      sudo: required
       android:
         components:
           - platform-tools
@@ -50,6 +48,7 @@ matrix:
         - npm install
         - brew install watchman
         - npm run link
+        - (cd ios && pod install)
       script:
         - npm run check
         - npm run build:ios
