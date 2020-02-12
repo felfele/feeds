@@ -1,4 +1,4 @@
-Feeds – RSS reader by Felfele  [![Build Status](https://travis-ci.org/felfele/felfele.svg?branch=master)](https://travis-ci.org/felfele/feeds)
+Feeds – RSS reader by Felfele  [![Build Status](https://travis-ci.org/felfele/feeds.svg?branch=master)](https://travis-ci.org/felfele/feeds)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-blueviolet.svg)](https://join.slack.com/t/felfele/shared_invite/enQtNTM1MjUwNTI1NzI5LTY5Yjg0YmVjN2MyN2MzMzc0Y2RkMGRiYzE0N2U0ZjgwNmYxMTQ3YjUwMDg1MGFiZTZlMWViZjU2MWJjY2Y0OTY)
 =======
 
@@ -23,15 +23,15 @@ Contribute
 --------------------
 
 We've set up a separate document for our
-[contribution guidelines](https://github.com/felfele/felfele/blob/master/CONTRIBUTING.md).
+[contribution guidelines](https://github.com/felfele/feeds/blob/master/CONTRIBUTING.md).
 
 Develop
 --------------------
 
 We've set up a separate document for
-[developers](https://github.com/felfele/felfele/blob/master/DEVELOPERS.md).
+[developers](https://github.com/felfele/feeds/blob/master/DEVELOPERS.md).
 
 License
 --------------------
 
-Felfele is licensed under AGPL v3. See the [LICENSE](https://github.com/felfele/felfele/blob/master/LICENSE)
+Feeds is licensed under AGPL v3. See the [LICENSE](https://github.com/felfele/feeds/blob/master/LICENSE)
