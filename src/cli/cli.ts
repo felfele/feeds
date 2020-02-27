@@ -7,6 +7,7 @@ import { RSSFeedManager } from '../RSSPostManager';
 import * as urlUtils from '../helpers/urlUtils';
 import { fetchOpenGraphData } from '../helpers/openGraph';
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
+import packageJSON from '../../package.json';
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch');
@@ -78,6 +79,27 @@ const definitions =
         const data = await fetchHtmlMetaData(canonicalUrl);
         output({data});
     })
+    .
+    addCommand('checkversions', 'Check package.json versions', async () => {
+        checkVersions(packageJSON.dependencies);
+        checkVersions(packageJSON.devDependencies);
+    })
 ;
+
+const checkVersions = (deps: {[pack: string]: string}) => {
+    const errors = [];
+    for (const key of Object.keys(deps)) {
+        const version = deps[key];
+        if (!version.substring(0, 1).match(/[0-9]/)) {
+            errors.push(`${key}: ${version}`);
+        }
+    }
+    if (errors.length > 0) {
+        // tslint:disable-next-line: no-console
+        output(errors);
+        output('Fix the versions by specifying exact versions instead of ranges');
+        throw new Error('invalid versions');
+    }
+};
 
 parseArguments(process.argv, definitions, output, output);
