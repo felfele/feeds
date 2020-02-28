@@ -45,7 +45,7 @@ jobs:
         - nvm install 10
         - node --version
       install:
-        - npm install
+        - npm ci
         - npm run link
         - (cd ios && pod install)
       script:
