@@ -19,8 +19,8 @@ The project is developed by a core team funded by a non-profit organization and 
 
 Currently we are running a public beta test, click the buttons below to join!
 
-[<img src="testflight-badge.png" width=127 height=60>](https://testflight.apple.com/join/icUTHYbo)
-[<img src="google-play-badge.png" width=155 height=60>](https://play.google.com/apps/testing/org.felfele.feeds)
+[<img src="testflight-badge.png" width=127 height=40>](https://testflight.apple.com/join/icUTHYbo)
+[<img src="google-play-badge.png" width=140 height=40>](https://play.google.com/apps/testing/org.felfele.feeds)
 
 [Homepage](https://felfele.org/)
 
