@@ -16,8 +16,6 @@ export interface StateProps extends ImageProps {
     source: ImageData;
     defaultImage?: BundledImage;
     style?: StyleProp<ImageStyle>;
-    background?: boolean;
-    backgroundImageStyle?: StyleProp<ImageStyle>;
 }
 
 export type Props = StateProps & Partial<ChildrenProps>;
@@ -34,32 +32,14 @@ export const ImageDataView = (props: Props) => {
             ? StyleSheet.flatten(props.style).height
             : props.source.height
         : props.source.height;
-    if (props.background === true) {
-        const { backgroundImageStyle, ...rest } = props;
-        return (
-            <ImageBackground
-                {...rest}
-                imageStyle={backgroundImageStyle}
-                source={source}
-                style={[props.style, {
-                    width: width,
-                    height: height,
-                }]}
-            >
-                {props.children}
-            </ImageBackground>
-        );
-    } else {
-        return (
-            <Image
-                {...props}
-                source={source}
-                style={[props.style, {
-                    width: width,
-                    height: height,
-                }]}
-            />
-        );
-    }
-
+    return (
+        <Image
+            {...props}
+            source={source}
+            style={[props.style, {
+                width: width,
+                height: height,
+            }]}
+        />
+    );
 };
