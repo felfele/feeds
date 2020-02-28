@@ -7,12 +7,13 @@ import { RSSFeedManager } from '../RSSPostManager';
 import * as urlUtils from '../helpers/urlUtils';
 import { fetchOpenGraphData } from '../helpers/openGraph';
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
-import packageJSON from '../../package.json';
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch');
 // tslint:disable-next-line:no-var-requires
 const FormData = require('form-data');
+// tslint:disable-next-line:no-var-requires
+const fs = require('fs');
 
 declare var process: {
     argv: string[];
@@ -81,6 +82,7 @@ const definitions =
     })
     .
     addCommand('checkversions', 'Check package.json versions', async () => {
+        const packageJSON = JSON.parse(fs.readFileSync('package.json'));
         checkVersions(packageJSON.dependencies);
         checkVersions(packageJSON.devDependencies);
     })
