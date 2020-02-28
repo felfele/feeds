@@ -2,6 +2,9 @@ env:
 jobs:
   fast_finish: true
 
+  allow_failures:
+    - os: osx
+
   include:
     - language: node_js
       node_js: 10
@@ -46,9 +49,9 @@ jobs:
         - node --version
       install:
         - npm install
-        - brew install watchman
         - npm run link
         - (cd ios && pod install)
       script:
-        - npm run check
+        - npm run tsc
         - npm run build:ios
+

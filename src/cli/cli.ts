@@ -12,6 +12,8 @@ import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
 const fetch = require('node-fetch');
 // tslint:disable-next-line:no-var-requires
 const FormData = require('form-data');
+// tslint:disable-next-line:no-var-requires
+const fs = require('fs');
 
 declare var process: {
     argv: string[];
@@ -78,6 +80,28 @@ const definitions =
         const data = await fetchHtmlMetaData(canonicalUrl);
         output({data});
     })
+    .
+    addCommand('checkversions', 'Check package.json versions', async () => {
+        const packageJSON = JSON.parse(fs.readFileSync('package.json'));
+        checkVersions(packageJSON.dependencies);
+        checkVersions(packageJSON.devDependencies);
+    })
 ;
+
+const checkVersions = (deps: {[pack: string]: string}) => {
+    const errors = [];
+    for (const key of Object.keys(deps)) {
+        const version = deps[key];
+        if (!version.substring(0, 1).match(/[0-9]/)) {
+            errors.push(`${key}: ${version}`);
+        }
+    }
+    if (errors.length > 0) {
+        // tslint:disable-next-line: no-console
+        output(errors);
+        output('Fix the versions by specifying exact versions instead of ranges');
+        throw new Error('invalid versions');
+    }
+};
 
 parseArguments(process.argv, definitions, output, output);

@@ -53,10 +53,8 @@ export const AsyncActions = {
             Debug.log('downloadPostsFromFeeds', feeds);
             const previousPosts = getState().rssPosts;
             const feedsWithoutOnboarding = feeds.filter(feed => feed.feedUrl !== FELFELE_ASSISTANT_URL);
-            const allPosts = await Promise.all([
-                loadRSSPostsFromFeeds(feedsWithoutOnboarding),
-            ]);
-            const posts = mergeUpdatedPosts(allPosts[0], previousPosts);
+            const allPosts = await Utils.timeout(19 * 1000, RSSPostManager.loadPosts(feedsWithoutOnboarding));
+            const posts = mergeUpdatedPosts(allPosts, previousPosts);
             const contentFilters = getState().contentFilters;
             const filteredPosts = applyContentFiltersToPosts(posts, contentFilters);
             dispatch(Actions.updateRssPosts(filteredPosts));

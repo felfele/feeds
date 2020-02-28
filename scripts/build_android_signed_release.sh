@@ -1,9 +1,9 @@
 #!/bin/sh -e
 
-./scripts/build_android_unsigned_release.sh
-
 [ "$FELFELE_KEYSTORE_STOREPASS" = "" ] && (echo 'No FELFELE_KEYSTORE_STOREPASS set, exiting' && exit 1)
 [ "$FELFELE_KEYSTORE_KEYPASS" = "" ] && (echo 'No FELFELE_KEYSTORE_KEYPASS set, exiting' && exit 1)
+
+./scripts/build_android_unsigned_release.sh
 
 android_release_dir='android/app/build/outputs/apk/release'
 unsigned_apk_name='app-release-unsigned.apk'

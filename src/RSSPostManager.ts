@@ -287,10 +287,9 @@ const feedFaviconString = (favicon: string | number): string => {
 class _RSSPostManager {
     public readonly feedManager = new RSSFeedManager();
 
-    private id = FirstId;
+    private id = 0;
 
     public async loadPosts(storedFeeds: Feed[]): Promise<PublicPost[]> {
-        const startTime = Date.now();
         const posts: Post[] = [];
         const metrics: RSSFeedWithMetrics[] = [];
 
@@ -299,53 +298,28 @@ class _RSSPostManager {
             feedMap[feed.feedUrl] = feed.name;
         }
 
-        let downloadSize = 0;
-        const firstLoad = this.id === FirstId;
         const loadFeedPromises = storedFeeds.map(feed => this.loadFeed(feed.feedUrl));
         const feeds = await Promise.all(loadFeedPromises);
         for (const feedWithMetrics of feeds) {
             if (feedWithMetrics) {
-                downloadSize += feedWithMetrics.size;
-                const rssFeed = feedWithMetrics.feed;
-                const storedFeed = storedFeeds.find(feed => urlUtils.compareUrls(feed.url, rssFeed.url));
-                const favicon = storedFeed && storedFeed.favicon && storedFeed.favicon !== ''
-                    ? storedFeed.favicon
-                    : rssFeed.icon
-                        ? rssFeed.icon
-                        : ''
-                ;
-                const faviconString = feedFaviconString(favicon);
-                Debug.log('RSSPostManager.loadPosts', {rssFeed, storedFeeds, favicon});
-                const feedName = feedMap[feedWithMetrics.url] || feedWithMetrics.feed.title;
-                const convertedPosts = this.convertRSSFeedtoPosts(rssFeed, feedName, faviconString, feedWithMetrics.url);
-                posts.push.apply(posts, convertedPosts);
-                metrics.push(feedWithMetrics);
+                try {
+                    const rssFeed = feedWithMetrics.feed;
+                    const storedFeed = storedFeeds.find(feed => urlUtils.compareUrls(feed.url, rssFeed.url));
+                    const favicon = storedFeed && storedFeed.favicon && storedFeed.favicon !== ''
+                        ? storedFeed.favicon
+                        : rssFeed.icon
+                            ? rssFeed.icon
+                            : ''
+                    ;
+                    const faviconString = feedFaviconString(favicon);
+                    const feedName = feedMap[feedWithMetrics.url] || feedWithMetrics.feed.title;
+                    const convertedPosts = this.convertRSSFeedtoPosts(rssFeed, feedName, faviconString, feedWithMetrics.url);
+                    posts.push.apply(posts, convertedPosts);
+                    metrics.push(feedWithMetrics);
+                } catch (e) {
+                    Debug.log('RSSPostManager.loadPosts', 'error while parsing feed', {e, feedWithMetrics});
+                }
             }
-        }
-        // Don't update when there are no new posts, e.g. when the network is down
-        if (!firstLoad && posts.length === 0) {
-            return [];
-        }
-
-        if (__DEV__) {
-            const stats = metrics
-                .map(metric => `${urlUtils.getHumanHostname(metric.feed.url)}: s${metric.size} d${metric.downloadTime} x${metric.xmlTime} p${metric.parseTime}`)
-                .join('\n');
-
-            const elapsed = Date.now() - startTime;
-            const firstPost: Post = {
-                _id: 1,
-                images: [],
-                text: `Debug message: downloaded ${downloadSize} bytes, elapsed ${elapsed}\n${stats}`,
-                createdAt: Date.now(),
-                author: {
-                    name: 'Felfele',
-                    uri: '',
-                    image: {
-                    },
-                },
-            };
-            return [firstPost, ...posts];
         }
         return posts;
     }
@@ -436,35 +410,42 @@ class _RSSPostManager {
         const links: Set<string> = new Set();
         const strippedFavicon = this.stripTrailing(favicon, '/');
         const posts = rssFeed.items.map(item => {
-            const markdown = this.htmlToMarkdown(item.description);
-            const [text, markdownImages] = this.extractTextAndImagesFromMarkdown(markdown, '');
-            const mediaImages = this.extractImagesFromMedia(item.media);
-            const enclosureImages = this.extractImagesFromEnclosures(item.enclosures);
-            const images = markdownImages
-                            .concat(mediaImages)
-                            .concat(markdownImages.length === 0 ? enclosureImages : []);
-            const title = this.isTitleSameAsText(item.title, text)
-                ? ''
-                : item.title === '(Untitled)'
+            try {
+                const markdown = this.htmlToMarkdown(item.description);
+                const [text, markdownImages] = this.extractTextAndImagesFromMarkdown(markdown, '');
+                const mediaImages = this.extractImagesFromMedia(item.media);
+                const enclosureImages = this.extractImagesFromEnclosures(item.enclosures);
+                const images = markdownImages
+                                .concat(mediaImages)
+                                .concat(markdownImages.length === 0 ? enclosureImages : []);
+                const title = this.isTitleSameAsText(item.title, text)
                     ? ''
-                    : '**' + item.title + '**' + '\n\n'
-                ;
-            const post: Post = {
-                _id: this.getNextId(),
-                text: (title + text).trim() + '\n\n',
-                createdAt: item.created,
-                images,
-                link:  item.link,
-                author: {
-                    name: feedName,
-                    uri: feedUrl,
-                    image: {
-                        uri: strippedFavicon,
+                    : item.title === '(Untitled)'
+                        ? ''
+                        : '**' + item.title + '**' + '\n\n'
+                    ;
+                const post: Post = {
+                    _id: this.getNextId(),
+                    text: (title + text).trim() + '\n\n',
+                    createdAt: item.created,
+                    images,
+                    link:  item.link,
+                    author: {
+                        name: feedName,
+                        uri: feedUrl,
+                        image: {
+                            uri: strippedFavicon,
+                        },
                     },
-                },
-            };
-            return post;
+                };
+                return post;
+            } catch (e) {
+                return undefined;
+            }
         }).filter(post => {
+            if (post == null) {
+                return false;
+            }
             if (post.link != null && links.has(post.link)) {
                 return false;
             }
@@ -475,7 +456,7 @@ class _RSSPostManager {
             return true;
         });
 
-        return posts;
+        return posts as Post[];
     }
 
     private extractImagesFromMedia(media?: RSSMedia): ImageData[] {
@@ -484,8 +465,8 @@ class _RSSPostManager {
         }
         const images = media.thumbnail.map(thumbnail => ({
             uri: thumbnail.url[0],
-            width: thumbnail.width[0],
-            height: thumbnail.height[0],
+            width: thumbnail.width?.[0],
+            height: thumbnail.height?.[0],
         } as ImageData));
         return images;
     }
