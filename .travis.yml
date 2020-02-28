@@ -4,20 +4,6 @@ jobs:
 
   allow_failures:
     - os: osx
-      language: objective-c
-      osx_image: xcode10.1
-      env:
-        - JOB_NAME=IOS
-      before_install:
-        - nvm install 10
-        - node --version
-      install:
-        - npm install
-        - npm run link
-        - (cd ios && pod install)
-      script:
-        - npm run tsc
-        - npm run build:ios
 
   include:
     - language: node_js
@@ -52,4 +38,20 @@ jobs:
         - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
         - sudo sysctl -p
         - npm run build:android
+
+    - os: osx
+      language: objective-c
+      osx_image: xcode10.1
+      env:
+        - JOB_NAME=IOS
+      before_install:
+        - nvm install 10
+        - node --version
+      install:
+        - npm install
+        - npm run link
+        - (cd ios && pod install)
+      script:
+        - npm run tsc
+        - npm run build:ios
 
