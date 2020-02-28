@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, ScrollView, Vibration, Linking } from 'react-native';
+import { StyleSheet, ScrollView, Vibration, View, Linking } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Settings } from '../../../models/Settings';
@@ -8,7 +8,6 @@ import { Colors, ComponentColors } from '../../../styles';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { RowItem } from '../../buttons/RowButton';
 import { RegularText } from '../../misc/text';
-import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { TouchableView } from '../../misc/TouchableView';
@@ -34,7 +33,7 @@ export const SettingsScreen = (props: Props) => {
         ? buildNumber
         : ''
     ;
-    const versionLabel = 'Felfele Feeds, Version: ' + Version + buildEnvironment + buildInfo;
+    const versionLabel = 'Feeds – RSS reader, Version: ' + Version + buildEnvironment + buildInfo;
     return (
         <FragmentSafeAreaView>
             <NavigationHeader
@@ -46,7 +45,7 @@ export const SettingsScreen = (props: Props) => {
                 paddingTop: 10,
             }}>
                 <RowItem
-                    title='Mute keywords'
+                    title='Muted words'
                     buttonStyle='navigate'
                     onPress={() => props.navigation.navigate('FilterListEditorContainer', {})}
                 />
@@ -55,6 +54,9 @@ export const SettingsScreen = (props: Props) => {
                     buttonStyle='navigate'
                     onPress={() => props.navigation.navigate('ExportImport', {})}
                 />
+
+                <View style={{paddingTop: 20}} ></View>
+
                 <RowItem
                     title='Send bug report'
                     buttonStyle='navigate'
@@ -66,7 +68,7 @@ export const SettingsScreen = (props: Props) => {
                     onPress={() => Linking.openURL('https://felfele.org/legal')}
                 />
                 <RowItem
-                    title='Visit website'
+                    title='Visit Felfele website'
                     buttonStyle='navigate'
                     onPress={() => Linking.openURL('https://felfele.org/')}
                 />
@@ -89,7 +91,6 @@ export const SettingsScreen = (props: Props) => {
                     onPress={() => props.navigation.navigate('Debug', {})}
                 />
                 }
-                <TabBarPlaceholder/>
             </ScrollView>
         </FragmentSafeAreaView>
     );

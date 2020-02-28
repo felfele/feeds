@@ -60,7 +60,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
         const button = isDelete
             ? <TwoButton
                 leftButton={{
-                    label: 'Edit keyword',
+                    label: 'Edit word',
                     icon: <Icon
                         name='edit'
                         size={20}
@@ -80,7 +80,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
                 }}
             />
             : <WideButton
-                label='Add keyword'
+                label='Add word'
                 icon={<Icon
                     name='add-box'
                     size={20}
@@ -92,7 +92,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
         return (
             <FragmentSafeAreaView>
                 <NavigationHeader
-                    title='Mute keyword'
+                    title='Mute word'
                     navigation={this.props.navigation}
                 />
                 <View style={styles.mainContainer}>
@@ -100,7 +100,7 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
                         defaultValue={this.state.filterText}
                         style={styles.linkInput}
                         onChangeText={(text) => this.setState({ filterText: text })}
-                        placeholder='Keywords to be muted'
+                        placeholder='Words to be muted'
                         autoCapitalize='none'
                         returnKeyType='done'
                         onSubmitEditing={addOrEditFilter}
