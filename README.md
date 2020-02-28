@@ -17,6 +17,11 @@ Feeds is a completely free and independent mobile RSS reader with no algorithmic
 
 The project is developed by a core team funded by a non-profit organization and volunteers from all over the world.
 
+Currently we are running a public beta test, click the buttons below to join!
+
+[<img src="testflight-badge.png" width=127 height=60>](https://testflight.apple.com/join/icUTHYbo)
+[<img src="google-play-badge.png" width=155 height=60>](https://play.google.com/apps/testing/org.felfele.feeds)
+
 [Homepage](https://felfele.org/)
 
 Contribute
