@@ -2,6 +2,23 @@ env:
 jobs:
   fast_finish: true
 
+  allow_failures:
+    - os: osx
+      language: objective-c
+      osx_image: xcode10.1
+      env:
+        - JOB_NAME=IOS
+      before_install:
+        - nvm install 10
+        - node --version
+      install:
+        - npm install
+        - npm run link
+        - (cd ios && pod install)
+      script:
+        - npm run tsc
+        - npm run build:ios
+
   include:
     - language: node_js
       node_js: 10
@@ -36,18 +53,3 @@ jobs:
         - sudo sysctl -p
         - npm run build:android
 
-    - os: osx
-      language: objective-c
-      osx_image: xcode10.1
-      env:
-        - JOB_NAME=IOS
-      before_install:
-        - nvm install 10
-        - node --version
-      install:
-        - npm install
-        - npm run link
-        - (cd ios && pod install)
-      script:
-        - npm run tsc
-        - npm run build:ios
