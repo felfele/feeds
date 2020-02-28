@@ -15,7 +15,7 @@ import DeviceInfo from 'react-native-device-info';
 import { restartApp } from '../../../helpers/restart';
 import { BoldText, RegularText } from '../../misc/text';
 import { filteredLog, LogItem } from '../../../log';
-import { Version } from '../../../Version';
+import { Version, BuildNumber } from '../../../Version';
 
 import { Debug } from '../../../Debug';
 import { TypedNavigation } from '../../../helpers/navigation';
@@ -45,16 +45,12 @@ export const escapePII = (text: string, filterFields: string[]): string => {
 const deviceInfo = () => {
     const brand = DeviceInfo.getBrand();
     const deviceID = DeviceInfo.getDeviceId();
-    const country = DeviceInfo.getDeviceCountry();
-    const locale = DeviceInfo.getDeviceLocale();
-    const version = Version;
     const systemName = DeviceInfo.getSystemName();
     const systemVersion = DeviceInfo.getSystemVersion();
 
     return `
 System: ${systemName} ${systemVersion} (${brand} ${deviceID})
-Locale: ${locale} ${country}
-Version: ${version}
+Version: ${Version}, build ${BuildNumber}
 `;
 };
 
@@ -101,18 +97,13 @@ class BugReportView extends React.Component<Props, State> {
                     keyboardShouldPersistTaps={'handled'}
                 >
                     <View style={styles.iconContainer}>
-                        <Icon
-                            name={'bug'}
-                            size={36}
-                            color={Colors.BLACK}
-                        />
                     </View>
                     {this.props.errorView
-                        ? <BoldText style={[styles.text, { fontSize: 18 }]}>
+                        ? <BoldText style={[styles.text, styles.title]}>
                             An error has occured!{'\n'}
                             We need to restart the app.
                         </BoldText>
-                        :  <BoldText style={[styles.text, { fontSize: 18 }]}>
+                        :  <BoldText style={[styles.text, styles.title]}>
                             Yikes!{'\n'}
                             What happened?
                         </BoldText>
@@ -255,15 +246,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainer: {
-        alignItems: 'center',
         backgroundColor: ComponentColors.BACKGROUND_COLOR,
     },
     iconContainer: {
         paddingTop: 26,
-        paddingBottom: 30,
+    },
+    title: {
+        textAlign: 'center',
+        fontSize: 18,
     },
     text: {
-        textAlign: 'center',
+        textAlign: 'justify',
         paddingHorizontal: 10,
         paddingBottom: 10,
     },
