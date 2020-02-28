@@ -235,7 +235,7 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNCAsyncStorage (1.5.0):
     - React
-  - RNDeviceInfo (0.21.5):
+  - RNDeviceInfo (5.5.3):
     - React
   - RNPermissions (2.0.9):
     - React
@@ -393,7 +393,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCAsyncStorage: 63407ea82f1b5ac8fc53a0b8c569b08e0516a9e0
-  RNDeviceInfo: e7c5fcde13d40e161d8a27f6c5dc69c638936002
+  RNDeviceInfo: 67607dfe9cfbed105838144c40187a8392aa404d
   RNPermissions: 6db7e0a4d94c9c02390d11020b1d3d187aaf77e5
   RNSVG: 0eb087cfb5d7937be93c45b163b26352a647e681
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4

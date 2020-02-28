@@ -25,23 +25,6 @@ import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 import { TwoButton } from '../../buttons/TwoButton';
 
-// personally identifiable information
-export const PIIKeys = [ 'privateKey', 'publicKey', 'address', 'name', 'localPath', 'user' ];
-
-export const escapePII = (text: string, filterFields: string[]): string => {
-    const fieldsToEscape = filterFields
-        .join('|');
-    const quoteOrLineEnd = '("|$)';
-    const fieldRegexp = new RegExp(`"(${fieldsToEscape})":".+?${quoteOrLineEnd}`, 'g');
-    const localPathRegexp = new RegExp(`"(file:///.+?|/.+?/.+?)${quoteOrLineEnd}`, 'g');
-    const bzzFeedRegexp = new RegExp(`(".*?)(bzz-feed:/.+?)${quoteOrLineEnd}`, 'g');
-    return text
-        .replace(fieldRegexp, '"$1":"OMITTED"')
-        .replace(localPathRegexp, '"OMITTED"')
-        .replace(bzzFeedRegexp, '$1OMITTED"')
-        ;
-};
-
 const deviceInfo = () => {
     const brand = DeviceInfo.getBrand();
     const deviceID = DeviceInfo.getDeviceId();
@@ -52,15 +35,6 @@ const deviceInfo = () => {
 System: ${systemName} ${systemVersion} (${brand} ${deviceID})
 Version: ${Version}, build ${BuildNumber}
 `;
-};
-
-const piiFilteredLog = () => {
-    return filteredLog()
-        .map((logItem: LogItem) => {
-            return `${logItem[0]} ${escapePII(logItem[1], PIIKeys)}`;
-        })
-        .join('\n')
-        ;
 };
 
 interface Props {
@@ -214,7 +188,7 @@ ${this.getDeviceInfoAndLogs()}
 ${deviceInfo()}
 Logs:
 
-${piiFilteredLog()}`;
+${filteredLog()}`;
         return bugReportBody;
     }
 
