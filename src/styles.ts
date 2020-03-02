@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 export const IconSize = {
     LARGE_LIST_ICON: 40,
@@ -24,6 +24,7 @@ export const Colors = {
     BRAND_PURPLE_LIGHT: '#BA76FA',
     BRAND_PURPLE_DARK: '#3700B4',
 };
+
 export const ComponentColors = {
     STRONG_TEXT: '#303030',
     TEXT_COLOR: Colors.GRAY,
@@ -40,6 +41,12 @@ export const ComponentColors = {
     TAB_INACTIVE_COLOR: Colors.PINKISH_GRAY,
     TAB_ACTION_BUTTON_COLOR: Colors.BRAND_PURPLE,
     TAB_ACTION_BUTTON_ICON_COLOR: Colors.WHITE,
+
+    SPINNER_COLOR: Platform.OS === 'ios'
+        ? Colors.MEDIUM_GRAY
+        : Colors.BRAND_PURPLE
+    ,
+
 };
 
 export const defaultBoldFont = 'Roboto-Bold';

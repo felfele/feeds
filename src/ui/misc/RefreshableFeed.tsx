@@ -83,8 +83,8 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                             refreshing={this.state.isRefreshing}
                             onRefresh={() => this.onRefresh() }
                             progressViewOffset={HeaderOffset}
-                            tintColor={Colors.BRAND_PURPLE}
-                            colors={[Colors.BRAND_PURPLE]}
+                            tintColor={ComponentColors.SPINNER_COLOR}
+                            colors={[ComponentColors.SPINNER_COLOR]}
                         />
                     }
                     style={{
