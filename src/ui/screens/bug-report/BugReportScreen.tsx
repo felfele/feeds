@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { restartApp } from '../../../helpers/restart';
-import { BoldText, RegularText } from '../../misc/text';
-import { filteredLog, LogItem } from '../../../log';
+import { BoldText } from '../../misc/text';
+import { filteredLog } from '../../../log';
 import { Version, BuildNumber } from '../../../Version';
 
 import { Debug } from '../../../Debug';
@@ -60,6 +60,7 @@ class BugReportView extends React.Component<Props, State> {
     };
 
     public render() {
+        const logText = 'By sending a bug report, you will share some information (shown below) with us.\n\n' + this.getDeviceInfoAndLogs();
         return (
             <KeyboardAvoidingView style={styles.keyboardAvoidingContainer}>
                 <NavigationHeader
@@ -69,31 +70,17 @@ class BugReportView extends React.Component<Props, State> {
                 <ScrollView
                     contentContainerStyle={styles.contentContainer}
                     keyboardShouldPersistTaps={'handled'}
+                    keyboardDismissMode='interactive'
                 >
-                    <View style={styles.iconContainer}>
-                    </View>
                     {this.props.errorView
-                        ? <BoldText style={[styles.text, styles.title]}>
-                            An error has occured!{'\n'}
-                            We need to restart the app.
-                        </BoldText>
-                        :  <BoldText style={[styles.text, styles.title]}>
-                            Yikes!{'\n'}
-                            What happened?
-                        </BoldText>
+                        ? <View style={styles.iconContainer}>
+                            <BoldText style={[styles.text, styles.title]}>
+                                An error has occured!{'\n'}
+                                We need to restart the app.
+                            </BoldText>
+                        </View>
+                        :  null
                     }
-                    <RegularText style={[styles.text, { fontSize: 14 }]} textBreakStrategy='simple'>
-                        As we never collect information automatically, it would be truly helpful if you could take a moment to let us know what happened.
-                    </RegularText>
-                    <SimpleTextInput
-                        style={styles.textInput}
-                        multiline={true}
-                        numberOfLines={4}
-                        onChangeText={this.onChangeText}
-                        placeholder='Let us know what happened...'
-                        placeholderTextColor='gray'
-                        underlineColorAndroid='transparent'
-                    />
                     {!this.props.errorView
                         ? <this.SendBugReportButton/>
                         : <TwoButton
@@ -122,11 +109,18 @@ class BugReportView extends React.Component<Props, State> {
                             }}
                         />
                     }
-                    <RegularText style={[styles.text, { fontSize: 14, color: Colors.BRAND_PURPLE }]}>
-                        By sending a bug report, you will share some information (shown below) with us.
-                    </RegularText>
+                    <Text style={styles.text}>Please take a moment and let us know what happened:</Text>
+                    <SimpleTextInput
+                        style={styles.textInput}
+                        multiline={true}
+                        numberOfLines={6}
+                        onChangeText={this.onChangeText}
+                        placeholder={'Write here...'}
+                        placeholderTextColor='gray'
+                        underlineColorAndroid='transparent'
+                    />
                     <View style={styles.logContainer}>
-                        <Text style={styles.logText}>{this.getDeviceInfoAndLogs()}</Text>
+                        <Text style={styles.logText}>{logText}</Text>
                     </View>
                     <this.SendBugReportButton/>
                     <TabBarPlaceholder/>
@@ -244,7 +238,7 @@ const styles = StyleSheet.create({
     },
     logContainer: {
         width: '100%',
-        marginVertical: 20,
+        marginVertical: 0,
         backgroundColor: Colors.LIGHTER_GRAY,
         paddingHorizontal: 10,
         paddingVertical: 12,
@@ -259,11 +253,10 @@ const styles = StyleSheet.create({
         paddingTop: 50,
     },
     textInput: {
-        marginTop: 20,
-        marginBottom: 10,
+        marginBottom: 1,
         padding: 10,
         backgroundColor: Colors.WHITE,
-        fontSize: 18,
+        fontSize: 16,
         height: 190,
         width: '100%',
         textAlignVertical: 'top',
