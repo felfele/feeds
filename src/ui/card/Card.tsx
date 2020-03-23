@@ -25,6 +25,7 @@ import { TypedNavigation } from '../../helpers/navigation';
 import { calculateImageDimensions } from '../../helpers/imageDataHelpers';
 import { RowItem } from '../buttons/RowButton';
 import { shareDialog } from '../../helpers/dialogs';
+import { Debug } from '../../Debug';
 
 export type AuthorFeed = UIFeed;
 
@@ -268,6 +269,14 @@ const CardTop = (props: {
                                     // removing the post automatically removes the action sheet
                                     props.onRemovePost(props.post);
                                 }}
+                            />
+                            <RowItem
+                                title={`Report post...`}
+                                buttonStyle='none'
+                                containerStyle={{
+                                    borderBottomWidth: 0,
+                                }}
+                                onPress={() => Debug.log(props.post)}
                             />
                             <RowItem
                                 title={`Cancel`}

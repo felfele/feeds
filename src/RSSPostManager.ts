@@ -16,6 +16,7 @@ import {
     RSSEnclosure,
 } from './helpers/RSSFeedHelpers';
 import { safeFetch } from './Network';
+import { MINUTE } from './DateUtils';
 // tslint:disable-next-line:no-var-requires
 const he = require('he');
 
@@ -409,6 +410,8 @@ class _RSSPostManager {
     private convertRSSFeedtoPosts(rssFeed: RSSFeed, feedName: string, favicon: string, feedUrl: string): Post[] {
         const links: Set<string> = new Set();
         const strippedFavicon = this.stripTrailing(favicon, '/');
+        const now = Date.now();
+        const adjustCreatedAt = (createdAt: number) => createdAt > now ? (now - 30 * MINUTE) : createdAt;
         const posts = rssFeed.items.map(item => {
             try {
                 const markdown = this.htmlToMarkdown(item.description);
@@ -427,7 +430,7 @@ class _RSSPostManager {
                 const post: Post = {
                     _id: this.getNextId(),
                     text: (title + text).trim() + '\n\n',
-                    createdAt: item.created,
+                    createdAt: adjustCreatedAt(item.created),
                     images,
                     link:  item.link,
                     author: {
