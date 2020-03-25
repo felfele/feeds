@@ -80,6 +80,7 @@ export const rssFeedHelper: RSSFeedHelper = {
     fetch: async (url: string): Promise<RSSFeedWithMetrics> => {
         const startTime = Date.now();
         const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
+        Debug.log('rssFeedHelper.fetch', {url, isRedditUrl});
         const fetchUrl = isRedditUrl ? redditFeedUrl(url) : url;
         const response = await Utils.timeout(rssFeedHelper.DefaultTimeout, fetch(fetchUrl, {
             headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI,

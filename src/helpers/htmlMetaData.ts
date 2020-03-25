@@ -17,7 +17,7 @@ export const fetchHtmlMetaData = async (url: string): Promise<HtmlMetaData> => {
     const html = await response.text();
     const feed = await fetchFeedFromUrl(url);
     const document = HtmlUtils.parse(html);
-    const openGraphData = getHtmlOpenGraphData(document);
+    const openGraphData = getHtmlOpenGraphData(document, url);
     const feedName = feed != null ? feed.name : '';
     const name = getFirstNonEmpty([getMetaName(document), openGraphData.name, feedName]);
     const title = getHtmlTitle(document, openGraphData.title);
@@ -52,7 +52,7 @@ interface HtmlChildNode extends ChildNode {
 const getHtmlTitle = (document: HTMLElement, defaultTitle: string): string => {
     const htmlTitleNodes = HtmlUtils.findPath(document, ['html', 'head', 'title']);
     return htmlTitleNodes.length > 0
-        ? (htmlTitleNodes[0].childNodes[0] as HtmlChildNode).value || defaultTitle
+        ? (htmlTitleNodes[0].childNodes[0] as HtmlChildNode)?.value || defaultTitle
         : defaultTitle
     ;
 };

@@ -70,13 +70,13 @@ const definitions =
     })
     .
     addCommand('opengraph <url>', 'Fetch OpenGraph data of url', async (url: string) => {
-        const canonicalUrl = urlUtils.getHttpsUrl(urlUtils.getCanonicalUrl(url));
+        const canonicalUrl = urlUtils.getCanonicalUrl(url);
         const data = await fetchOpenGraphData(canonicalUrl);
         output({data});
     })
     .
     addCommand('metadata <url>', 'Fetch metadata of url', async (url: string) => {
-        const canonicalUrl = urlUtils.getHttpsUrl(urlUtils.getCanonicalUrl(url));
+        const canonicalUrl = urlUtils.getCanonicalUrl(url);
         const data = await fetchHtmlMetaData(canonicalUrl);
         output({data});
     })

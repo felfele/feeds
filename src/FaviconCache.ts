@@ -121,16 +121,10 @@ class _FaviconCache {
         const links = HtmlUtils.findPath(document, ['html', 'head', 'link']);
         const favicon = this.findBestIconFromLinks(links);
         if (favicon != null) {
-            if (favicon.startsWith('//')) {
-                return 'https:' + favicon;
-            }
-            if (!favicon.startsWith('http')) {
-                return url + favicon;
-            }
-            return favicon;
+            return urlUtils.createUrlFromUrn(favicon, url);
         }
 
-        return url + 'favicon.ico';
+        return urlUtils.createUrlFromUrn('favicon.ico', url);
     }
 }
 

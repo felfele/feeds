@@ -1,5 +1,5 @@
 import { HtmlUtils } from '../HtmlUtils';
-import { getCanonicalUrl, getHttpsUrl } from './urlUtils';
+import { createUrlFromUrn } from './urlUtils';
 
 export interface OpenGraphData {
     title: string;
@@ -12,16 +12,16 @@ export interface OpenGraphData {
 export const fetchOpenGraphData = async (url: string): Promise<OpenGraphData> => {
     const response = await fetch(url);
     const html = await response.text();
-    const data = parseOpenGraphData(html);
+    const data = parseOpenGraphData(html, url);
     return data;
 };
 
-export const parseOpenGraphData = (html: string): OpenGraphData => {
+const parseOpenGraphData = (html: string, baseUrl: string): OpenGraphData => {
     const document = HtmlUtils.parse(html);
-    return getHtmlOpenGraphData(document);
+    return getHtmlOpenGraphData(document, baseUrl);
 };
 
-export const getHtmlOpenGraphData = (document: HTMLElement): OpenGraphData => {
+export const getHtmlOpenGraphData = (document: HTMLElement, baseUrl: string): OpenGraphData => {
     const metaElements = HtmlUtils.findPath(document, ['html', 'head', 'meta']);
 
     const ogData: OpenGraphData = {
@@ -29,7 +29,7 @@ export const getHtmlOpenGraphData = (document: HTMLElement): OpenGraphData => {
         description: '',
         image: '',
         name: '',
-        url: '',
+        url: baseUrl,
     };
     for (const meta of metaElements) {
         ogData.title = getPropertyIfValueNotSet(ogData.title, meta, 'og:title');
@@ -38,13 +38,13 @@ export const getHtmlOpenGraphData = (document: HTMLElement): OpenGraphData => {
         ogData.name = getPropertyIfValueNotSet(ogData.name, meta, 'og:site_name');
         ogData.url = getPropertyIfValueNotSet(ogData.url, meta, 'og:url');
     }
-    return normalizeOpenGraphData(ogData);
+    return normalizeOpenGraphData(ogData, baseUrl);
 };
 
-const normalizeOpenGraphData = (ogData: OpenGraphData): OpenGraphData => {
+const normalizeOpenGraphData = (ogData: OpenGraphData, baseUrl: string): OpenGraphData => {
     return {
         ...ogData,
-        image: getHttpsUrl(getCanonicalUrl(ogData.image)),
+        image: createUrlFromUrn(ogData.image, baseUrl),
     };
 };
 
