@@ -429,7 +429,7 @@ class _RSSPostManager {
                     ;
                 const post: Post = {
                     _id: this.getNextId(),
-                    text: (title + text).trim() + '\n\n',
+                    text: (title + text).trim(),
                     createdAt: adjustCreatedAt(item.created),
                     images,
                     link:  item.link,
@@ -450,6 +450,9 @@ class _RSSPostManager {
                 return false;
             }
             if (post.link != null && links.has(post.link)) {
+                return false;
+            }
+            if (post.text === '') {
                 return false;
             }
             if (post.link != null) {
