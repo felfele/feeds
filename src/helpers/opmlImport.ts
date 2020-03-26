@@ -14,10 +14,18 @@ interface OPMLFeed {
     feedType: string;
 }
 
-export const importOpml = async (url: string): Promise<Feed[] | undefined> => {
+export const fetchAndImportOpml = async (url: string): Promise<Feed[] | undefined> => {
     try {
         const response = await fetch(url);
         const xml = await response.text();
+        return importOpml(xml);
+    } catch (e) {
+        return undefined;
+    }
+};
+
+export const importOpml = async (xml: string): Promise<Feed[] | undefined> => {
+    try {
         const opmlFeeds = await new Promise<OPMLFeed[]>((resolve, reject) => {
             try {
                 parseOpml(xml, (err: any, items: OPMLFeed[]) => {
@@ -55,12 +63,17 @@ const convertOPMLFeed = async (opmlFeed: OPMLFeed): Promise<Feed | undefined> =>
     const feedUrl = getHttpsUrl(opmlFeed.feedUrl);
     Debug.log('convertOPMLFeed', {feedUrl});
     try {
-        const feed = await Utils.timeout(15000, RSSFeedManager.fetchFeedFromUrl(opmlFeed.feedUrl));
+        const feed = await Utils.timeout(15000, RSSFeedManager.fetchFeedFromUrl(feedUrl));
+        Debug.log('convertOPMLFeed', 'after timeout', {feed});
+        if (feed == null) {
+            return undefined;
+        }
         const completeFeed: Feed = {
             name: findBestAlternative([opmlFeed.title, feed?.name]),
             url: findBestAlternative([opmlFeed.url, feed?.url]),
             feedUrl: feedUrl,
             favicon: feed?.favicon || '',
+            followed: true,
         };
         return completeFeed;
     } catch (e) {

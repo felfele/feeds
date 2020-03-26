@@ -20,7 +20,7 @@ import { MINUTE } from './DateUtils';
 // tslint:disable-next-line:no-var-requires
 const he = require('he');
 
-interface ContentWithMimeType {
+export interface ContentWithMimeType {
     content: string;
     mimeType: string;
 }
@@ -114,7 +114,7 @@ export class RSSFeedManager {
                 mimeType: mimeType,
             };
         } catch (e) {
-            Debug.log('fetchContentWithMimeType', {e});
+            Debug.log('fetchContentWithMimeType', {url, e});
             return null;
         }
     }
@@ -272,7 +272,7 @@ export class RSSFeedManager {
             if (augmentedFeed != null) {
                 return augmentedFeed;
             }
-    }
+        }
 
         return null;
     }
