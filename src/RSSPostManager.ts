@@ -292,9 +292,9 @@ class _RSSPostManager {
         const posts: Post[] = [];
         const metrics: RSSFeedWithMetrics[] = [];
 
-        const feedMap: { [index: string]: string } = {};
+        const feedMap: { [index: string]: Feed } = {};
         for (const feed of storedFeeds) {
-            feedMap[feed.feedUrl] = feed.name;
+            feedMap[feed.feedUrl] = feed;
         }
 
         const loadFeedPromises = storedFeeds.map(feed => this.loadFeed(feed.feedUrl));
@@ -303,15 +303,9 @@ class _RSSPostManager {
             if (feedWithMetrics) {
                 try {
                     const rssFeed = feedWithMetrics.feed;
-                    const storedFeed = storedFeeds.find(feed => urlUtils.compareUrls(feed.url, rssFeed.url));
-                    const favicon = storedFeed && storedFeed.favicon && storedFeed.favicon !== ''
-                        ? storedFeed.favicon
-                        : rssFeed.icon
-                            ? rssFeed.icon
-                            : ''
-                    ;
+                    const favicon = feedMap[feedWithMetrics.url]?.favicon;
                     const faviconString = feedFaviconString(favicon);
-                    const feedName = feedMap[feedWithMetrics.url] || feedWithMetrics.feed.title;
+                    const feedName = feedMap[feedWithMetrics.url]?.name || feedWithMetrics.feed.title;
                     const convertedPosts = this.convertRSSFeedtoPosts(rssFeed, feedName, faviconString, feedWithMetrics.url);
                     posts.push.apply(posts, convertedPosts);
                     metrics.push(feedWithMetrics);
