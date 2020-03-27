@@ -3,7 +3,8 @@ import { ImageData } from '../models/ImageData';
 import { isBundledImage } from './imageDataHelpers';
 import { Debug } from '../Debug';
 import * as urlUtils from '../helpers/urlUtils';
-import { RSSFeedManager } from '../RSSPostManager';
+import { RSSFeedManager, ContentWithMimeType } from '../RSSPostManager';
+import { importOpml } from './opmlImport';
 
 export const FELFELE_FEEDS_MIME_TYPE = 'application/felfele-feeds+json';
 
@@ -49,10 +50,22 @@ export const fetchRSSFeedFromUrl = async (url: string): Promise<Feed | null> => 
     }
 };
 
+const tryFetchFeedByContentWithMimeType = async (url: string, contentWithMimeType: ContentWithMimeType): Promise<Feed | Feed[] | null> => {
+    const feed = await RSSFeedManager.fetchFeedByContentWithMimeType(url, contentWithMimeType);
+    if (feed != null) {
+        return feed;
+    }
+    const feeds = await importOpml(contentWithMimeType.content);
+    if (feeds != null) {
+        return feeds;
+    }
+    return null;
+};
+
 export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | null> => {
     const originalContentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(url);
     if (originalContentWithMimeType != null && RSSFeedManager.isRssMimeType(originalContentWithMimeType?.mimeType)) {
-        return RSSFeedManager.fetchFeedByContentWithMimeType(url, originalContentWithMimeType);
+        return tryFetchFeedByContentWithMimeType(url, originalContentWithMimeType);
     }
     const canonicalUrl = getCanonicalUrlForRSS(url);
     const contentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(canonicalUrl);
@@ -69,7 +82,7 @@ export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | nu
             return null;
         }
     } else {
-        return RSSFeedManager.fetchFeedByContentWithMimeType(canonicalUrl, contentWithMimeType);
+        return tryFetchFeedByContentWithMimeType(canonicalUrl, contentWithMimeType);
     }
 };
 

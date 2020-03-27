@@ -7,6 +7,8 @@ import { RSSFeedManager } from '../RSSPostManager';
 import * as urlUtils from '../helpers/urlUtils';
 import { fetchOpenGraphData } from '../helpers/openGraph';
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
+import { fetchAndImportOpml } from '../helpers/opmlImport';
+import { fetchFeedsFromUrl } from '../helpers/feedHelpers';
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch');
@@ -85,6 +87,16 @@ const definitions =
         const packageJSON = JSON.parse(fs.readFileSync('package.json'));
         checkVersions(packageJSON.dependencies);
         checkVersions(packageJSON.devDependencies);
+    })
+    .
+    addCommand('opml <url>', 'Download and conver OPML data', async (url: string) => {
+        const data = await fetchAndImportOpml(url);
+        output({data});
+    })
+    .
+    addCommand('addFeed <url>', 'Test add feed input', async (url: string) => {
+        const feeds = await fetchFeedsFromUrl(url);
+        output({feeds});
     })
 ;
 

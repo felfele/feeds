@@ -20,12 +20,10 @@ import { MINUTE } from './DateUtils';
 // tslint:disable-next-line:no-var-requires
 const he = require('he');
 
-interface ContentWithMimeType {
+export interface ContentWithMimeType {
     content: string;
     mimeType: string;
 }
-
-const FirstId = 1;
 
 const RSSMimeTypes = [
     'application/rss+xml',
@@ -116,7 +114,7 @@ export class RSSFeedManager {
                 mimeType: mimeType,
             };
         } catch (e) {
-            Debug.log('fetchContentWithMimeType', {e});
+            Debug.log('fetchContentWithMimeType', {url, e});
             return null;
         }
     }
@@ -199,10 +197,10 @@ export class RSSFeedManager {
     }
 
     public static async augmentFeedWithMetadata(url: string, rssFeed: RSSFeedWithMetrics, html?: string): Promise<Feed | null> {
-        Debug.log('RSSFeedManager.fetchFeedFromUrl', {rssFeed});
+        Debug.log('RSSFeedManager.augmentFeedWithMetadata', {url, rssFeed});
         const feedUrl = (rssFeed.feed && rssFeed.feed.url) || undefined;
         const baseUrl = urlUtils.getBaseUrl(feedUrl || url).replace('http://', 'https://');
-        Debug.log('RSSFeedManager.fetchFeedFromUrl', {baseUrl});
+        Debug.log('RSSFeedManager.augmentFeedWithMetadata', {url, baseUrl});
         const name = Utils.take(rssFeed.feed.title.split(' - '), 1, rssFeed.feed.title)[0];
         const feed: Feed = {
             url: urlUtils.getCanonicalUrl(baseUrl),
@@ -241,13 +239,13 @@ export class RSSFeedManager {
     }
 
     public static async fetchFeedByContentWithMimeType(url: string, contentWithMimeType: ContentWithMimeType): Promise<Feed | null> {
-        Debug.log('RSSFeedManager.fetchFeedFromUrl', {mimeType: contentWithMimeType.mimeType});
+        Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, mimeType: contentWithMimeType.mimeType});
 
         if (contentWithMimeType.mimeType === 'text/html') {
             const baseUrl = urlUtils.getBaseUrl(url);
-            Debug.log('RSSFeedManager.fetchFeedFromUrl', {baseUrl});
+            Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, baseUrl});
             const feed = RSSFeedManager.getFeedFromHtml(baseUrl, contentWithMimeType.content);
-            Debug.log('RSSFeedManager.fetchFeedFromUrl', {feed});
+            Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, feed});
             if (feed.feedUrl !== '') {
                 const rssFeed = await rssFeedHelper.fetch(feed.feedUrl);
                 const augmentedFeed = await RSSFeedManager.augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content);
@@ -257,8 +255,8 @@ export class RSSFeedManager {
             }
 
             const altFeed = await RSSFeedManager.tryFetchFeedFromAltLocations(baseUrl, feed);
-            if (altFeed?.feedUrl !== '') {
-                const rssFeed = await rssFeedHelper.fetch(feed.feedUrl);
+            if (altFeed != null && altFeed.feedUrl !== '') {
+                const rssFeed = await rssFeedHelper.fetch(altFeed.feedUrl);
                 const augmentedFeed = await RSSFeedManager.augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content);
                 if (augmentedFeed != null) {
                     return augmentedFeed;
@@ -269,12 +267,12 @@ export class RSSFeedManager {
         // It looks like there is a valid feed on the url
         if (RSSFeedManager.isRssMimeType(contentWithMimeType.mimeType)) {
             const rssFeed = await rssFeedHelper.load(url, contentWithMimeType.content);
-            Debug.log('RSSFeedManager.fetchFeedFromUrl', {rssFeed});
+            Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {rssFeed});
             const augmentedFeed = await RSSFeedManager.augmentFeedWithMetadata(url, rssFeed);
             if (augmentedFeed != null) {
                 return augmentedFeed;
             }
-    }
+        }
 
         return null;
     }
