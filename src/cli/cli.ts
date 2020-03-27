@@ -7,7 +7,8 @@ import { RSSFeedManager } from '../RSSPostManager';
 import * as urlUtils from '../helpers/urlUtils';
 import { fetchOpenGraphData } from '../helpers/openGraph';
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
-import { importOpml } from '../helpers/opmlImport';
+import { fetchAndImportOpml } from '../helpers/opmlImport';
+import { fetchFeedsFromUrl } from '../helpers/feedHelpers';
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch');
@@ -88,9 +89,14 @@ const definitions =
         checkVersions(packageJSON.devDependencies);
     })
     .
-    addCommand('opml', 'Download and conver OPML data', async () => {
-        const data = await importOpml('https://raw.githubusercontent.com/microsoft/rss-reader-wp/master/RSSReader_WP7/sample-opml.xml');
+    addCommand('opml <url>', 'Download and conver OPML data', async (url: string) => {
+        const data = await fetchAndImportOpml(url);
         output({data});
+    })
+    .
+    addCommand('addFeed <url>', 'Test add feed input', async (url: string) => {
+        const feeds = await fetchFeedsFromUrl(url);
+        output({feeds});
     })
 ;
 
