@@ -16,7 +16,7 @@ export const fetchOpenGraphData = async (url: string): Promise<OpenGraphData> =>
     return data;
 };
 
-const parseOpenGraphData = (html: string, baseUrl: string): OpenGraphData => {
+export const parseOpenGraphData = (html: string, baseUrl: string): OpenGraphData => {
     const document = HtmlUtils.parse(html);
     return getHtmlOpenGraphData(document, baseUrl);
 };

@@ -15,7 +15,7 @@ test('open graph data parsing from html', () => {
             <meta property='og:url' content='${url}'>
         </head></html>
     `;
-    const result = parseOpenGraphData(input);
+    const result = parseOpenGraphData(input, url);
 
     expect(result.title).toEqual(title);
     expect(result.description).toEqual(description);
