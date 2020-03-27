@@ -75,7 +75,7 @@
     "he": "1.2.0",
     "node-libs-browser": "2.1.0",
     "node-libs-react-native": "1.0.3",
-    "node-opml-parser": "^1.0.0",
+    "node-opml-parser": "1.0.0",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-actions-sheet": "0.1.6",
