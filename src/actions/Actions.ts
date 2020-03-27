@@ -13,6 +13,8 @@ export const InternalActions = {
         createAction(ActionTypes.ADD_FEED, { feed }),
     updateFeedFavicon: (feed: Feed, favicon: string) =>
         createAction(ActionTypes.UPDATE_FEED_FAVICON, {feed, favicon}),
+    updateFeed: (feedUrl: string, feed: Feed) =>
+        createAction(ActionTypes.UPDATE_FEED, { feedUrl, feed }),
     appStateSet: (appState: AppState) =>
         createAction(ActionTypes.APP_STATE_SET, { appState }),
 };

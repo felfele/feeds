@@ -12,6 +12,7 @@ import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
 import { ContentFilter } from '../models/ContentFilter';
 import { Utils } from '../Utils';
+import { isRedditLink, redditFeedUrl, fetchRedditFeed } from '../helpers/redditFeedHelpers';
 
 export const AsyncActions = {
     addFeed: (feed: Feed): Thunk => {
@@ -53,7 +54,11 @@ export const AsyncActions = {
             Debug.log('downloadPostsFromFeeds', feeds);
             const previousPosts = getState().rssPosts;
             const feedsWithoutOnboarding = feeds.filter(feed => feed.feedUrl !== FELFELE_ASSISTANT_URL);
-            const allPosts = await Utils.timeout(19 * 1000, RSSPostManager.loadPosts(feedsWithoutOnboarding));
+            const allFeedsTimeout = feeds.length > 40
+                ? feeds.length * 500
+                : 20 * 1000
+            ;
+            const allPosts = await Utils.timeout(allFeedsTimeout, RSSPostManager.loadPosts(feedsWithoutOnboarding));
             const posts = mergeUpdatedPosts(allPosts, previousPosts);
             const contentFilters = getState().contentFilters;
             const filteredPosts = applyContentFiltersToPosts(posts, contentFilters);
@@ -80,11 +85,18 @@ export const AsyncActions = {
             dispatch(InternalActions.appStateSet(currentVersionAppState));
         };
     },
-};
-
-const loadRSSPostsFromFeeds = async (feeds: Feed[]): Promise<Post[]> => {
-    const posts = await Utils.timeout(60000, RSSPostManager.loadPosts(feeds));
-    return posts;
+    fixRedditFeeds: (): Thunk => {
+        return async (dispatch, getState) => {
+            const redditFeeds = getState().feeds.filter(feed => isRedditLink(feed.feedUrl));
+            for (const feed of redditFeeds) {
+                const updatedFeed = await fetchRedditFeed(feed.feedUrl);
+                Debug.log('fixRedditFeeds', {updatedFeed, feed});
+                if (updatedFeed != null) {
+                    dispatch(InternalActions.updateFeed(feed.feedUrl, updatedFeed));
+                }
+            }
+        };
+    },
 };
 
 const matchContentFilters = (text: string, contentFilters: ContentFilter[]): boolean => {

@@ -1,5 +1,11 @@
 import { RSSItem, RSSThumbnail, RSSFeed, RSSFeedWithMetrics } from './RSSFeedHelpers';
 import * as urlUtils from './urlUtils';
+import { Feed } from '../models/Feed';
+import { Debug } from '../Debug';
+import { getFavicon } from './favicon';
+import { safeFetch } from '../Network';
+import { asyncTryExpr } from './tryExpr';
+import { isError } from 'util';
 
 interface RedditImageData {
     url: string;
@@ -32,7 +38,15 @@ interface RedditPost {
 
 const IMAGE_DIMENSION_THRESHOLD = 1200;
 
-export const redditFeedUrl = (url: string) => url.slice(0, -4).concat('.json');
+export const redditFeedUrl = (url: string) => {
+    if (url.endsWith('.rss')) {
+        return url.slice(0, -4).concat('.json');
+    }
+    if (url.endsWith('.json')) {
+        return url;
+    }
+    return url + '.json';
+};
 
 const findBestResolutionRedditImage = (redditImage: RedditImage): RedditImageData | undefined => {
     const allImages = [redditImage.source, ...redditImage.resolutions];
@@ -114,4 +128,93 @@ export const loadRedditFeed = (url: string, text: string, startTime: number, dow
         parseTime: parseTime - xmlTime,
     };
     return rssFeedWithMetrics;
+};
+
+export const isRedditLink = (url: string): boolean => {
+    const canonicalUrl = urlUtils.getCanonicalUrl(url);
+    const humanHostName = urlUtils.getHumanHostname(canonicalUrl);
+    return humanHostName === urlUtils.REDDIT_COM;
+};
+
+const parseSubredditFromUrl = (url: string): string | undefined => {
+    const canonicalUrl = urlUtils.getCanonicalUrl(url);
+    const domainAndQuery = canonicalUrl.split('//', 2)?.[1];
+    if (domainAndQuery == null) {
+        return undefined;
+    }
+    const parts = domainAndQuery.split('/');
+    if (parts.length < 3) {
+        return undefined;
+    }
+    const [domain, r, sub, ...rest] = parts;
+    if (sub == null) {
+        return undefined;
+    }
+    const subredditParts = sub.split('.');
+    if (subredditParts.length === 0) {
+        return sub;
+    }
+    return subredditParts[0];
+};
+
+export interface RedditLink {
+    canonicalUrl: string;
+    subreddit: string;
+}
+
+export const makeCanonicalRedditLink = (url: string): RedditLink | undefined => {
+    if (!isRedditLink(url)) {
+        return undefined;
+    }
+    const subreddit = parseSubredditFromUrl(url);
+    if (subreddit == null) {
+        return undefined;
+    }
+    return {
+        canonicalUrl: `https://${urlUtils.REDDIT_COM}/r/${subreddit}`,
+        subreddit,
+    };
+};
+
+const getAboutJsonIcon = (aboutJson: any) => {
+    if (aboutJson.data.icon_img != null && aboutJson.data.icon_img !== '') {
+        return aboutJson.data.icon_img;
+    }
+    if (aboutJson.data.community_icon != null && aboutJson.data.community_icon !== '') {
+        return aboutJson.data.community_icon;
+    }
+    return undefined;
+};
+
+export const fetchRedditFeed = async (url: string): Promise<Feed | undefined> => {
+    const redditLink = makeCanonicalRedditLink(url);
+    if (redditLink == null) {
+        return undefined;
+    }
+    const canonicalUrl = redditLink.canonicalUrl;
+    const feedUrl = redditFeedUrl(redditLink.canonicalUrl);
+    Debug.log('fetchRedditFeed', {url, redditLink, feedUrl});
+    const aboutJsonUrl = canonicalUrl + '/about.json';
+    const response = await asyncTryExpr(() => safeFetch(aboutJsonUrl));
+    if (isError(response)) {
+        Debug.log('fetchRedditFeed', {error: response});
+        return undefined;
+    }
+    const json = await response.json() as any;
+    Debug.log('fetchRedditFeed', {json});
+    if (json.data.title == null) {
+        return undefined;
+    }
+    const name = json.data.title;
+    const aboutJsonIcon = getAboutJsonIcon(json);
+    const favicon = aboutJsonIcon != null
+        ? aboutJsonIcon
+        : await getFavicon(canonicalUrl)
+    ;
+    return {
+        name,
+        url: canonicalUrl,
+        feedUrl,
+        favicon,
+    };
 };

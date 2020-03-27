@@ -1,7 +1,7 @@
 import { Post, PublicPost } from './models/Post';
 import { ImageData } from './models/ImageData';
 import { Feed } from './models/Feed';
-import { FaviconCache } from './FaviconCache';
+import { getFavicon, findBestIconFromLinks } from './helpers/favicon';
 import { Utils } from './Utils';
 import * as urlUtils from './helpers/urlUtils';
 import { HtmlUtils } from './HtmlUtils';
@@ -67,7 +67,7 @@ export class RSSFeedManager {
             }
         }
 
-        feed.favicon = FaviconCache.findBestIconFromLinks(links) || '';
+        feed.favicon = findBestIconFromLinks(links) || '';
 
         const titles = HtmlUtils.findPath(document, ['html', 'head', 'title']);
         for (const title of titles) {
@@ -221,7 +221,7 @@ export class RSSFeedManager {
             feed.name = feedFromHtml.name;
         }
         if (urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM) {
-            feed.favicon = await FaviconCache.getFavicon(url);
+            feed.favicon = await getFavicon(url);
         } else {
             feed.favicon = feedFromHtml.favicon || rssFeed.feed.icon || '';
         }
