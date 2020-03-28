@@ -2,7 +2,6 @@ import { Post, PublicPost } from './models/Post';
 import { ImageData } from './models/ImageData';
 import { Feed } from './models/Feed';
 import { fetchSiteFaviconUrl, findBestIconFromLinks } from './helpers/favicon';
-import { Utils } from './Utils';
 import * as urlUtils from './helpers/urlUtils';
 import { HtmlUtils } from './HtmlUtils';
 import { Debug } from './Debug';
@@ -201,7 +200,7 @@ export class RSSFeedManager {
         const feedUrl = (rssFeed.feed && rssFeed.feed.url) || undefined;
         const baseUrl = urlUtils.getBaseUrl(feedUrl || url).replace('http://', 'https://');
         Debug.log('RSSFeedManager.augmentFeedWithMetadata', {url, baseUrl});
-        const name = Utils.take(rssFeed.feed.title.split(' - '), 1, rssFeed.feed.title)[0];
+        const name = rssFeed.feed.title.split(' - ')?.[0] ?? rssFeed.feed.title;
         const feed: Feed = {
             url: urlUtils.getCanonicalUrl(baseUrl),
             feedUrl: url,

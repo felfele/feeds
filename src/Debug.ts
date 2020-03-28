@@ -1,6 +1,6 @@
 import * as util from 'util';
-import { Utils } from './Utils';
 import { timestampToDateString } from './helpers/dateHelpers';
+import { isNodeJS } from './helpers/Utils';
 
 type Logger = (s: string) => void;
 
@@ -23,7 +23,7 @@ export class Debug {
                 ? timestampToDateString(Date.now(), false)
                 : ''
             ;
-            if (Utils.isNodeJS() &&
+            if (isNodeJS() &&
                 args.length === 2 &&
                 typeof args[0] === 'string' &&
                 typeof args[1] === 'object'

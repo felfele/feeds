@@ -1,6 +1,14 @@
-import * as urlUtils from '../src/helpers/urlUtils';
+import * as urlUtils from '../../src/helpers/urlUtils';
 
 test('Test human hostname', async () => {
+    const input = 'https://reddit.com/r/android';
+    const expectedResult = 'reddit.com';
+    const result = urlUtils.getHumanHostname(input);
+
+    expect(result).toBe(expectedResult);
+});
+
+test('Test human hostname with long name', async () => {
     const input = 'https://www.gfdl.noaa.gov/global-warming-and-hurricanes/';
     const expectedResult = 'noaa.gov';
     const result = urlUtils.getHumanHostname(input);

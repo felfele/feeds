@@ -1,8 +1,8 @@
 import * as urlUtils from './urlUtils';
-import { Utils } from '../Utils';
 import { Version } from '../Version';
 import { loadRedditFeed, redditFeedUrl } from './redditFeedHelpers';
 import { Debug } from '../Debug';
+import { timeout } from './Utils';
 
 // tslint:disable-next-line:no-var-requires
 const util = require('react-native-util');
@@ -81,7 +81,7 @@ export const rssFeedHelper: RSSFeedHelper = {
         const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
         Debug.log('rssFeedHelper.fetch', {url, isRedditUrl});
         const fetchUrl = isRedditUrl ? redditFeedUrl(url) : url;
-        const response = await Utils.timeout(rssFeedHelper.DefaultTimeout, fetch(fetchUrl, {
+        const response = await timeout(rssFeedHelper.DefaultTimeout, fetch(fetchUrl, {
             headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI,
         }));
         const downloadTime = Date.now();
@@ -91,7 +91,7 @@ export const rssFeedHelper: RSSFeedHelper = {
                 ? Promise.resolve(loadRedditFeed(url, text, startTime, downloadTime))
                 : rssFeedHelper.load(url, text, startTime, downloadTime)
             ;
-            const feed = await Utils.timeout(rssFeedHelper.DefaultTimeout, feedLoader);
+            const feed = await timeout(rssFeedHelper.DefaultTimeout, feedLoader);
             return feed;
         } else {
             Debug.log('rssFeedHelper.fetch', {fetchUrl, response});

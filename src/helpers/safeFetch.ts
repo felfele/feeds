@@ -1,4 +1,4 @@
-import { Utils } from '../Utils';
+import { timeout } from './Utils';
 
 export const safeFetch = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
     const response = await fetch(input, init);
@@ -8,8 +8,8 @@ export const safeFetch = async (input: RequestInfo, init?: RequestInit): Promise
     return response;
 };
 
-export const safeFetchWithTimeout = async (input: RequestInfo, init?: RequestInit, timeout: number = 0): Promise<Response> => {
-    return await Utils.timeout(timeout, safeFetch(input, init));
+export const safeFetchWithTimeout = async (input: RequestInfo, init?: RequestInit, timeoutMillis: number = 0): Promise<Response> => {
+    return await timeout(timeoutMillis, safeFetch(input, init));
 };
 
 export const safeFetchWithFollow = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {

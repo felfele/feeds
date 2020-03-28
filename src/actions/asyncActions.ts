@@ -11,8 +11,8 @@ import { Debug } from '../Debug';
 import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
 import { ContentFilter } from '../models/ContentFilter';
-import { Utils } from '../Utils';
 import { isRedditLink, fetchRedditFeed } from '../helpers/redditFeedHelpers';
+import { timeout } from '../helpers/Utils';
 
 export const AsyncActions = {
     addFeed: (feed: Feed): Thunk => {
@@ -58,7 +58,7 @@ export const AsyncActions = {
                 ? feeds.length * 500
                 : 20 * 1000
             ;
-            const allPosts = await Utils.timeout(allFeedsTimeout, RSSPostManager.loadPosts(feedsWithoutOnboarding));
+            const allPosts = await timeout(allFeedsTimeout, RSSPostManager.loadPosts(feedsWithoutOnboarding));
             const posts = mergeUpdatedPosts(allPosts, previousPosts);
             const contentFilters = getState().contentFilters;
             const filteredPosts = applyContentFiltersToPosts(posts, contentFilters);
