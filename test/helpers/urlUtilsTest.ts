@@ -1,8 +1,24 @@
 import * as urlUtils from '../../src/helpers/urlUtils';
 
+test('Test invalid human hostname', async () => {
+    const input = '';
+    const expectedResult = '';
+    const result = urlUtils.getHumanHostname(input);
+
+    expect(result).toBe(expectedResult);
+});
+
 test('Test human hostname', async () => {
     const input = 'https://reddit.com/r/android';
     const expectedResult = 'reddit.com';
+    const result = urlUtils.getHumanHostname(input);
+
+    expect(result).toBe(expectedResult);
+});
+
+test('Test human hostname without domain', async () => {
+    const input = 'https://reddit/r/android';
+    const expectedResult = 'reddit';
     const result = urlUtils.getHumanHostname(input);
 
     expect(result).toBe(expectedResult);

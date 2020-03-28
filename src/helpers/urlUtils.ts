@@ -12,9 +12,9 @@ export const getHumanHostname = (url: string): string => {
     if (url.startsWith('//')) {
         url = 'https:' + url;
     }
-    const hostname = Url.parse(url).hostname;
-    const parts = hostname ? hostname.split('.') : '';
-    const humanHostname = parts.slice(-2).join('.');
+    const hostname = Url.parse(url).hostname as string;
+    const parts = hostname ? hostname.split('.') : [];
+    const humanHostname = parts.slice(-2)?.join('.') ?? '';
     return humanHostname;
 };
 
