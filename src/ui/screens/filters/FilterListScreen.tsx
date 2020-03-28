@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { ContentFilter } from '../../../models/ContentFilter';
-import { DateUtils } from '../../../DateUtils';
+import { printableElapsedTime } from '../../../helpers/dateHelpers';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { ComponentColors, Colors } from '../../../styles';
 import { RowItem } from '../../buttons/RowButton';
@@ -51,7 +51,7 @@ export class FilterListScreen extends React.Component<StateProps & DispatchProps
                             title={filter.text}
                             description={
                                 'Expires in ' +
-                                DateUtils.printableElapsedTime(Date.now(), filter.createdAt + filter.validUntil)}
+                                printableElapsedTime(Date.now(), filter.createdAt + filter.validUntil)}
                             key={filter.text}
                             buttonStyle='navigate'
                             onPress={() => {

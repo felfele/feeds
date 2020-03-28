@@ -10,10 +10,9 @@ import {
     Dimensions,
     StyleSheet,
     Linking,
-    TextInput,
 } from 'react-native';
 import { TouchableView } from '../misc/TouchableView';
-import { DateUtils } from '../../DateUtils';
+import { printableElapsedTime } from '../../helpers/dateHelpers';
 import * as urlUtils from '../../helpers/urlUtils';
 import { ImageDataView } from '../misc/ImageDataView';
 import { MediumText, RegularText } from '../misc/text';
@@ -196,7 +195,7 @@ const CardTop = (props: {
     onPress?: () => void;
 }) => {
     const postUpdateTime = props.post.updatedAt || props.post.createdAt;
-    const printableTime = DateUtils.printableElapsedTime(postUpdateTime, props.currentTimestamp) + ' ago';
+    const printableTime = printableElapsedTime(postUpdateTime, props.currentTimestamp) + ' ago';
     const authorName = props.post.author ? props.post.author.name : DEFAULT_AUTHOR_NAME;
     const url = props.post.link || '';
     const hostnameText = url === '' ? '' : urlUtils.getHumanHostname(url);

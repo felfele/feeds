@@ -1,4 +1,4 @@
-import { DateUtils } from './DateUtils';
+import { timestampToDateString } from './helpers/dateHelpers';
 
 export type LogItem = [string, string];
 
@@ -6,7 +6,7 @@ const logData: LogItem[] = [];
 let logFilter = '';
 
 export const appendToLog = (logLine: string) => {
-    const dateString = DateUtils.timestampToDateString(Date.now(), true).replace('T', ' ').replace('Z', '');
+    const dateString = timestampToDateString(Date.now(), true).replace('T', ' ').replace('Z', '');
     logData.splice(0, 0, [dateString, logLine]);
 };
 

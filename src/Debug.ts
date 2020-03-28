@@ -1,6 +1,6 @@
 import * as util from 'util';
 import { Utils } from './Utils';
-import { DateUtils } from './DateUtils';
+import { timestampToDateString } from './helpers/dateHelpers';
 
 type Logger = (s: string) => void;
 
@@ -20,7 +20,7 @@ export class Debug {
     public static log(...args: any[]) {
         if (__DEV__ && Debug.isDebugMode) {
             const timestamp = Debug.showTimestamp
-                ? DateUtils.timestampToDateString(Date.now(), false)
+                ? timestampToDateString(Date.now(), false)
                 : ''
             ;
             if (Utils.isNodeJS() &&

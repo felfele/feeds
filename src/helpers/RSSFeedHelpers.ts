@@ -1,7 +1,6 @@
 import * as urlUtils from './urlUtils';
 import { Utils } from '../Utils';
 import { Version } from '../Version';
-import { DateUtils } from '../DateUtils';
 import { loadRedditFeed, redditFeedUrl } from './redditFeedHelpers';
 import { Debug } from '../Debug';
 
@@ -164,7 +163,7 @@ export const rssFeedHelper: RSSFeedHelper = {
             const item: RSSItem = {
                 title: entry.title ? entry.title[0] : '',
                 description: entry.content ? entry.content[0]._ : '',
-                created: entryDate ? DateUtils.parseDateString(entryDate) : Date.now(),
+                created: entryDate ? Date.parse(entryDate) : Date.now(),
                 link: entry.link ? entry.link[0].href[0] : '',
                 url: entry.link ? entry.link[0].href[0] : '',
                 media: getAtomEntryMedia(entry),

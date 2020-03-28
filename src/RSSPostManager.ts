@@ -16,7 +16,7 @@ import {
     RSSEnclosure,
 } from './helpers/RSSFeedHelpers';
 import { safeFetch } from './helpers/safeFetch';
-import { MINUTE } from './DateUtils';
+import { MINUTE } from './helpers/dateHelpers';
 // tslint:disable-next-line:no-var-requires
 const he = require('he');
 

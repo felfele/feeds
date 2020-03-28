@@ -13,7 +13,7 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import { ContentFilter, filterValidUntilToText } from '../../../models/ContentFilter';
 import { ComponentColors, defaultFont, defaultTextProps, Colors } from '../../../styles';
-import { DAY, MONTH31, WEEK, YEAR } from '../../../DateUtils';
+import { DAY, MONTH31, WEEK, YEAR } from '../../../helpers/dateHelpers';
 import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { Debug } from '../../../Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
