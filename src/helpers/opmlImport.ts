@@ -1,8 +1,8 @@
 import { Feed } from '../models/Feed';
-import { RSSFeedManager } from '../RSSPostManager';
+import { fetchFeedFromUrl } from './RSSPostHelpers';
 import { getHttpsUrl } from './urlUtils';
-import { Utils } from '../Utils';
-import { Debug } from '../Debug';
+import { Debug } from './Debug';
+import { timeout } from './Utils';
 
 // tslint:disable-next-line: no-var-requires
 const parseOpml = require('node-opml-parser');
@@ -63,7 +63,7 @@ const convertOPMLFeed = async (opmlFeed: OPMLFeed): Promise<Feed | undefined> =>
     const feedUrl = getHttpsUrl(opmlFeed.feedUrl);
     Debug.log('convertOPMLFeed', {feedUrl});
     try {
-        const feed = await Utils.timeout(15000, RSSFeedManager.fetchFeedFromUrl(feedUrl));
+        const feed = await timeout(15000, fetchFeedFromUrl(feedUrl));
         Debug.log('convertOPMLFeed', 'after timeout', {feed});
         if (feed == null) {
             return undefined;

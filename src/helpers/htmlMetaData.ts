@@ -1,8 +1,9 @@
 import { OpenGraphData, getHtmlOpenGraphData } from './openGraph';
-import { RSSFeedManager } from '../RSSPostManager';
+import { fetchFeedFromUrl } from './RSSPostHelpers';
 import { fetchSiteFaviconUrl } from './favicon';
-import { HtmlUtils } from '../HtmlUtils';
+import { HtmlUtils } from './HtmlUtils';
 import { Feed } from '../models/Feed';
+import { Debug } from './Debug';
 
 export interface HtmlMetaData extends OpenGraphData {
     icon: string;
@@ -15,7 +16,7 @@ export interface HtmlMetaData extends OpenGraphData {
 export const fetchHtmlMetaData = async (url: string): Promise<HtmlMetaData> => {
     const response = await fetch(url);
     const html = await response.text();
-    const feed = await fetchFeedFromUrl(url);
+    const feed = await tryFetchFeedFromUrl(url);
     const document = HtmlUtils.parse(html);
     const openGraphData = getHtmlOpenGraphData(document, url);
     const feedName = feed != null ? feed.name : '';
@@ -36,11 +37,12 @@ export const fetchHtmlMetaData = async (url: string): Promise<HtmlMetaData> => {
     };
 };
 
-const fetchFeedFromUrl = async (url: string): Promise<Feed | null> => {
+const tryFetchFeedFromUrl = async (url: string): Promise<Feed | null> => {
     try {
-        const feed = await RSSFeedManager.fetchFeedFromUrl(url);
+        const feed = await fetchFeedFromUrl(url);
         return feed;
     } catch (e) {
+        Debug.log('tryFetchFeedFromUrl', {e});
         return null;
     }
 };

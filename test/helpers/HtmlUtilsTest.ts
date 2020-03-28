@@ -1,4 +1,4 @@
-import { HtmlUtils } from '../src/HtmlUtils';
+import { HtmlUtils } from '../../src/helpers/HtmlUtils';
 
 test('match html attributes', () => {
     const mimeType = 'application/rss+xml';

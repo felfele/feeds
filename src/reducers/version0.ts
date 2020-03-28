@@ -1,5 +1,5 @@
 import { PersistedState } from 'redux-persist';
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 import { ContentFilter } from '../models/ContentFilter';
 import { Feed } from '../models/Feed';
 import { Post } from '../models/Post';

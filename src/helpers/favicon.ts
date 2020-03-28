@@ -1,6 +1,6 @@
-import { HtmlUtils } from '../HtmlUtils';
-import { Debug } from '../Debug';
-import { safeFetch } from '../Network';
+import { HtmlUtils } from './HtmlUtils';
+import { Debug } from './Debug';
+import { safeFetch } from './safeFetch';
 import * as urlUtils from './urlUtils';
 
 interface Icon {

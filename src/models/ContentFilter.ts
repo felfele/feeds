@@ -1,5 +1,5 @@
 import { Model } from './Model';
-import { DateUtils } from '../DateUtils';
+import { printableElapsedTime } from '../helpers/dateHelpers';
 
 export interface ContentFilter extends Model {
     text: string;
@@ -11,5 +11,5 @@ export const filterValidUntilToText = (validUntil: number): string => {
     if (validUntil === 0) {
         return 'forever';
     }
-    return DateUtils.printableElapsedTime(0, validUntil);
+    return printableElapsedTime(0, validUntil);
 };

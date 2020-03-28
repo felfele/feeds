@@ -2,17 +2,17 @@ import { Feed } from '../models/Feed';
 import { AppState } from '../reducers/AppState';
 import { Actions, InternalActions } from './Actions';
 import { migrateAppStateToCurrentVersion } from '../store';
-import { RSSPostManager } from '../RSSPostManager';
+import { loadPosts } from '../helpers/RSSPostHelpers';
 import { FELFELE_ASSISTANT_URL } from '../reducers/defaultData';
 import {
     mergeUpdatedPosts,
 } from '../helpers/postHelpers';
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
 import { ContentFilter } from '../models/ContentFilter';
-import { Utils } from '../Utils';
 import { isRedditLink, fetchRedditFeed } from '../helpers/redditFeedHelpers';
+import { timeout } from '../helpers/Utils';
 
 export const AsyncActions = {
     addFeed: (feed: Feed): Thunk => {
@@ -58,7 +58,7 @@ export const AsyncActions = {
                 ? feeds.length * 500
                 : 20 * 1000
             ;
-            const allPosts = await Utils.timeout(allFeedsTimeout, RSSPostManager.loadPosts(feedsWithoutOnboarding));
+            const allPosts = await timeout(allFeedsTimeout, loadPosts(feedsWithoutOnboarding));
             const posts = mergeUpdatedPosts(allPosts, previousPosts);
             const contentFilters = getState().contentFilters;
             const filteredPosts = applyContentFiltersToPosts(posts, contentFilters);

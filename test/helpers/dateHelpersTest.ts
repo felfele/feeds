@@ -1,17 +1,10 @@
-import { DateUtils } from '../src/DateUtils';
+import { timestampToDateString, printableElapsedTime } from '../../src/helpers/dateHelpers';
 
 const now = 1503058728706;
 
-test('Test ISO8601 complete format to UTC timestamp', async () => {
-    const input = '2017-08-17T15:01:26.000Z';
-    const result = DateUtils.parseDateString(input);
-
-    expect(result).toBe(1502982086000);
-});
-
 test('Test UTC timestamp to ISO8601 complete format', async () => {
     const input = 1502982086000;
-    const result = DateUtils.timestampToDateString(input);
+    const result = timestampToDateString(input);
 
     expect(result).toEqual('2017-08-17T15:01:26.000Z');
 });
@@ -34,7 +27,7 @@ test('Test printable time output', () => {
         '1 month',
     ];
 
-    const results = createdTimes.map(time => DateUtils.printableElapsedTime(time, now));
+    const results = createdTimes.map(time => printableElapsedTime(time, now));
 
     expect(results).toEqual(expectedResults);
 });

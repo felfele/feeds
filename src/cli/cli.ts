@@ -1,14 +1,14 @@
 
 import { Version, BuildNumber } from '../Version';
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 import { parseArguments, addOption } from './cliParser';
 import { output, setOutput } from './cliHelpers';
-import { RSSFeedManager } from '../RSSPostManager';
 import * as urlUtils from '../helpers/urlUtils';
 import { fetchOpenGraphData } from '../helpers/openGraph';
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
 import { fetchAndImportOpml } from '../helpers/opmlImport';
 import { fetchFeedsFromUrl } from '../helpers/feedHelpers';
+import { fetchFeedFromUrl } from '../helpers/RSSPostHelpers';
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch');
@@ -67,7 +67,7 @@ const definitions =
     .
     addCommand('rss <url>', 'Fetch RSS feed of url', async (url: string) => {
         const canonicalUrl = urlUtils.getCanonicalUrl(url);
-        const feed = await RSSFeedManager.fetchFeedFromUrl(canonicalUrl);
+        const feed = await fetchFeedFromUrl(canonicalUrl);
         output('rss feed', {feed});
     })
     .

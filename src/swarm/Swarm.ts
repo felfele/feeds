@@ -1,8 +1,8 @@
 
-import { Debug } from '../Debug';
-import { safeFetch } from '../Network';
+import { Debug } from '../helpers/Debug';
+import { safeFetch } from '../helpers/safeFetch';
 
-export const defaultGateway = 'https://swarm.felfele.com';
+export const defaultGateway = 'https://swarm.felfele.org';
 export const defaultPublicGateway = 'https://swarm-gateways.net';
 export const defaultDebugGateway = 'http://localhost:8500';
 export const defaultUrlScheme = '/bzz-raw:/';
@@ -28,8 +28,9 @@ const uploadString = async (data: string, swarmGateway: string, headers?: {[key:
     Debug.log('uploadString', {data});
     const url = swarmGateway + '/bzz:/';
     const options: RequestInit = {
-        headers: headers ?? {
+        headers: {
             'Content-Type': 'text/plain',
+            ...headers,
         },
         method: 'POST',
     };

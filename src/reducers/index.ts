@@ -4,7 +4,7 @@ import { ContentFilter } from '../models/ContentFilter';
 import { Feed } from '../models/Feed';
 import { Settings } from '../models/Settings';
 import { Post } from '../models/Post';
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 import {
     removeFromArray,
     updateArrayItem,

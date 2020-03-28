@@ -9,7 +9,7 @@ import { View,
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
 import { NavigationHeader } from '../../misc/NavigationHeader';
-import { clearLog, filteredLog, setLogFilter } from '../../../log';
+import { clearLog, filteredLog, setLogFilter } from '../../../helpers/log';
 import { Colors, ComponentColors, DefaultTabBarHeight } from '../../../styles';
 import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { TypedNavigation } from '../../../helpers/navigation';

@@ -2,7 +2,7 @@ import { Store } from 'redux';
 import { AppState } from '../reducers/AppState';
 import { Actions } from '../actions/Actions';
 import { AsyncActions } from '../actions/asyncActions';
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 
 export const felfeleInitAppActions = (store: Store<AppState, Actions>) => {
     // tslint:disable-next-line:no-console

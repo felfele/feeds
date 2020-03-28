@@ -4,7 +4,7 @@ import { Card } from '../../src/ui/card/Card';
 import { Post } from '../../src/models/Post';
 import { Author } from '../../src/models/Author';
 import TestRenderer from 'react-test-renderer';
-import { Debug } from '../../src/Debug';
+import { Debug } from '../../src/helpers/Debug';
 import { TypedNavigation } from '../../src/helpers/navigation';
 
 Debug.setDebugMode(true);

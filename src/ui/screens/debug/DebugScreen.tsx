@@ -5,13 +5,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { getSerializedAppState, getAppStateFromSerialized } from '../../../store';
 import { AppState } from '../../../reducers/AppState';
-import { Debug } from '../../../Debug';
+import { Debug } from '../../../helpers/Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import * as Dialogs from '../../../helpers/dialogs';
 import { Colors, ComponentColors } from '../../../styles';
 import { RowItem } from '../../buttons/RowButton';
 import { restartApp } from '../../../helpers/restart';
-import { Utils } from '../../../Utils';
+import { waitMillisec } from '../../../helpers/Utils';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { Feed } from '../../../models/Feed';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
@@ -144,7 +144,7 @@ const onAppStateReset = async (props: Props) => {
     if (confirmed) {
         props.onAppStateReset();
         const timeout = Platform.OS === 'android' ? 3000 : 1000;
-        await Utils.waitMillisec(timeout);
+        await waitMillisec(timeout);
         restartApp();
     }
 };

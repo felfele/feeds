@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 import { Feed } from '../../../models/Feed';
-import { Debug } from '../../../Debug';
+import { Debug } from '../../../helpers/Debug';
 import { ComponentColors, Colors, defaultMediumFont } from '../../../styles';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
