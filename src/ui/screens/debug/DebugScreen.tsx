@@ -28,6 +28,7 @@ export interface DispatchProps {
     onDeleteFilters: () => void;
     onAddFeed: (feed: Feed) => void;
     onRefreshFeeds: (feeds: Feed[]) => void;
+    onFixRedditFeeds: () => void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -95,6 +96,14 @@ export const DebugScreen = (props: Props) => (
                     }
                     title='Delete all filters'
                     onPress={async () => await onDeleteFilters(props)}
+                    buttonStyle='none'
+                />
+                <RowItem
+                    icon={
+                        <MaterialCommunityIcon name='auto-fix' />
+                    }
+                    title='Fix reddit feeds'
+                    onPress={async () => await onFixRedditFeeds(props)}
                     buttonStyle='none'
                 />
                 <RowItem
@@ -174,4 +183,8 @@ const onLogAppStateVersion = async () => {
     const serializedAppState = await getSerializedAppState();
     const appState = await getAppStateFromSerialized(serializedAppState);
     Debug.log('onLogAppStateVersion', appState._persist);
+};
+
+const onFixRedditFeeds = async (props: Props) => {
+    props.onFixRedditFeeds();
 };

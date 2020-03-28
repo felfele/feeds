@@ -76,7 +76,7 @@ interface RSSFeedHelper {
 }
 
 export const rssFeedHelper: RSSFeedHelper = {
-    DefaultTimeout: 10000,
+    DefaultTimeout: 15000,
     fetch: async (url: string): Promise<RSSFeedWithMetrics> => {
         const startTime = Date.now();
         const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;

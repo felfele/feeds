@@ -1,7 +1,7 @@
 import { Post, PublicPost } from './models/Post';
 import { ImageData } from './models/ImageData';
 import { Feed } from './models/Feed';
-import { FaviconCache } from './FaviconCache';
+import { fetchSiteFaviconUrl, findBestIconFromLinks } from './helpers/favicon';
 import { Utils } from './Utils';
 import * as urlUtils from './helpers/urlUtils';
 import { HtmlUtils } from './HtmlUtils';
@@ -67,7 +67,7 @@ export class RSSFeedManager {
             }
         }
 
-        feed.favicon = FaviconCache.findBestIconFromLinks(links) || '';
+        feed.favicon = findBestIconFromLinks(links) || '';
 
         const titles = HtmlUtils.findPath(document, ['html', 'head', 'title']);
         for (const title of titles) {
@@ -221,7 +221,7 @@ export class RSSFeedManager {
             feed.name = feedFromHtml.name;
         }
         if (urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM) {
-            feed.favicon = await FaviconCache.getFavicon(url);
+            feed.favicon = await fetchSiteFaviconUrl(url);
         } else {
             feed.favicon = feedFromHtml.favicon || rssFeed.feed.icon || '';
         }
@@ -292,9 +292,9 @@ class _RSSPostManager {
         const posts: Post[] = [];
         const metrics: RSSFeedWithMetrics[] = [];
 
-        const feedMap: { [index: string]: string } = {};
+        const feedMap: { [index: string]: Feed } = {};
         for (const feed of storedFeeds) {
-            feedMap[feed.feedUrl] = feed.name;
+            feedMap[feed.feedUrl] = feed;
         }
 
         const loadFeedPromises = storedFeeds.map(feed => this.loadFeed(feed.feedUrl));
@@ -303,15 +303,9 @@ class _RSSPostManager {
             if (feedWithMetrics) {
                 try {
                     const rssFeed = feedWithMetrics.feed;
-                    const storedFeed = storedFeeds.find(feed => urlUtils.compareUrls(feed.url, rssFeed.url));
-                    const favicon = storedFeed && storedFeed.favicon && storedFeed.favicon !== ''
-                        ? storedFeed.favicon
-                        : rssFeed.icon
-                            ? rssFeed.icon
-                            : ''
-                    ;
+                    const favicon = feedMap[feedWithMetrics.url]?.favicon;
                     const faviconString = feedFaviconString(favicon);
-                    const feedName = feedMap[feedWithMetrics.url] || feedWithMetrics.feed.title;
+                    const feedName = feedMap[feedWithMetrics.url]?.name || feedWithMetrics.feed.title;
                     const convertedPosts = this.convertRSSFeedtoPosts(rssFeed, feedName, faviconString, feedWithMetrics.url);
                     posts.push.apply(posts, convertedPosts);
                     metrics.push(feedWithMetrics);

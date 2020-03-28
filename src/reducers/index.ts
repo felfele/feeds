@@ -107,6 +107,16 @@ const feedsReducer = (feeds: Feed[] = defaultFeeds, action: Actions): Feed[] => 
                 favicon: action.payload.favicon,
             }));
         }
+        case 'UPDATE-FEED': {
+            const ind = feeds.findIndex(feed => feed != null && action.payload.feedUrl === feed.feedUrl);
+            if (ind === -1) {
+                return feeds;
+            }
+            return updateArrayItem(feeds, ind, (feed) => ({
+                ...feed,
+                ...action.payload.feed,
+            }));
+        }
         case 'TOGGLE-FEED-FAVORITE': {
             const ind = feeds.findIndex(feed => feed != null && action.payload.feedUrl === feed.feedUrl);
             if (ind === -1) {

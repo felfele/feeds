@@ -33,6 +33,9 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
         onRefreshFeeds: (feeds: Feed[]) => {
             dispatch(AsyncActions.downloadPostsFromFeeds(feeds));
         },
+        onFixRedditFeeds: () => {
+            dispatch(AsyncActions.fixRedditFeeds());
+        },
    };
 };
 
