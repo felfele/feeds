@@ -1,4 +1,4 @@
-import { markdownEscape, markdownUnescape } from '../src/markdown';
+import { markdownEscape, markdownUnescape } from '../../src/helpers/markdown';
 
 const complexText = `
 # Contributor Covenant Code of Conduct

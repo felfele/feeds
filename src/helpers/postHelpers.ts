@@ -4,7 +4,7 @@ import { HtmlMetaData, fetchHtmlMetaData } from './htmlMetaData';
 import { ImageData } from '../models/ImageData';
 import { HexString } from './opaqueTypes';
 import { getHttpLinkFromText } from './urlUtils';
-import { markdownEscape } from '../markdown';
+import { markdownEscape } from './markdown';
 
 export const mergeUpdatedPosts = (updatedPosts: Post[], oldPosts: Post[]): Post[] => {
     const uniqueAuthors = new Map<string, Author>();
