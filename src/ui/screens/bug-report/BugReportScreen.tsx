@@ -14,7 +14,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import { restartApp } from '../../../helpers/restart';
 import { BoldText } from '../../misc/text';
-import { filteredLog } from '../../../log';
+import { filteredLog } from '../../../helpers/log';
 import { Version, BuildNumber } from '../../../Version';
 
 import { Debug } from '../../../Debug';

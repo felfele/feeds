@@ -1,4 +1,4 @@
-import { timestampToDateString } from './helpers/dateHelpers';
+import { timestampToDateString } from './dateHelpers';
 
 export type LogItem = [string, string];
 

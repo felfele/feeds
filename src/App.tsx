@@ -20,7 +20,7 @@ import { EditFeedContainer as FeedInfoContainer, RSSFeedInfoContainer } from './
 import { FilterListScreenContainer } from './ui/screens/filters/FilterListScreenContainer';
 import { FilterEditorContainer } from './ui/screens/filters/FilterEditorContainer';
 import { DebugScreenContainer } from './ui/screens/debug/DebugScreenContainer';
-import { appendToLog } from './log';
+import { appendToLog } from './helpers/log';
 import { LogViewerScreenContainer } from './ui/screens/log-viewer/LogViewerScreenContainer';
 import { defaultTextProps } from './styles';
 import { FeedContainer } from './ui/screens/feed-view/FeedContainer';
