@@ -1,10 +1,10 @@
-import { Post, PublicPost } from './models/Post';
-import { ImageData } from './models/ImageData';
-import { Feed } from './models/Feed';
-import { fetchSiteFaviconUrl, findBestIconFromLinks } from './helpers/favicon';
-import * as urlUtils from './helpers/urlUtils';
-import { HtmlUtils } from './helpers/HtmlUtils';
-import { Debug } from './helpers/Debug';
+import { Post, PublicPost } from '../models/Post';
+import { ImageData } from '../models/ImageData';
+import { Feed } from '../models/Feed';
+import { fetchSiteFaviconUrl, findBestIconFromLinks } from './favicon';
+import * as urlUtils from './urlUtils';
+import { HtmlUtils } from './HtmlUtils';
+import { Debug } from './Debug';
 import {
     HEADERS_WITH_FELFELE,
     HEADERS_WITH_SAFARI,
@@ -13,9 +13,9 @@ import {
     RSSFeed,
     RSSMedia,
     RSSEnclosure,
-} from './helpers/RSSFeedHelpers';
-import { safeFetch } from './helpers/safeFetch';
-import { MINUTE } from './helpers/dateHelpers';
+} from './RSSFeedHelpers';
+import { safeFetch } from './safeFetch';
+import { MINUTE } from './dateHelpers';
 // tslint:disable-next-line:no-var-requires
 const he = require('he');
 

@@ -1,5 +1,5 @@
 import { Feed } from '../models/Feed';
-import { RSSFeedManager } from '../RSSPostManager';
+import { RSSFeedManager } from './RSSPostManager';
 import { getHttpsUrl } from './urlUtils';
 import { Debug } from './Debug';
 import { timeout } from './Utils';

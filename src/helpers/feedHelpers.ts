@@ -2,7 +2,7 @@ import { Feed } from '../models/Feed';
 import { ImageData } from '../models/ImageData';
 import { isBundledImage } from './imageDataHelpers';
 import * as urlUtils from '../helpers/urlUtils';
-import { RSSFeedManager, ContentWithMimeType } from '../RSSPostManager';
+import { RSSFeedManager, ContentWithMimeType } from './RSSPostManager';
 import { importOpml } from './opmlImport';
 import { isRedditLink, fetchRedditFeed } from './redditFeedHelpers';
 

@@ -1,4 +1,4 @@
-import { RSSPostManager, RSSFeedManager } from '../src/RSSPostManager';
+import { RSSPostManager, RSSFeedManager } from '../../src/helpers/RSSPostManager';
 
 test('Parse CDATA descriptions from RSS', async () => {
     const text = 'text';

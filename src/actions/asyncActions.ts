@@ -2,7 +2,7 @@ import { Feed } from '../models/Feed';
 import { AppState } from '../reducers/AppState';
 import { Actions, InternalActions } from './Actions';
 import { migrateAppStateToCurrentVersion } from '../store';
-import { RSSPostManager } from '../RSSPostManager';
+import { RSSPostManager } from '../helpers/RSSPostManager';
 import { FELFELE_ASSISTANT_URL } from '../reducers/defaultData';
 import {
     mergeUpdatedPosts,

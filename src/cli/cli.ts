@@ -3,7 +3,7 @@ import { Version, BuildNumber } from '../Version';
 import { Debug } from '../helpers/Debug';
 import { parseArguments, addOption } from './cliParser';
 import { output, setOutput } from './cliHelpers';
-import { RSSFeedManager } from '../RSSPostManager';
+import { RSSFeedManager } from '../helpers/RSSPostManager';
 import * as urlUtils from '../helpers/urlUtils';
 import { fetchOpenGraphData } from '../helpers/openGraph';
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
