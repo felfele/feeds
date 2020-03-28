@@ -8,11 +8,12 @@ import { Debug } from './Debug';
 import {
     HEADERS_WITH_FELFELE,
     HEADERS_WITH_SAFARI,
-    rssFeedHelper,
     RSSFeedWithMetrics,
     RSSFeed,
     RSSMedia,
     RSSEnclosure,
+    loadRSSFeed,
+    fetchFeed,
 } from './RSSFeedHelpers';
 import { safeFetch } from './safeFetch';
 import { MINUTE } from './dateHelpers';
@@ -165,7 +166,7 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
         const rssContentWithMimeType = await fetchRSSFeedUrlFromUrl(altUrl);
         if (rssContentWithMimeType != null && isRssMimeType(rssContentWithMimeType.mimeType)) {
             feed.feedUrl = altUrl;
-            const rssFeed = await rssFeedHelper.load(altUrl, rssContentWithMimeType.content);
+            const rssFeed = await loadRSSFeed(altUrl, rssContentWithMimeType.content);
             return {
                 ...feed,
                 name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
@@ -221,7 +222,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
         const feed = getFeedFromHtml(baseUrl, contentWithMimeType.content);
         Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, feed});
         if (feed.feedUrl !== '') {
-            const rssFeed = await rssFeedHelper.fetch(feed.feedUrl);
+            const rssFeed = await fetchFeed(feed.feedUrl);
             const augmentedFeed = await augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content);
             if (augmentedFeed != null) {
                 return augmentedFeed;
@@ -230,7 +231,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
 
         const altFeed = await tryFetchFeedFromAltLocations(baseUrl, feed);
         if (altFeed != null && altFeed.feedUrl !== '') {
-            const rssFeed = await rssFeedHelper.fetch(altFeed.feedUrl);
+            const rssFeed = await fetchFeed(altFeed.feedUrl);
             const augmentedFeed = await augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content);
             if (augmentedFeed != null) {
                 return augmentedFeed;
@@ -240,7 +241,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
 
     // It looks like there is a valid feed on the url
     if (isRssMimeType(contentWithMimeType.mimeType)) {
-        const rssFeed = await rssFeedHelper.load(url, contentWithMimeType.content);
+        const rssFeed = await loadRSSFeed(url, contentWithMimeType.content);
         Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {rssFeed});
         const augmentedFeed = await augmentFeedWithMetadata(url, rssFeed);
         if (augmentedFeed != null) {
@@ -264,8 +265,8 @@ export const loadPosts = async (storedFeeds: Feed[]): Promise<PublicPost[]> => {
         feedMap[feed.feedUrl] = feed;
     }
 
-    const loadFeedPromises = storedFeeds.map(feed => loadFeed(feed.feedUrl));
-    const feeds = await Promise.all(loadFeedPromises);
+    const fetchFeedPromises = storedFeeds.map(feed => tryFetchFeed(feed.feedUrl));
+    const feeds = await Promise.all(fetchFeedPromises);
     for (const feedWithMetrics of feeds) {
         if (feedWithMetrics) {
             try {
@@ -345,9 +346,9 @@ export const isTitleSameAsText = (title: string, text: string): boolean => {
     return isSame;
 };
 
-const loadFeed = async (feedUrl: string): Promise<RSSFeedWithMetrics | null> => {
+const tryFetchFeed = async (feedUrl: string): Promise<RSSFeedWithMetrics | null> => {
     try {
-        const rss = await rssFeedHelper.fetch(feedUrl);
+        const rss = await fetchFeed(feedUrl);
         return rss;
     } catch (e) {
         Debug.log('RSSPostManager.loadFeed', {e, feedUrl});
