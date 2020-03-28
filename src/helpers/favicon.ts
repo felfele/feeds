@@ -8,13 +8,26 @@ interface Icon {
     size: number;
 }
 
-export const getFavicon = async (url: string): Promise<string> => {
+export const fetchSiteFaviconUrl = async (url: string): Promise<string> => {
     const baseUrl = urlUtils.getBaseUrl(url);
     try {
-        return await downloadIndexAndParseFavicon(baseUrl);
+        const favicon = await downloadIndexAndParseFavicon(baseUrl);
+        if (favicon == null) {
+            return urlUtils.createUrlFromUrn('favicon.ico', url);
+        }
+        return favicon;
     } catch (e) {
         Debug.log(e);
         return '';
+    }
+};
+
+export const fetchFaviconUrl = async (url: string): Promise<string | undefined> => {
+    try {
+        return await downloadIndexAndParseFavicon(url);
+    } catch (e) {
+        Debug.log(e);
+        return undefined;
     }
 };
 
@@ -86,14 +99,13 @@ export const findBestIconFromLinks = (links: Node[]): string | undefined => {
     ;
 };
 
-const downloadIndexAndParseFavicon = async (url: string): Promise<string> => {
+const downloadIndexAndParseFavicon = async (url: string): Promise<string | undefined> => {
     const html = await fetchHtml(url);
     const favicon = parseFaviconFromHtml(html);
     if (favicon != null) {
         return urlUtils.createUrlFromUrn(favicon, url);
     }
-
-    return urlUtils.createUrlFromUrn('favicon.ico', url);
+    return undefined;
 };
 
 const parseFaviconFromHtml = (html: string): string | undefined => {

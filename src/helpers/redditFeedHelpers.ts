@@ -2,7 +2,7 @@ import { RSSItem, RSSThumbnail, RSSFeed, RSSFeedWithMetrics } from './RSSFeedHel
 import * as urlUtils from './urlUtils';
 import { Feed } from '../models/Feed';
 import { Debug } from '../Debug';
-import { getFavicon } from './favicon';
+import { fetchFaviconUrl } from './favicon';
 import { safeFetch } from '../Network';
 import { asyncTryExpr } from './tryExpr';
 import { isError } from 'util';
@@ -34,6 +34,17 @@ interface RedditPostData {
 interface RedditPost {
     kind: string;
     data: RedditPostData;
+}
+
+interface RedditAbout {
+    kind: string;
+    data: RedditAboutData;
+}
+
+interface RedditAboutData {
+    icon_img?: string;
+    community_icon?: string;
+    title?: string;
 }
 
 const IMAGE_DIMENSION_THRESHOLD = 1200;
@@ -147,6 +158,9 @@ const parseSubredditFromUrl = (url: string): string | undefined => {
         return undefined;
     }
     const [domain, r, sub, ...rest] = parts;
+    if (r !== 'r') {
+        return undefined;
+    }
     if (sub == null) {
         return undefined;
     }
@@ -176,12 +190,12 @@ export const makeCanonicalRedditLink = (url: string): RedditLink | undefined => 
     };
 };
 
-const getAboutJsonIcon = (aboutJson: any) => {
-    if (aboutJson.data.icon_img != null && aboutJson.data.icon_img !== '') {
-        return aboutJson.data.icon_img;
+const getAboutIcon = (about: RedditAbout) => {
+    if (about.data.icon_img != null && about.data.icon_img !== '') {
+        return about.data.icon_img;
     }
-    if (aboutJson.data.community_icon != null && aboutJson.data.community_icon !== '') {
-        return aboutJson.data.community_icon;
+    if (about.data.community_icon != null && about.data.community_icon !== '') {
+        return about.data.community_icon;
     }
     return undefined;
 };
@@ -192,7 +206,8 @@ export const fetchRedditFeed = async (url: string): Promise<Feed | undefined> =>
         return undefined;
     }
     const canonicalUrl = redditLink.canonicalUrl;
-    const feedUrl = redditFeedUrl(redditLink.canonicalUrl);
+    // We store the feedUrl as RSS, so that it can be exported easily
+    const feedUrl = canonicalUrl + '.rss';
     Debug.log('fetchRedditFeed', {url, redditLink, feedUrl});
     const aboutJsonUrl = canonicalUrl + '/about.json';
     const response = await asyncTryExpr(() => safeFetch(aboutJsonUrl));
@@ -200,16 +215,16 @@ export const fetchRedditFeed = async (url: string): Promise<Feed | undefined> =>
         Debug.log('fetchRedditFeed', {error: response});
         return undefined;
     }
-    const json = await response.json() as any;
-    Debug.log('fetchRedditFeed', {json});
-    if (json.data.title == null) {
+    const about = await response.json() as RedditAbout;
+    Debug.log('fetchRedditFeed', {about});
+    if (about.data.title == null) {
         return undefined;
     }
-    const name = json.data.title;
-    const aboutJsonIcon = getAboutJsonIcon(json);
-    const favicon = aboutJsonIcon != null
-        ? aboutJsonIcon
-        : await getFavicon(canonicalUrl)
+    const name = about.data.title;
+    const aboutIcon = getAboutIcon(about);
+    const favicon = aboutIcon != null
+        ? aboutIcon
+        : await fetchFaviconUrl(canonicalUrl) || ''
     ;
     return {
         name,

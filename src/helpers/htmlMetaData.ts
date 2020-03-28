@@ -1,6 +1,6 @@
 import { OpenGraphData, getHtmlOpenGraphData } from './openGraph';
 import { RSSFeedManager } from '../RSSPostManager';
-import { getFavicon } from './favicon';
+import { fetchSiteFaviconUrl } from './favicon';
 import { HtmlUtils } from '../HtmlUtils';
 import { Feed } from '../models/Feed';
 
@@ -21,7 +21,7 @@ export const fetchHtmlMetaData = async (url: string): Promise<HtmlMetaData> => {
     const feedName = feed != null ? feed.name : '';
     const name = getFirstNonEmpty([getMetaName(document), openGraphData.name, feedName]);
     const title = getHtmlTitle(document, openGraphData.title);
-    const icon = await getFavicon(url);
+    const icon = await fetchSiteFaviconUrl(url);
     const createdAt = getPublishedTime(document);
     const updatedAt = getModifiedTime(document, createdAt);
     return {

@@ -12,7 +12,7 @@ import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
 import { ContentFilter } from '../models/ContentFilter';
 import { Utils } from '../Utils';
-import { isRedditLink, redditFeedUrl, fetchRedditFeed } from '../helpers/redditFeedHelpers';
+import { isRedditLink, fetchRedditFeed } from '../helpers/redditFeedHelpers';
 
 export const AsyncActions = {
     addFeed: (feed: Feed): Thunk => {
