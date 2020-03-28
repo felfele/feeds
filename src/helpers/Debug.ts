@@ -1,6 +1,6 @@
 import * as util from 'util';
-import { timestampToDateString } from './helpers/dateHelpers';
-import { isNodeJS } from './helpers/Utils';
+import { timestampToDateString } from './dateHelpers';
+import { isNodeJS } from './Utils';
 
 type Logger = (s: string) => void;
 

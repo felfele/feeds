@@ -6,7 +6,7 @@ import { Feed } from '../../models/Feed';
 import { AsyncActions } from '../../actions/asyncActions';
 import { TypedNavigation } from '../../helpers/navigation';
 import { getAllFeeds } from '../../selectors/selectors';
-import { Debug } from '../../Debug';
+import { Debug } from '../../helpers/Debug';
 import { Actions } from '../../actions/Actions';
 
 interface OwnProps {

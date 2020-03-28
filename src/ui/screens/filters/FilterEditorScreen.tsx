@@ -15,7 +15,7 @@ import { ContentFilter, filterValidUntilToText } from '../../../models/ContentFi
 import { ComponentColors, defaultFont, defaultTextProps, Colors } from '../../../styles';
 import { DAY, MONTH31, WEEK, YEAR } from '../../../helpers/dateHelpers';
 import { SimpleTextInput } from '../../misc/SimpleTextInput';
-import { Debug } from '../../../Debug';
+import { Debug } from '../../../helpers/Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';

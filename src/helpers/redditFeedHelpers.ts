@@ -1,7 +1,7 @@
 import { RSSItem, RSSThumbnail, RSSFeed, RSSFeedWithMetrics } from './RSSFeedHelpers';
 import * as urlUtils from './urlUtils';
 import { Feed } from '../models/Feed';
-import { Debug } from '../Debug';
+import { Debug } from './Debug';
 import { fetchFaviconUrl } from './favicon';
 import { safeFetch } from './safeFetch';
 import { asyncTryExpr } from './tryExpr';

@@ -4,7 +4,7 @@ import { Feed } from './models/Feed';
 import { fetchSiteFaviconUrl, findBestIconFromLinks } from './helpers/favicon';
 import * as urlUtils from './helpers/urlUtils';
 import { HtmlUtils } from './helpers/HtmlUtils';
-import { Debug } from './Debug';
+import { Debug } from './helpers/Debug';
 import {
     HEADERS_WITH_FELFELE,
     HEADERS_WITH_SAFARI,

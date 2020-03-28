@@ -7,7 +7,7 @@ import { FELFELE_ASSISTANT_URL } from '../reducers/defaultData';
 import {
     mergeUpdatedPosts,
 } from '../helpers/postHelpers';
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 import { Post } from '../models/Post';
 import { ThunkTypes, Thunk, isActionTypes } from './actionHelpers';
 import { ContentFilter } from '../models/ContentFilter';

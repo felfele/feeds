@@ -16,7 +16,7 @@ import { RowItem } from '../../buttons/RowButton';
 import * as Swarm from '../../../swarm/Swarm';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { safeFetch } from '../../../helpers/safeFetch';
-import { Debug } from '../../../Debug';
+import { Debug } from '../../../helpers/Debug';
 
 export interface StateProps {
     swarmGatewayAddress: string;

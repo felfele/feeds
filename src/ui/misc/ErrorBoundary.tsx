@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Debug } from '../../Debug';
+import { Debug } from '../../helpers/Debug';
 import { RegularText } from './text';
 
 export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {

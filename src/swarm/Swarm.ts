@@ -1,5 +1,5 @@
 
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 import { safeFetch } from '../helpers/safeFetch';
 
 export const defaultGateway = 'https://swarm.felfele.com';

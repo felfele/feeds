@@ -17,7 +17,7 @@ import { TouchableView } from '../../misc/TouchableView';
 import { MediumText, RegularText } from '../../misc/text';
 import { WideButton } from '../../buttons/WideButton';
 import { upload } from '../../../swarm/Swarm';
-import { Debug } from '../../../Debug';
+import { Debug } from '../../../helpers/Debug';
 import { errorDialog, shareDialog } from '../../../helpers/dialogs';
 import { FELFELE_FEEDS_MIME_TYPE } from '../../../helpers/feedHelpers';
 import { makeFeedsLinkMessage } from '../../../helpers/linkHelpers';

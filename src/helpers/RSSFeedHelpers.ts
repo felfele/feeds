@@ -1,7 +1,7 @@
 import * as urlUtils from './urlUtils';
 import { Version } from '../Version';
 import { loadRedditFeed, redditFeedUrl } from './redditFeedHelpers';
-import { Debug } from '../Debug';
+import { Debug } from './Debug';
 import { timeout } from './Utils';
 
 // tslint:disable-next-line:no-var-requires

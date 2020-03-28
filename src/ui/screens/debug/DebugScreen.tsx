@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import { getSerializedAppState, getAppStateFromSerialized } from '../../../store';
 import { AppState } from '../../../reducers/AppState';
-import { Debug } from '../../../Debug';
+import { Debug } from '../../../helpers/Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import * as Dialogs from '../../../helpers/dialogs';
 import { Colors, ComponentColors } from '../../../styles';

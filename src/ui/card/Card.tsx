@@ -24,7 +24,7 @@ import { TypedNavigation } from '../../helpers/navigation';
 import { calculateImageDimensions } from '../../helpers/imageDataHelpers';
 import { RowItem } from '../buttons/RowButton';
 import { shareDialog } from '../../helpers/dialogs';
-import { Debug } from '../../Debug';
+import { Debug } from '../../helpers/Debug';
 
 export type AuthorFeed = UIFeed;
 

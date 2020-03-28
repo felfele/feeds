@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Debug } from '../../Debug';
+import { Debug } from '../../helpers/Debug';
 import { BugReportScren } from '../screens/bug-report/BugReportScreen';
 
 export class TopLevelErrorBoundary extends React.Component<{}, { hasError: boolean }> {

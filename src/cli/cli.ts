@@ -1,6 +1,6 @@
 
 import { Version, BuildNumber } from '../Version';
-import { Debug } from '../Debug';
+import { Debug } from '../helpers/Debug';
 import { parseArguments, addOption } from './cliParser';
 import { output, setOutput } from './cliHelpers';
 import { RSSFeedManager } from '../RSSPostManager';
