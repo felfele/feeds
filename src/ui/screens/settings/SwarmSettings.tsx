@@ -15,7 +15,7 @@ import { TypedNavigation } from '../../../helpers/navigation';
 import { RowItem } from '../../buttons/RowButton';
 import * as Swarm from '../../../swarm/Swarm';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { safeFetch } from '../../../Network';
+import { safeFetch } from '../../../helpers/safeFetch';
 import { Debug } from '../../../Debug';
 
 export interface StateProps {

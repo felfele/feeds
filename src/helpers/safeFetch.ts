@@ -1,4 +1,4 @@
-import { Utils } from './Utils';
+import { Utils } from '../Utils';
 
 export const safeFetch = async (input: RequestInfo, init?: RequestInit): Promise<Response> => {
     const response = await fetch(input, init);
