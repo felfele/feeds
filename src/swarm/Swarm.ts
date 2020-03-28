@@ -28,9 +28,8 @@ const uploadString = async (data: string, swarmGateway: string, headers?: {[key:
     Debug.log('uploadString', {data});
     const url = swarmGateway + '/bzz:/';
     const options: RequestInit = {
-        headers: {
+        headers: headers ?? {
             'Content-Type': 'text/plain',
-            ...headers,
         },
         method: 'POST',
     };
