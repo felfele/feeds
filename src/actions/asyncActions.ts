@@ -2,7 +2,7 @@ import { Feed } from '../models/Feed';
 import { AppState } from '../reducers/AppState';
 import { Actions, InternalActions } from './Actions';
 import { migrateAppStateToCurrentVersion } from '../store';
-import { RSSPostManager } from '../helpers/RSSPostManager';
+import { loadPosts } from '../helpers/RSSPostHelpers';
 import { FELFELE_ASSISTANT_URL } from '../reducers/defaultData';
 import {
     mergeUpdatedPosts,
@@ -58,7 +58,7 @@ export const AsyncActions = {
                 ? feeds.length * 500
                 : 20 * 1000
             ;
-            const allPosts = await timeout(allFeedsTimeout, RSSPostManager.loadPosts(feedsWithoutOnboarding));
+            const allPosts = await timeout(allFeedsTimeout, loadPosts(feedsWithoutOnboarding));
             const posts = mergeUpdatedPosts(allPosts, previousPosts);
             const contentFilters = getState().contentFilters;
             const filteredPosts = applyContentFiltersToPosts(posts, contentFilters);

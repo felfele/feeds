@@ -2,7 +2,7 @@ import { Feed } from '../models/Feed';
 import { ImageData } from '../models/ImageData';
 import { isBundledImage } from './imageDataHelpers';
 import * as urlUtils from '../helpers/urlUtils';
-import { RSSFeedManager, ContentWithMimeType } from './RSSPostManager';
+import { ContentWithMimeType, fetchContentWithMimeType, isRssMimeType, fetchFeedByContentWithMimeType } from './RSSPostHelpers';
 import { importOpml } from './opmlImport';
 import { isRedditLink, fetchRedditFeed } from './redditFeedHelpers';
 
@@ -37,7 +37,7 @@ const getCanonicalUrlForRSS = (url: string): string => {
 };
 
 const tryFetchFeedByContentWithMimeType = async (url: string, contentWithMimeType: ContentWithMimeType): Promise<Feed | Feed[] | undefined> => {
-    const feed = await RSSFeedManager.fetchFeedByContentWithMimeType(url, contentWithMimeType);
+    const feed = await fetchFeedByContentWithMimeType(url, contentWithMimeType);
     if (feed != null) {
         return feed;
     }
@@ -53,12 +53,12 @@ export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | un
     if (isRedditLink(url)) {
         return fetchRedditFeed(url);
     }
-    const originalContentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(url);
-    if (originalContentWithMimeType != null && RSSFeedManager.isRssMimeType(originalContentWithMimeType?.mimeType)) {
+    const originalContentWithMimeType = await fetchContentWithMimeType(url);
+    if (originalContentWithMimeType != null && isRssMimeType(originalContentWithMimeType?.mimeType)) {
         return tryFetchFeedByContentWithMimeType(url, originalContentWithMimeType);
     }
     const canonicalUrl = getCanonicalUrlForRSS(url);
-    const contentWithMimeType = await RSSFeedManager.fetchContentWithMimeType(canonicalUrl);
+    const contentWithMimeType = await fetchContentWithMimeType(canonicalUrl);
     if (contentWithMimeType == null) {
         return undefined;
     }
