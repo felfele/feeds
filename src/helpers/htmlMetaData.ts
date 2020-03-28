@@ -1,7 +1,7 @@
 import { OpenGraphData, getHtmlOpenGraphData } from './openGraph';
 import { RSSFeedManager } from '../RSSPostManager';
 import { fetchSiteFaviconUrl } from './favicon';
-import { HtmlUtils } from '../HtmlUtils';
+import { HtmlUtils } from './HtmlUtils';
 import { Feed } from '../models/Feed';
 
 export interface HtmlMetaData extends OpenGraphData {

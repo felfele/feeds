@@ -1,4 +1,4 @@
-import { timestampToDateString, printableElapsedTime } from '../src/helpers/dateHelpers';
+import { timestampToDateString, printableElapsedTime } from '../../src/helpers/dateHelpers';
 
 const now = 1503058728706;
 

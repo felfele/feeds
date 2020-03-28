@@ -1,4 +1,4 @@
-import { HtmlUtils } from '../HtmlUtils';
+import { HtmlUtils } from './HtmlUtils';
 import { createUrlFromUrn } from './urlUtils';
 
 export interface OpenGraphData {

@@ -3,7 +3,7 @@ import { ImageData } from './models/ImageData';
 import { Feed } from './models/Feed';
 import { fetchSiteFaviconUrl, findBestIconFromLinks } from './helpers/favicon';
 import * as urlUtils from './helpers/urlUtils';
-import { HtmlUtils } from './HtmlUtils';
+import { HtmlUtils } from './helpers/HtmlUtils';
 import { Debug } from './Debug';
 import {
     HEADERS_WITH_FELFELE,
