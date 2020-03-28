@@ -6,6 +6,7 @@ import {
     RegisteredStyle,
     ViewStyle,
     Clipboard,
+    Keyboard,
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
@@ -17,7 +18,8 @@ import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { getHttpLinkFromText } from '../../../helpers/urlUtils';
 import { FEEDS_LINK_MESSAGE } from '../../../helpers/linkHelpers';
-import { errorDialog } from '../../../helpers/dialogs';
+import { RegularText } from '../../misc/text';
+import { WideButton } from '../../buttons/WideButton';
 
 const QRCameraWidth = Dimensions.get('window').width;
 const QRCameraHeight = QRCameraWidth;
@@ -32,6 +34,29 @@ export interface StateProps {
 }
 
 type Props = DispatchProps & StateProps;
+
+const QRCodeButton = (props: {navigation: TypedNavigation}) => {
+    const [showCode, setShowCode] = React.useState(false);
+    return showCode
+        ?
+            <QRCodeScanner
+                onRead={(event) => props.navigation.replace('RSSFeedLoader', { feedUrl: event.data })}
+                containerStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
+                cameraStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
+                fadeIn={false}
+                cameraProps={{ratio: '1:1'}}
+            />
+        :
+            <WideButton
+                label='SCAN QR CODE'
+                icon={<Icon name='qrcode' size={24} color={Colors.BRAND_PURPLE}/>}
+                onPress={() => {
+                    setShowCode(true);
+                    Keyboard.dismiss();
+                }}
+            />
+    ;
+};
 
 export class FeedLinkReader extends React.Component<Props, State> {
     public render() {
@@ -49,25 +74,25 @@ export class FeedLinkReader extends React.Component<Props, State> {
                     navigation={this.props.navigation}
                 />
                 <View style={styles.container}>
-                    <SimpleTextInput
-                        style={styles.linkInput}
-                        placeholder='Scan QR code or paste link here'
-                        placeholderTextColor={Colors.MEDIUM_GRAY}
-                        autoCapitalize='none'
-                        autoFocus={true}
-                        autoCorrect={false}
-                        returnKeyType='done'
-                        onSubmitEditing={(text) => this.handleLink(text)}
-                        onEndEditing={() => {}}
-                    />
-                    <View style={styles.qrCameraContainer}>
-                        <QRCodeScanner
-                            onRead={(event) => this.onScanSuccess(event.data)}
-                            containerStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
-                            cameraStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
-                            fadeIn={false}
-                            cameraProps={{ratio: '1:1'}}
+                    <RegularText style={styles.hintLabel}>You can enter a link of a website or a blog here you want to follow. You can also import from Feeds or OPML links.</RegularText>
+                    <View style={{
+                        flexDirection: 'row',
+                    }}>
+                        <SimpleTextInput
+                            style={styles.linkInput}
+                            placeholder='Paste link here'
+                            placeholderTextColor={Colors.MEDIUM_GRAY}
+                            autoCapitalize='none'
+                            autoFocus={true}
+                            autoCorrect={false}
+                            returnKeyType='done'
+                            onSubmitEditing={(text) => this.handleLink(text)}
+                            onEndEditing={() => {}}
                         />
+                    </View>
+                    <RegularText style={styles.hintLabel}>You can also scan QR codes from other people.</RegularText>
+                    <View style={styles.qrCameraContainer}>
+                        <QRCodeButton navigation={this.props.navigation} />
                     </View>
                 </View>
             </FragmentSafeAreaView>
@@ -85,6 +110,10 @@ export class FeedLinkReader extends React.Component<Props, State> {
     }
 
     private handleLink(text: string) {
+        if (text === '') {
+            this.props.navigation.goBack(null);
+            return;
+        }
         const feedUrl = text;
         this.props.navigation.replace('RSSFeedLoader', { feedUrl });
     }
@@ -120,5 +149,12 @@ const styles = StyleSheet.create({
     qrCameraStyle: {
         width: QRCameraWidth,
         height: QRCameraHeight,
+        paddingTop: 10,
+    },
+    hintLabel: {
+        color: ComponentColors.HINT_TEXT_COLOR,
+        paddingTop: 25,
+        paddingLeft: 10,
+        fontSize: 14,
     },
 });

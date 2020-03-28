@@ -62,7 +62,7 @@ const QRCodeView = (props: {navigation: TypedNavigation, qrCodeValue: string, on
         }
         </TouchableView>
         <View style={styles.qrCodeHintContainer}>
-            <RegularText style={styles.qrCodeHint}>This is your feeds code.</RegularText>
+            <RegularText style={styles.qrCodeHint}>This is your Feeds code.</RegularText>
             <RegularText style={styles.qrCodeHint}>Ask people to scan it or share as a link.</RegularText>
         </View>
         <WideButton
