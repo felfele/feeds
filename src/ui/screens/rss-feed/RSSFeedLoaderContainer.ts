@@ -29,7 +29,7 @@ export const mapDispatchToProps = (dispatch: any, ownProps: { navigation: TypedN
                     const feed = feeds;
                     dispatch(AsyncActions.addFeed(feed));
                     dispatch(AsyncActions.downloadPostsFromFeeds([feed]));
-                    ownProps.navigation.navigate('Feed', {
+                    ownProps.navigation.replace('Feed', {
                         feedUrl: feed.feedUrl,
                         name: feed.name,
                     });
