@@ -85,14 +85,6 @@ export const stripNonAscii = (s: string): string => {
 };
 
 export const getLinkFromText = (text: string): string | undefined => {
-    const bzzFeedLink = getBzzFeedLinkFromText(text);
-    if (bzzFeedLink != null) {
-        return bzzFeedLink;
-    }
-    const bzzLink = getBzzLinkFromText(text);
-    if (bzzLink != null) {
-        return bzzLink;
-    }
     const httpLink = getHttpLinkFromText(text);
     if (httpLink != null) {
         return httpLink;
@@ -106,26 +98,6 @@ export const getHttpLinkFromText = (text: string): string | undefined => {
         return httpLink[1];
     }
     return undefined;
-};
-
-export const getBzzFeedLinkFromText = (text: string): string | undefined => {
-    const bzzFeedLink = text.match(BZZ_FEED_MATCHER);
-    if (bzzFeedLink != null) {
-        return bzzFeedLink[1];
-    }
-    return undefined;
-};
-
-export const getBzzLinkFromText = (text: string): string | undefined => {
-    const bzzLink = text.match(BZZ_RESOURCE_MATCHER);
-    if (bzzLink != null) {
-        return bzzLink[1];
-    }
-    return undefined;
-};
-
-export const isFelfeleResource = (text: string): boolean => {
-    return text.match(BZZ_FEED_MATCHER) != null || text.match(FELFELE_DEEP_LINK_MATCHER) != null;
 };
 
 export const compareUrls = (url1: string, url2: string): boolean => {

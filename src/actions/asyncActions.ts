@@ -3,7 +3,7 @@ import { AppState } from '../reducers/AppState';
 import { Actions, InternalActions } from './Actions';
 import { migrateAppStateToCurrentVersion } from '../store';
 import { loadPosts } from '../helpers/RSSPostHelpers';
-import { FELFELE_ASSISTANT_URL } from '../reducers/defaultData';
+import { FEEDS_ASSISTANT_URL } from '../reducers/defaultData';
 import {
     mergeUpdatedPosts,
 } from '../helpers/postHelpers';
@@ -53,7 +53,7 @@ export const AsyncActions = {
         return async (dispatch, getState) => {
             Debug.log('downloadPostsFromFeeds', feeds);
             const previousPosts = getState().rssPosts;
-            const feedsWithoutOnboarding = feeds.filter(feed => feed.feedUrl !== FELFELE_ASSISTANT_URL);
+            const feedsWithoutOnboarding = feeds.filter(feed => feed.feedUrl !== FEEDS_ASSISTANT_URL);
             const allFeedsTimeout = feeds.length > 40
                 ? feeds.length * 500
                 : 20 * 1000

@@ -4,11 +4,12 @@ import { Author } from '../models/Author';
 import { Post } from '../models/Post';
 import { Feed } from '../models/Feed';
 import { defaultImages } from '../defaultImages';
+import { defaultGateway } from '../swarm/Swarm';
 
 export const defaultSettings: Settings = {
     showSquareImages: false,
     showDebugMenu: false,
-    swarmGatewayAddress: 'https://swarm.felfele.com/',
+    swarmGatewayAddress: defaultGateway,
 };
 
 export const DEFAULT_AUTHOR_NAME = '';
@@ -21,15 +22,12 @@ export const defaultAuthor: Author = {
     },
 };
 
-export const FELFELE_APP_NAME = 'Felfele';
-export const FELFELE_SHARE_EXTENSION_NAME = 'ShareExtension';
-export const FELFELE_ASSISTANT_NAME = 'Felfele Assistant';
-export const FELFELE_ASSISTANT_URL = 'local/onboarding';
-export const FELFELE_FOUNDATION_URL = 'bzz-feed:/?user=0xdbbac89704424c90dce46043686c743f0d9dbdda';
+export const FEEDS_ASSISTANT_NAME = 'Feeds app';
+export const FEEDS_ASSISTANT_URL = 'local/onboarding';
 
 const onboardingAuthor: Author = {
-    name: FELFELE_ASSISTANT_NAME,
-    uri: FELFELE_ASSISTANT_URL,
+    name: FEEDS_ASSISTANT_NAME,
+    uri: FEEDS_ASSISTANT_URL,
     image: {
         localPath: defaultImages.felfeleAssistant,
     },
@@ -39,13 +37,23 @@ const defaultPost1: Post = {
     _id: 0,
     createdAt: Date.now(),
     images: [],
-    text: `Basic features:
+    text: `Welcome to Feeds app!
 
-- Post text and images. If you post multiple images they will be displayed as a slide show.
+Feeds is a completely free and independent mobile RSS reader with the following features:
 
-- Follow other people using the Felfele app, or follow your favorite website/blog.
+- Follow news sites and blogs (e.g. Wordpress). Tap the plus icon on the top right and enter a link.
 
-- Share interesting posts in your feed by pressing the three vertical dots on a post.
+- You can also follow Reddit subs, Youtube channels, Tumblr and Mastodon
+
+- No signup, registration or tracking: everything happens and stays on your phone
+
+- Export and import feeds between your devices or with your friends
+
+- No ads or algorithmic timeline: what you see is what you follow
+
+- Mute content with keywords
+
+- Explore new content with the built-in category browser. Tap the grid icon on the top left and select Explore.
 
 We would like to hear about you! You can always ask questions or send feedback to us at [hello@felfele.org](mailto:hello@felfele.org)
 
@@ -55,31 +63,7 @@ If you find something is broken or you don't like please send us a bug report fr
     author: onboardingAuthor,
 };
 
-const defaultPost2: Post = {
-    _id: 1,
-    createdAt: Date.now(),
-    images: [],
-    text: `You can follow others by getting an invite link from them or scanning a QR code on their phones. Press the + button in the top right corner to do this.
-
-Paste a link here or enter a website address.
-
-If you want to share your posts, go to the Profile tab. Press the share button in the top right corner or show your QR code.
-    `,
-    author: onboardingAuthor,
-};
-
-const defaultPost3: Post = {
-    _id: 2,
-    createdAt: Date.now(),
-    images: [],
-    text: `You can also find new content if you press the All feeds button on the top left, then the Explore button.
-
-Enjoy!
-`,
-    author: onboardingAuthor,
-};
-
-export const defaultLocalPosts = [defaultPost1, defaultPost2, defaultPost3];
+export const defaultLocalPosts = [defaultPost1];
 
 export const defaultCurrentTimestamp = 0;
 
@@ -89,9 +73,9 @@ export const defaultMetadata = {
 
 export const defaultFeeds: Feed[] = [
     {
-        name: 'Felfele Assistant',
-        url: FELFELE_ASSISTANT_URL,
-        feedUrl: FELFELE_ASSISTANT_URL,
+        name: FEEDS_ASSISTANT_NAME,
+        url: FEEDS_ASSISTANT_URL,
+        feedUrl: FEEDS_ASSISTANT_URL,
         favicon: defaultImages.felfeleAssistant,
         followed: true,
     },

@@ -7,9 +7,8 @@ import { ComponentColors } from '../../../styles';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Dialogs from '../../../helpers/dialogs';
-import { FELFELE_ASSISTANT_URL } from '../../../reducers/defaultData';
+import { FEEDS_ASSISTANT_URL } from '../../../reducers/defaultData';
 import { TypedNavigation } from '../../../helpers/navigation';
-import { isFelfeleResource } from '../../../helpers/urlUtils';
 import { WideButton } from '../../buttons/WideButton';
 import { View, GestureResponderEvent, ActivityIndicator, Linking } from 'react-native';
 import { LoadingView } from '../../misc/LoadingView';
@@ -66,15 +65,13 @@ const ListFooter = (props: {
 );
 
 export const FeedView = (props: Props) => {
-    const isOnboardingFeed = props.feed.feedUrl === FELFELE_ASSISTANT_URL;
+    const isOnboardingFeed = props.feed.feedUrl === FEEDS_ASSISTANT_URL;
 
     const button = (iconName: string, color: string, onPress: () => void) => ({
         label: icon(iconName, color),
         onPress,
     });
-    const isUrlFelfeleResource = isFelfeleResource(props.feed.feedUrl);
-    const navigateToFeedInfo = () => props.navigation.navigate(
-        isUrlFelfeleResource ? 'FeedInfo' : 'RSSFeedInfo', {
+    const navigateToFeedInfo = () => props.navigation.navigate('RSSFeedInfo', {
             feed: props.feed,
         }
     );
