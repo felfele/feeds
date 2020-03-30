@@ -28,6 +28,7 @@ interface SimpleTextInputProps {
     onSubmitEditing?: (text: string) => void;
     onChangeText?: (text: string) => void;
     onEndEditing?: () => void;
+    onFocus?: () => void;
 }
 
 export class SimpleTextInput extends React.Component<SimpleTextInputProps, { text: string }> {
@@ -70,6 +71,7 @@ export class SimpleTextInput extends React.Component<SimpleTextInputProps, { tex
                 clearButtonMode={this.props.clearButtonMode}
                 editable={this.props.editable}
                 blurOnSubmit={this.props.blurOnSubmit}
+                onFocus={this.props.onFocus}
                 ref={ref => this.ref = ref}
             />
         );
