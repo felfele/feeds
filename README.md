@@ -9,13 +9,13 @@ Feeds is a completely free and independent mobile RSS reader with no algorithmic
 ### Features
 - Follow news sites and blogs (e.g. Wordpress) with RSS
 - You can also follow Reddit subs, Youtube channels, Tumblr and Mastodon
-- No signup or registration, everything happens and stays on your phone
+- No signup, registration or tracking: everything happens and stays on your phone
 - Export and import feeds between your devices or with your friends
-- No algorithmic timeline: what you see is what you follow
+- No ads or algorithmic timeline: what you see is what you follow
 - Mute content with keywords
 - Explore new content with the built-in category browser
 
-The project is developed by a core team funded by a non-profit organization and volunteers from all over the world.
+The project is developed by a core team supported by a non-profit organization and volunteers from all over the world.
 
 Currently we are running a public beta test, click the buttons below to join!
 
@@ -24,8 +24,24 @@ Currently we are running a public beta test, click the buttons below to join!
 
 [Homepage](https://felfele.org/)
 
+Terms & Privacy Policy
+----------------------
+Feeds is made by Felfele Foundation, a non-profit organization that builds products for people to connect and inspire each other, without being exploited by technology.
+
+Feeds does not collect or transmit any data to any servers – everything stays on your device. Felfele does not sell, rent or monetize your personal data or content in any way, ever.
+
+See our complete [Terms & Privacy Policy](https://github.com/felfele/feeds/blob/master/TERMS_AND_PRIVACY_POLICY.md).
+
+
 Contribute
 --------------------
+
+If you like this project there are many ways you can contribute! Here are a few examples
+- Report bugs or share feature ideas
+- Spread the word by showing the app to your friends, family and communities
+- Write about the app on social media
+- Help us translate the app to your language
+- If you are a developer there are (open issues or features)[https://github.com/felfele/feeds/issues] you can implement
 
 We've set up a separate document for our
 [contribution guidelines](https://github.com/felfele/feeds/blob/master/CONTRIBUTING.md).

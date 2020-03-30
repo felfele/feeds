@@ -53,6 +53,8 @@ export interface Routes {
         feeds: Feed[],
         subCategoryName: string,
     };
+    PrivacyPolicy: {
+    };
 }
 
 export interface TypedNavigation {

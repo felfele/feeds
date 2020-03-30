@@ -65,7 +65,7 @@ export const SettingsScreen = (props: Props) => {
                 <RowItem
                     title='Terms & Privacy Policy'
                     buttonStyle='navigate'
-                    onPress={() => Linking.openURL('https://felfele.org/legal')}
+                    onPress={() => props.navigation.navigate('PrivacyPolicy', {})}
                 />
                 <RowItem
                     title='Visit Felfele website'

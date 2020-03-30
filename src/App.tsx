@@ -41,6 +41,7 @@ import { FeedLinkReaderContainer } from './ui/screens/feed-link-reader/FeedLinkR
 import { RSSFeedLoaderContainer } from './ui/screens/rss-feed/RSSFeedLoaderContainer';
 import { FeedViewContainer } from './ui/screens/feed-view/FeedViewContainer';
 import { SwarmSettingsContainer } from './ui/screens/settings/SwarmSettingsContainer';
+import { PrivacyPolicy } from './ui/screens/settings/PrivacyPolicy';
 
 YellowBox.ignoreWarnings([
     'Method `jumpToIndex` is deprecated.',
@@ -115,6 +116,9 @@ const Scenes: NavigationRouteConfigMap = {
     },
     FeedFromList: {
         screen: FeedViewContainer,
+    },
+    PrivacyPolicy: {
+        screen: PrivacyPolicy,
     },
 };
 
