@@ -15,14 +15,12 @@ Feeds is a completely free and independent mobile RSS reader with no algorithmic
 - Mute content with keywords
 - Explore new content with the built-in category browser
 
-The project is developed by a core team supported by a non-profit organization and volunteers from all over the world.
+The project is developed by a core team supported by a [non-profit organization](https://felfele.org/) and volunteers from all over the world.
 
 Currently we are running a public beta test, click the buttons below to join!
 
 [<img src="testflight-badge.png" width=127 height=40>](https://testflight.apple.com/join/icUTHYbo)
 [<img src="google-play-badge.png" width=140 height=40>](https://play.google.com/apps/testing/org.felfele.feeds)
-
-[Homepage](https://felfele.org/)
 
 Terms & Privacy Policy
 ----------------------
@@ -42,6 +40,7 @@ If you like this project there are many ways you can contribute! Here are a few 
 - Follow us and share posts about us on social media
 - Help us translate the app to your language or write better documentation
 - If you are a developer there are always [open issues or features](https://github.com/felfele/feeds/issues) you can implement
+- Don't have time? No problem, we accept [donations](https://felfele.org/donate) too!
 
 We've set up a separate document for our
 [contribution guidelines](https://github.com/felfele/feeds/blob/master/CONTRIBUTING.md).
