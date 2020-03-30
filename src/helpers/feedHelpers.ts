@@ -50,6 +50,12 @@ const tryFetchFeedByContentWithMimeType = async (url: string, contentWithMimeTyp
 
 export const fetchFeedsFromUrl = async (url: string): Promise<Feed | Feed[] | undefined> => {
     // special cases
+    if (!url.includes('.')) {
+        url += '.com';
+    }
+    if (url.includes(' ')) {
+        url = url.replace(/ /g, '');
+    }
     if (isRedditLink(url)) {
         return fetchRedditFeed(url);
     }
