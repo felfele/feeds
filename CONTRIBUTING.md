@@ -4,7 +4,7 @@ Please always follow our [Code of Conduct](https://github.com/felfele/felfele/bl
 
 ## Communication
 
-### Task management 
+### Task management
 
 We aim to document all our work on GitHub. The processing of a new issue is the following:
 1. new issue is submitted, _unscheduled_ label added automatically
@@ -16,15 +16,10 @@ We aim to document all our work on GitHub. The processing of a new issue is the 
 
 Our [slack](https://join.slack.com/t/felfele/shared_invite/enQtNTM1MjUwNTI1NzI5LTY5Yjg0YmVjN2MyN2MzMzc0Y2RkMGRiYzE0N2U0ZjgwNmYxMTQ3YjUwMDg1MGFiZTZlMWViZjU2MWJjY2Y0OTY) channel is open to everyone interested in the project. Here you can ask questions, and also follow the latest discussions including product, design, and development. You can always reach out to us at community@felfele.com.
 
-### Meetings
-
-We have an open call every Monday, 11 am (CEST) 
-Link: https://zoom.us/j/2597260543
-
 ## Development
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
-email, or any other method with the owners of this repository before making a change. 
+email, or any other method with the owners of this repository before making a change.
 
 ### Reporting Bugs
 

@@ -26,6 +26,8 @@ Currently we are running a public beta test, click the buttons below to join!
 
 Terms & Privacy Policy
 ----------------------
+Feeds is made by Felfele Foundation, a non-profit organization that builds products for people to connect and inspire each other, without being exploited by technology.
+
 Feeds does not collect or transmit any data to any servers – everything stays on your device. Felfele does not sell, rent or monetize your personal data or content in any way, ever.
 
 See our complete [Terms & Privacy Policy](https://github.com/felfele/feeds/blob/master/TERMS_AND_PRIVACY_POLICY.md).
@@ -33,6 +35,13 @@ See our complete [Terms & Privacy Policy](https://github.com/felfele/feeds/blob/
 
 Contribute
 --------------------
+
+If you like this project there are many ways you can contribute! Here are a few examples
+- Report bugs or share feature ideas
+- Spread the word by showing the app to your friends, family and communities
+- Write about the app on social media
+- Help us translate the app to your language
+- If you are a developer there are (open issues or features)[https://github.com/felfele/feeds/issues] you can implement
 
 We've set up a separate document for our
 [contribution guidelines](https://github.com/felfele/feeds/blob/master/CONTRIBUTING.md).
