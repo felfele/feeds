@@ -4,7 +4,7 @@ Feeds – RSS reader by Felfele  [![Build Status](https://travis-ci.org/felfele/
 
 [<img src="screenshot-mobile.png" width=400>](screenshot-mobile.png)
 
-Feeds is a completely free and independent mobile RSS reader with no algorithmic timeline -- just like in the good ol' days.
+Feeds is a completely free and independent mobile RSS reader with no algorithmic timeline – just like in the good ol' days.
 
 ### Features
 - Follow news sites and blogs (e.g. Wordpress) with RSS
