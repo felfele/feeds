@@ -1,14 +1,13 @@
-Felfele [![Gitter](https://badges.gitter.im/felfele/purple-lounge.svg)](https://gitter.im/felfele/purple-lounge?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build Status](https://travis-ci.org/felfele/felfele.svg?branch=master)](https://travis-ci.org/felfele/felfele)
+Feeds [![Build Status](https://travis-ci.org/felfele/feeds.svg?branch=master)](https://travis-ci.org/felfele/feeds)
 =======
 
 ## Installation and setup
 
-This project uses React Native. You will need Android SDK, XCode, Node.js and NPM to be installed.
+This project uses React Native. You will need Android SDK, Xcode, Node.js and NPM to be installed.
 
 ## Install dependencies
 
-`npm install && npm run link`
+`npm install`
 
 ## Link assets
 
@@ -16,11 +15,7 @@ This project uses React Native. You will need Android SDK, XCode, Node.js and NP
 
 ## Build and test in simulator
 
-`npm run ios `
-
-## Start tests that run automatically
-
-`npm run watchTest`
+`npm run ios`
 
 ## Start packager in terminal
 
