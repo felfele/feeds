@@ -28,7 +28,7 @@ Feeds is made by Felfele Foundation, a non-profit organization that builds produ
 
 Feeds does not collect or transmit any data to any servers – everything stays on your device. Felfele does not sell, rent or monetize your personal data or content in any way, ever.
 
-See our complete [Terms & Privacy Policy](https://github.com/felfele/feeds/blob/master/TERMS_AND_PRIVACY_POLICY.md).
+See our complete [Terms & Privacy Policy](https://github.com/felfele/feeds/blob/master/TERMS_AND_PRIVACY_POLICY.md) (it's short, less than one page!)
 
 
 Contribute
