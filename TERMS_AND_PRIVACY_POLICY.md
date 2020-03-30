@@ -1,3 +1,5 @@
+## Terms & Privacy Policy
+
 ### General
 
 Feeds is made by Felfele Foundation, a non-profit organization that builds products for people to connect and inspire each other, without being exploited by technology.
