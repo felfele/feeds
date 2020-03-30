@@ -24,6 +24,13 @@ Currently we are running a public beta test, click the buttons below to join!
 
 [Homepage](https://felfele.org/)
 
+Terms & Privacy Policy
+----------------------
+Feeds does not collect or transmit any data to any servers – everything stays on your device. Felfele does not sell, rent or monetize your personal data or content in any way, ever.
+
+See our complete [Terms & Privacy Policy](https://github.com/felfele/feeds/blob/master/TERMS_AND_PRIVACY_POLICY.md).
+
+
 Contribute
 --------------------
 

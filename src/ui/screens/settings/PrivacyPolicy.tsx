@@ -31,17 +31,22 @@ export const PrivacyPolicy = (props: {navigation: TypedNavigation}) => (
         }}>
             <BoldText style={styles.heading}>General</BoldText>
             <RegularText style={styles.paragraph}>
+                Feeds is made by Felfele Foundation, a non-profit organization that builds products for people
+                to connect and inspire each other, without being exploited by technology.
+            </RegularText>
+
+            <RegularText style={styles.paragraph}>
                 Feeds does not collect or transmit any data to any servers – everything stays on your device.
                 Felfele does not sell, rent or monetize your personal data or content in any way, ever.
             </RegularText>
 
-            <BoldText style={styles.heading}>Sharing</BoldText>
+            <BoldText style={styles.heading}>Export & Import</BoldText>
             <RegularText style={styles.paragraph}>
                 When you use the Export functionality the application stores unencrypted data of your
-                links on our servers for a limited amount of time so that others can read it.
+                links on our servers for a limited amount of time so that others can import it.
             </RegularText>
 
-            <BoldText style={styles.heading}>User support</BoldText>
+            <BoldText style={styles.heading}>Support</BoldText>
             <RegularText style={styles.paragraph}>
                 If you contact support or submit a Bug Report, any personal data you may share with us
                 is kept only for the purposes of researching the issue and contacting you about your case.
@@ -65,9 +70,9 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 18,
         paddingTop: 25,
-        paddingBottom: 15,
     },
     paragraph: {
+        paddingTop: 15,
         fontSize: 16,
     },
     link: {
