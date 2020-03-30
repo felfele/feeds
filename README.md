@@ -39,7 +39,7 @@ Contribute
 If you like this project there are many ways you can contribute! Here are a few examples
 - Report bugs or share feature ideas
 - Spread the word by showing the app to your friends, family and communities
-- Write about the app on social media
+- Write about us on social media
 - Help us translate the app to your language
 - If you are a developer there are (open issues or features)[https://github.com/felfele/feeds/issues] you can implement
 
