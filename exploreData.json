@@ -1,5 +1,5 @@
 {
-    "Animals": {
+    "Animals & Nature": {
         "cats": [
             {
                 "url": "https://www.reddit.com/r/cats",
@@ -27,7 +27,30 @@
                 "name": "Puppies, puppies everywhere!",
                 "favicon": "https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png"
             }
+        ],
+        "other": [
+            {
+                "name": "A subreddit for cute and cuddly pictures",
+                "url": "https://reddit.com/r/aww",
+                "feedUrl": "https://reddit.com/r/aww.rss",
+                "favicon": "https://b.thumbs.redditmedia.com/aKWBgkEo7FnZ1d598QhzMrSZ-J1mVCk2H4kxOiikL8A.png"
+            },
+            {
+                "name": "All things Red Panda",
+                "url": "https://reddit.com/r/redpandas",
+                "feedUrl": "https://reddit.com/r/redpandas.rss",
+                "favicon": "https://a.thumbs.redditmedia.com/SU2rJah4uwVYZrBB.png"
+            }
+        ],
+        "nature": [
+            {
+                "name": "National Geographic",
+                "url": "https://www.nationalgeographic.com/",
+                "feedUrl": "https://www.nationalgeographic.com/news/rss/index.rss",
+                "favicon": "https://www.nationalgeographic.com/etc.clientlibs/ui/clientlibs/resources/platform/refresh/images/apple-touch-icon.ngsversion.5e829be7.png"
+            }
         ]
+
     },
     "Art and Creation": {
         "art": [
@@ -212,6 +235,12 @@
                 "favicon": "https://static.tmz.com/tmz-web/icons/android-chrome-512x512-v1.png"
             },
             {
+                "url": "https://theintercept.com/",
+                "feedUrl": "https://theintercept.com/feed",
+                "name": "The Intercept",
+                "favicon": "https://theintercept.com/assets/b012547368b054015855e0f0f6b5557d.png"
+            },
+            {
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/videos.rss",
                 "name": "/r/videos",
@@ -378,12 +407,6 @@
                 "feedUrl": "https://www.reddit.com/r/nosleep.rss",
                 "name": "nosleep",
                 "favicon": "https://b.thumbs.redditmedia.com/YP6_2w0ol2xOZ0xsUxJkBQl73JafB78A8TcB1wZK18M.png"
-            },
-            {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/MURICA.rss",
-                "name": "'MURICA! FUCK YEAH!",
-                "favicon": "https://b.thumbs.redditmedia.com/DBiOs3jQlVGk1SHIhj59CJPflD1nIQtJ-v9bYq9eh4U.png"
             },
             {
                 "url": "https://www.reddit.com/",
