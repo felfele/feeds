@@ -1,6 +1,6 @@
 # Contributing
 
-Please always follow our [Code of Conduct](https://github.com/felfele/felfele/blob/master/CODE_OF_CONDUCT.md) in all your interactions with the project and the community.
+Please always follow our [Code of Conduct](https://github.com/felfele/feeds/blob/master/CODE_OF_CONDUCT.md) in all your interactions with the project and the community.
 
 ## Communication
 
@@ -14,7 +14,7 @@ We aim to document all our work on GitHub. The processing of a new issue is the 
 
 ### How to contact us
 
-Our [slack](https://join.slack.com/t/felfele/shared_invite/enQtNTM1MjUwNTI1NzI5LTY5Yjg0YmVjN2MyN2MzMzc0Y2RkMGRiYzE0N2U0ZjgwNmYxMTQ3YjUwMDg1MGFiZTZlMWViZjU2MWJjY2Y0OTY) channel is open to everyone interested in the project. Here you can ask questions, and also follow the latest discussions including product, design, and development. You can always reach out to us at community@felfele.com.
+Our [slack](https://join.slack.com/t/felfele/shared_invite/zt-clseo486-L~kgODYDt1HKPUfmlAuxrA) channel is open to everyone interested in the project. Here you can ask questions, and also follow the latest discussions including product, design, and development. You can always reach out to us at hello@felfele.org.
 
 ## Development
 
@@ -23,7 +23,7 @@ email, or any other method with the owners of this repository before making a ch
 
 ### Reporting Bugs
 
-Found a bug in the Felfele mobile app? Here are some notes on how to report it so we
+Found a bug in the app? Here are some notes on how to report it so we
 can fix it as fast as possible:
 
 - Explain, as detailed as possible, how to reproduce the issue
@@ -33,13 +33,13 @@ can fix it as fast as possible:
   screenshot](https://github.com/blog/1347-issue-attachments) or video
   illustrating the issue
 - If you're having trouble with a specific post or other kind of content, please include a link to it if it's possible
-- Include all this information in a new issue on our [Issue Tracker](https://github.com/felfele/felfele/issues)
+- Include all this information in a new issue on our [Issue Tracker](https://github.com/felfele/feeds/issues)
 
 ### Pull Request Process
 
 Know how to fix something? We love pull requests! Here's a quick guide:
 
-1. [Check for open issues](https://github.com/travis-ci/travis-ci/issues), or
+1. [Check for open issues](https://github.com/felfele/feeds/issues), or
    open a fresh issue to start a discussion around a feature idea or a bug
    Opening a separate issue to discuss the change is less important for smaller
    changes, as the discussion can be done in the pull request
