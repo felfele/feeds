@@ -36,7 +36,6 @@ const tryFetchFeedByContentWithMimeType = async (inputUrl: string, canonicalUrl:
     }
     const exploreFeed = tryFindFeedInExploreData(inputUrl, canonicalUrl);
     if (exploreFeed != null) {
-        console.log('tryFetchFeedByContentWithMimeType', {inputUrl, canonicalUrl});
         return exploreFeed;
     }
 
@@ -100,6 +99,7 @@ export const fetchFeedsFromUrl = async (inputUrl: string, fetchConfiguration = d
     const canonicalUrl = urlUtils.getCanonicalUrl(url);
     const contentWithMimeType = await fetchConfiguration.fetchContentWithMimeType(canonicalUrl);
     if (contentWithMimeType == null) {
+        // try searching in explore data as a last resort
         const feed = tryFindFeedInExploreData(inputUrl, canonicalUrl);
         return feed;
     }
