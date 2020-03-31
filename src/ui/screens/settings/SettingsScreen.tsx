@@ -33,7 +33,8 @@ export const SettingsScreen = (props: Props) => {
         ? buildNumber
         : ''
     ;
-    const versionLabel = 'Feeds – RSS reader, Version: ' + Version + buildEnvironment + buildInfo;
+    const appName = 'Feeds – RSS reader by Felfele';
+    const versionLabel = appName + ', Version: ' + Version + buildEnvironment + buildInfo;
     return (
         <FragmentSafeAreaView>
             <NavigationHeader
@@ -68,29 +69,34 @@ export const SettingsScreen = (props: Props) => {
                     onPress={() => props.navigation.navigate('PrivacyPolicy', {})}
                 />
                 <RowItem
-                    title='Visit Felfele website'
+                    title='Visit Felfele Foundation website'
                     buttonStyle='link'
                     onPress={() => Linking.openURL('https://felfele.org/')}
                 />
+
+                { props.settings.showDebugMenu &&
+                <React.Fragment>
+                    <View style={{paddingTop: 20}} ></View>
+                    <RowItem
+                        icon={
+                            <Ionicons name='md-bug' size={24} color={ComponentColors.TEXT_COLOR}/>
+                        }
+                        title='Debug menu'
+                        buttonStyle='navigate'
+                        onPress={() => props.navigation.navigate('Debug', {})}
+                    />
+                </React.Fragment>
+                }
 
                 <TouchableView
                     onLongPress={() => {
                         Vibration.vibrate(500, false);
                         props.onShowDebugMenuValueChange(!props.settings.showDebugMenu);
                     }}
+                    style={styles.copyrightContainer}
                 >
                     <RegularText style={styles.versionLabel}>{versionLabel}</RegularText>
                 </TouchableView>
-                { props.settings.showDebugMenu &&
-                <RowItem
-                    icon={
-                        <Ionicons name='md-bug' size={24} color={ComponentColors.TEXT_COLOR}/>
-                    }
-                    title='Debug menu'
-                    buttonStyle='navigate'
-                    onPress={() => props.navigation.navigate('Debug', {})}
-                />
-                }
             </ScrollView>
         </FragmentSafeAreaView>
     );
@@ -105,9 +111,11 @@ const styles = StyleSheet.create({
     },
     versionLabel: {
         color: ComponentColors.HINT_TEXT_COLOR,
-        paddingTop: 25,
-        paddingBottom: 10,
         paddingLeft: 10,
+        paddingVertical: 3,
         fontSize: 14,
+    },
+    copyrightContainer: {
+        paddingTop: 15,
     },
 });
