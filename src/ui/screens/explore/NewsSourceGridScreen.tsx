@@ -7,6 +7,7 @@ import { Feed } from '../../../models/Feed';
 import { TypedNavigation } from '../../../helpers/navigation';
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
 import { getFeedImage } from '../../../helpers/feedHelpers';
+import { View } from 'react-native';
 
 export interface StateProps {
     subCategoryName: string;
@@ -25,6 +26,7 @@ export const NewsSourceGridScreen = (props: StateProps & DispatchProps) => {
             <NavigationHeader title={props.subCategoryName} navigation={props.navigation}/>
             {props.feeds.length > 0 &&
                 <FlatGrid
+                    ListFooterComponent={<View style={{paddingBottom: 100}}></View>}
                     style={{ flex: 1, backgroundColor: ComponentColors.BACKGROUND_COLOR }}
                     spacing={10}
                     fixed={true}

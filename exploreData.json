@@ -1,8 +1,8 @@
 {
-    "animals": {
+    "Animals": {
         "cats": [
             {
-                "url": "https://www.reddit.com/",
+                "url": "https://www.reddit.com/r/cats",
                 "feedUrl": "https://www.reddit.com/r/cats.rss",
                 "name": "Cats",
                 "favicon": "https://b.thumbs.redditmedia.com/tAT1hlAs4s7wGyszOHRrTVGNOnyZZWazTv6QEtlUHiQ.png"
@@ -16,17 +16,23 @@
                 "favicon": "https://66.media.tumblr.com/avatar_3053e00fd9cc_128.pnj"
             },
             {
-                "url": "https://animals.tumblr.com/",
-                "feedUrl": "https://animals.tumblr.com/rss",
-                "name": "Animals",
-                "favicon": "https://66.media.tumblr.com/avatar_afeb0c873890_128.pnj"
+                "url": "https://www.reddit.com/r/dogpictures/",
+                "feedUrl": "https://www.reddit.com/r/dogpictures.rss",
+                "name": "Pictures of dogs!",
+                "favicon": "https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png"
+            },
+            {
+                "url": "https://www.reddit.com/r/puppies/",
+                "feedUrl": "https://www.reddit.com/r/puppies.rss",
+                "name": "Puppies, puppies everywhere!",
+                "favicon": "https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png"
             }
         ]
     },
-    "art and creation": {
+    "Art and Creation": {
         "art": [
             {
-                "url": "https://www.reddit.com/",
+                "url": "https://www.reddit.com/r/Art",
                 "feedUrl": "https://www.reddit.com/r/Art.rss",
                 "name": "Art",
                 "favicon": "https://b.thumbs.redditmedia.com/VoZlOfOxgNGkqayUrmGI96XuSOGKVT-MVI4WK-CXP3o.png"
@@ -36,6 +42,18 @@
                 "feedUrl": "https://art.tumblr.com/rss",
                 "name": "Art on Tumblr",
                 "favicon": "https://66.media.tumblr.com/avatar_45eb6fd9cb75_128.pnj"
+            },
+            {
+                "url": "https://amusements.tumblr.com/",
+                "feedUrl": "https://amusements.tumblr.com/rss",
+                "name": "Disclosure",
+                "favicon": "https://66.media.tumblr.com/avatar_72b861817c21_128.pnj"
+            },
+            {
+                "url": "https://www.theartnewspaper.com/",
+                "feedUrl": "https://www.theartnewspaper.com/rss.xml",
+                "name": "The Art Newspaper",
+                "favicon": "https://www.theartnewspaper.com/icons/touch-icon-180x180.png"
             }
         ],
         "music": [
@@ -50,6 +68,12 @@
                 "feedUrl": "https://music.tumblr.com/rss",
                 "name": "music on tumblr",
                 "favicon": "https://66.media.tumblr.com/avatar_75983fecf474_128.pnj"
+            },
+            {
+                "url": "https://pitchfork.com/",
+                "feedUrl": "https://pitchfork.com/feed/rss/",
+                "name": "Pitchfork",
+                "favicon": "https://cdn.pitchfork.com/assets/misc/favicon-152-v2.png"
             }
         ],
         "photography": [
@@ -77,7 +101,7 @@
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/brutalism.rss",
                 "name": "Brutalism",
-                "favicon": "https://www.redditstatic.com/icon.png"
+                "favicon": "https://styles.redditmedia.com/t5_2vkqp/styles/communityIcon_cqlu7ot6zeh41.png"
             },
             {
                 "url": "https://www.reddit.com/",
@@ -85,32 +109,15 @@
                 "name": "City Porn",
                 "favicon": "https://b.thumbs.redditmedia.com/4KKF9mkNZECNka_ExAeyJlec1Vg6iz__kfujrBSEbuU.png"
             }
-
         ]
     },
-    "computers": {
-        "programming": [
+    "Entertainment": {
+        "food and drink": [
             {
                 "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/programming.rss",
-                "name": "programming",
-                "favicon": "https://www.redditstatic.com/icon.png"
-            },
-            {
-                "url": "https://news.ycombinator.com/",
-                "feedUrl": "https://news.ycombinator.com/rss",
-                "name": "Hacker News",
-                "favicon": "https://news.ycombinator.com/favicon.ico"
-            }
-        ]
-    },
-    "entertainment": {
-        "amusements": [
-            {
-                "url": "https://amusements.tumblr.com/",
-                "feedUrl": "https://amusements.tumblr.com/rss",
-                "name": "Disclosure",
-                "favicon": "https://66.media.tumblr.com/avatar_72b861817c21_128.pnj"
+                "feedUrl": "https://www.reddit.com/r/food.rss",
+                "name": "Foods",
+                "favicon": "https://b.thumbs.redditmedia.com/6rCw0815aqJAdAIl3WHdLpkN4EuKlksf87ZY4Hr25Io.png"
             }
         ],
         "comics": [
@@ -186,6 +193,24 @@
             }
         ],
         "entertainment": [
+            {
+                "url": "https://www.slashfilm.com/",
+                "feedUrl": "https://feeds2.feedburner.com/slashfilm",
+                "name": "/Film",
+                "favicon": "https://d13ezvd6yrslxm.cloudfront.net/wp/wp-content/images/cropped-ZZ46A5EC75-192x192.jpg"
+            },
+            {
+                "url": "https://www.buzzfeed.com/",
+                "feedUrl": "https://buzzfeed.com/index.xml",
+                "name": "BuzzFeed",
+                "favicon": "https://www.buzzfeed.com/static-assets/img/touch-icon-android.6f90f349a263fafae3843e9decf2812a.png"
+            },
+            {
+                "url": "https://www.tmz.com/",
+                "feedUrl": "https://tmz.com/rss.xml",
+                "name": "TMZ.com",
+                "favicon": "https://static.tmz.com/tmz-web/icons/android-chrome-512x512-v1.png"
+            },
             {
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/videos.rss",
@@ -386,7 +411,7 @@
             }
         ]
     },
-    "games": {
+    "Games": {
         "games": [
             {
                 "url": "https://www.reddit.com/",
@@ -570,17 +595,29 @@
             }
         ]
     },
-    "health": {
-        "fitness": [
+    "Knowledge and Learning": {
+        "education": [
             {
                 "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/Fitness.rss",
-                "name": "Fitness",
-                "favicon": "https://b.thumbs.redditmedia.com/Ted4KOMuRbaCYlDS55cTqjpVVZ2ENHKtYFbBFjI1i2o.png"
+                "feedUrl": "https://www.reddit.com/r/todayilearned.rss",
+                "name": "Today I Learned (TIL)",
+                "favicon": "https://b.thumbs.redditmedia.com/B7IpR8P1mEsQIjdizK5x79s5aGfJUtKk3u2ksGZ9n2Q.png"
+            },
+            {
+                "url": "https://www.reddit.com/",
+                "feedUrl": "https://www.reddit.com/r/wikipedia.rss",
+                "name": "The most interesting pages on Wikipedia",
+                "favicon": "https://styles.redditmedia.com/t5_2qh3b/styles/communityIcon_vrij95zhn1011.png"
             }
-        ]
-    },
-    "humanities and social sciences": {
+        ],
+        "books": [
+            {
+                "url": "https://www.reddit.com/",
+                "feedUrl": "https://www.reddit.com/r/books.rss",
+                "name": "So many books, so little time",
+                "favicon": "https://a.thumbs.redditmedia.com/8rHqHJ86uZ8iHfejG2zZbLX9ThOAZUzCVOwgms0KCq4.png"
+            }
+        ],
         "history": [
             {
                 "url": "https://www.reddit.com/",
@@ -598,45 +635,41 @@
             }
         ]
     },
-    "information and learning": {
-        "education": [
+    "Money and Business": {
+        "business": [
             {
-                "url": "https://education.tumblr.com/",
-                "feedUrl": "https://education.tumblr.com/rss",
-                "name": "did you know?",
-                "favicon": "https://66.media.tumblr.com/avatar_9d5210b14112_128.pnj"
+                "url": "https://www.bbc.com/news/business",
+                "feedUrl": "https://feeds.bbci.co.uk/news/business/rss.xml",
+                "name": "BBC Business",
+                "favicon": "https://m.files.bbci.co.uk/modules/bbc-morph-news-waf-page-meta/1.2.0/apple-touch-icon.png"
             },
             {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/todayilearned.rss",
-                "name": "Today I Learned (TIL)",
-                "favicon": "https://b.thumbs.redditmedia.com/B7IpR8P1mEsQIjdizK5x79s5aGfJUtKk3u2ksGZ9n2Q.png"
+                "url": "https://www.businessinsider.com/",
+                "feedUrl": "https://feeds2.feedburner.com/businessinsider",
+                "name": "Business Insider",
+                "favicon": "https://www.businessinsider.com/public/assets/BI/US/favicons/apple-touch-icon.png?12-31-19"
             },
             {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/wikipedia.rss",
-                "name": "The most interesting pages on Wikipedia",
-                "favicon": "https://www.redditstatic.com/icon.png"
-            }
-        ],
-        "information": [
-            {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/news.rss",
-                "name": "All news, US and international.",
-                "favicon": "https://a.thumbs.redditmedia.com/E0Bkwgwe5TkVLflBA7WMe9fMSC7DV2UOeff-UpNJeb0.png"
+                "url": "https://www.ft.com/",
+                "feedUrl": "https://www.ft.com/?format=rss",
+                "name": "Financial Times",
+                "favicon": "https://www.ft.com/__origami/service/image/v2/images/raw/ftlogo-v1%3Abrand-ft-logo-square-coloured?source=update-logos&width=194&height=194&format=png"
             },
             {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/books.rss",
-                "name": "So many books, so little time",
-                "favicon": "https://a.thumbs.redditmedia.com/8rHqHJ86uZ8iHfejG2zZbLX9ThOAZUzCVOwgms0KCq4.png"
+                "url": "https://www.forbes.com",
+                "feedUrl": "https://www.forbes.com/real-time/feed2/",
+                "name": "Forbes",
+                "favicon": "https://i.forbesimg.com/media/assets/appicons/forbes-app-icon_144x144.png"
+            },
+            {
+                "url": "https://www.nytimes.com/",
+                "feedUrl": "https://feeds.nytimes.com/nyt/rss/Business",
+                "name": "New York Times Business",
+                "favicon": "https://www.nytimes.com/vi-assets/static-assets/apple-touch-icon-319373aaf4524d94d38aa599c56b8655.png"
             }
         ]
     },
-    "money and business": {
-    },
-    "people and society": {
+    "People and Society": {
         "family": [
             {
                 "url": "https://www.reddit.com/",
@@ -714,37 +747,13 @@
             }
         ]
     },
-    "popular culture": {
-        "life": [
-            {
-                "url": "https://life.tumblr.com/",
-                "feedUrl": "https://life.tumblr.com/rss",
-                "name": "LIFE",
-                "favicon": "https://66.media.tumblr.com/avatar_c1cd55ae1202_128.pnj"
-            }
-        ],
-        "food and drink": [
-            {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/food.rss",
-                "name": "food",
-                "favicon": "https://b.thumbs.redditmedia.com/6rCw0815aqJAdAIl3WHdLpkN4EuKlksf87ZY4Hr25Io.png"
-            }
-        ]
-    },
-    "science": {
+    "Science": {
         "science": [
             {
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/science.rss",
                 "name": "Science",
                 "favicon": "https://b.thumbs.redditmedia.com/pkTkSME-lKZcgYyhnOLC5Byj_5SgU5G4B4u1td1F-4Y.png"
-            },
-            {
-                "url": "https://science.tumblr.com/",
-                "feedUrl": "https://science.tumblr.com/rss",
-                "name": "Science! | Best Science posts daily | Snapchat me: @Brent",
-                "favicon": "https://66.media.tumblr.com/avatar_2c187c5f0424_128.pnj"
             }
         ],
         "space": [
@@ -778,7 +787,7 @@
             }
         ]
     },
-    "sports": {
+    "Sports and Health": {
         "baseball": [
             {
                 "url": "https://www.reddit.com/",
@@ -832,6 +841,18 @@
             }
         ],
         "sports": [
+            {
+                "url": "https://bleacherreport.com/",
+                "feedUrl": "https://bleacherreport.com/articles/feed",
+                "name": "Bleacher Report",
+                "favicon": "https://bleacherreport.com/img/favicon/appleTouchIcon.png"
+            },
+            {
+                "url": "https://espn.com/",
+                "feedUrl": "https://espn.com/espn/rss/news",
+                "name": "ESPN",
+                "favicon": "https://a.espncdn.com/wireless/mw5/r1/images/bookmark-icons-v2/espn-icon-57x57.png"
+            },
             {
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/nba.rss",
@@ -906,24 +927,6 @@
             },
             {
                 "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/LiverpoolFC.rss",
-                "name": "Liverpool FC: You'll Never Walk Alone",
-                "favicon": "https://b.thumbs.redditmedia.com/WLEzY-SqqZJeZeXu0jLQjpCm3uO-u7I2lq1OWmYTGNk.png"
-            },
-            {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/FIFA.rss",
-                "name": "EA Sports FIFA",
-                "favicon": "https://www.redditstatic.com/icon.png"
-            },
-            {
-                "url": "https://www.reddit.com/",
-                "feedUrl": "https://www.reddit.com/r/Gunners.rss",
-                "name": "The Arsenal on reddit",
-                "favicon": "https://b.thumbs.redditmedia.com/ZiAEtqQcDoI72L601xFToVXnp-VRwALa1ZviwnkZ3jg.png"
-            },
-            {
-                "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/tennis.rss",
                 "name": "Tennis News & Discussion",
                 "favicon": "https://www.redditstatic.com/icon.png"
@@ -936,15 +939,73 @@
                 "name": "Tennis News & Discussion",
                 "favicon": "https://www.redditstatic.com/icon.png"
             }
+        ],
+        "fitness": [
+            {
+                "url": "https://www.reddit.com/",
+                "feedUrl": "https://www.reddit.com/r/Fitness.rss",
+                "name": "Fitness",
+                "favicon": "https://b.thumbs.redditmedia.com/Ted4KOMuRbaCYlDS55cTqjpVVZ2ENHKtYFbBFjI1i2o.png"
+            }
         ]
     },
-    "technology": {
+    "Technology": {
+        "programming": [
+            {
+                "url": "https://www.reddit.com/",
+                "feedUrl": "https://www.reddit.com/r/programming.rss",
+                "name": "programming",
+                "favicon": "https://www.redditstatic.com/icon.png"
+            },
+            {
+                "url": "https://news.ycombinator.com/",
+                "feedUrl": "https://news.ycombinator.com/rss",
+                "name": "Hacker News",
+                "favicon": "https://news.ycombinator.com/favicon.ico"
+            }
+        ],
         "technology": [
             {
                 "url": "https://www.theverge.com/",
                 "feedUrl": "https://www.theverge.com/rss/index.xml",
                 "name": "The Verge",
                 "favicon": "https://cdn.vox-cdn.com/uploads/chorus_asset/file/7395351/android-chrome-192x192.0.png"
+            },
+            {
+                "url": "https://www.engadget.com/",
+                "feedUrl": "https://www.engadget.com/rss.xml",
+                "name": "Engadget",
+                "favicon": "https://s.blogsmithmedia.com/www.engadget.com/assets-h884a7194315973782dcacd93a9be4229/images/favicon-160x160.png"
+            },
+            {
+                "url": "https://gizmodo.com/",
+                "feedUrl": "https://gizmodo.com/rss",
+                "name": "Gizmodo",
+                "favicon": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_80,q_80,w_80/fdj3buryz5nuzyf2k620.png"
+            },
+            {
+                "url": "https://lifehacker.com/",
+                "feedUrl": "https://lifehacker.com/rss",
+                "name": "Lifehacker",
+                "favicon": "https://i.kinja-img.com/gawker-media/image/upload/c_fill,f_auto,fl_progressive,g_center,h_80,q_80,w_80/u0939doeuioaqhspkjyc.png"
+            },
+            {
+                "url": "https://www.techspot.com/",
+                "feedUrl": "https://www.techspot.com/backend.xml",
+                "name": "TechSpot",
+                "favicon": "https://static.techspot.com/images/ts3mobile-badge.png"
+            },
+            {
+                "url": "https://9to5mac.com/",
+                "feedUrl": "https://9to5mac.com/feed/",
+                "name": "9to5Mac",
+                "favicon": "https://9to5mac.com/wp-content/themes/9to5-2015/images/favicons/9to5mac/icon-192x192.png"
+            },
+            {
+                "url": "https://www.androidauthority.com/",
+                "feedUrl": "https://www.androidauthority.com/rss",
+                "name": "Android Authority",
+                "favicon": "https://www.androidauthority.com/wp-content/themes/aa/images/aa-mascot-192x192.png?v=1.0.1"
             },
             {
                 "url": "https://www.reddit.com/",
@@ -990,13 +1051,13 @@
             }
         ]
     },
-    "transportation": {
+    "Transportation": {
         "bicycles": [
             {
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/bicycling.rss",
                 "name": "bicycling",
-                "favicon": "https://www.redditstatic.com/icon.png"
+                "favicon": "https://styles.redditmedia.com/t5_2qi0s/styles/communityIcon_txq402halct31.jpg"
             }
         ],
         "boats": [
@@ -1004,15 +1065,15 @@
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/boating.rss",
                 "name": "boating",
-                "favicon": "https://www.redditstatic.com/icon.png"
+                "favicon": "https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png"
             }
         ],
         "trains": [
             {
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/trains.rss",
-                "name": "All stuff related to trains and railfanning!",
-                "favicon": "https://www.redditstatic.com/icon.png"
+                "name": "All things related to Trains and Rail Fanning!",
+                "favicon": "https://b.thumbs.redditmedia.com/pnp4lHVzPgagPnUDxIpYxnS7YFoZ0AmLVu2bmKfFdIg.png"
             }
         ],
         "transportation": [
@@ -1020,7 +1081,7 @@
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/transportation.rss",
                 "name": "All about transportation",
-                "favicon": "https://www.redditstatic.com/icon.png"
+                "favicon": "https://www.redditstatic.com/desktop2x/img/favicon/android-icon-192x192.png"
             }
         ],
         "cars": [
@@ -1028,7 +1089,7 @@
                 "url": "https://www.reddit.com/",
                 "feedUrl": "https://www.reddit.com/r/cars.rss",
                 "name": "r/Cars",
-                "favicon": "https://www.redditstatic.com/icon.png"
+                "favicon": "https://styles.redditmedia.com/t5_2qhl2/styles/communityIcon_8n8xmdrerqd11.png"
             }
         ]
     }

@@ -50,8 +50,9 @@ export interface Routes {
         feed: Feed,
     };
     NewsSourceGridContainer: {
-        feeds: Feed[],
-        subCategoryName: string,
+        // feeds: Feed[],
+        // subCategoryName: string,
+        categoryName: string,
     };
     PrivacyPolicy: {
     };

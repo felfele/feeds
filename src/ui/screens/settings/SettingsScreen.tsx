@@ -69,7 +69,7 @@ export const SettingsScreen = (props: Props) => {
                 />
                 <RowItem
                     title='Visit Felfele website'
-                    buttonStyle='navigate'
+                    buttonStyle='link'
                     onPress={() => Linking.openURL('https://felfele.org/')}
                 />
 

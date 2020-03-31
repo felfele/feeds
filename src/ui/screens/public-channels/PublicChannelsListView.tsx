@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, SafeAreaView, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { SuperGridSectionList } from 'react-native-super-grid';
+import { SectionGrid } from 'react-native-super-grid';
 
 import { Feed } from '../../../models/Feed';
 import { Colors, ComponentColors } from '../../../styles';
@@ -21,7 +21,7 @@ export interface DispatchProps {
 }
 
 export interface PublicFeedSection {
-    title?: string;
+    title: string;
     data: Feed[];
 }
 
@@ -41,8 +41,7 @@ class FeedGrid extends React.PureComponent<DispatchProps & StateProps & { childr
             <View style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, flex: 1 }}>
                 {this.props.children}
                 {
-                // @ts-ignore - SuperGridSectionList is passing props to internal SectionList, typings is missing
-                <SuperGridSectionList
+                <SectionGrid
                     style={{ flex: 1 }}
                     spacing={10}
                     fixed={true}
@@ -64,7 +63,6 @@ class FeedGrid extends React.PureComponent<DispatchProps & StateProps & { childr
                     renderSectionHeader={({ section }) => ( section.title &&
                         <MediumText style={styles.sectionHeader}>{section.title}</MediumText>
                     )}
-                    // @ts-ignore - SuperGridSectionList is passing props to internal SectionList, typings is missing
                     ListFooterComponent={<TabBarPlaceholder color={ComponentColors.BACKGROUND_COLOR}/>}
                     ListHeaderComponent={this.props.headerComponent}
                 />

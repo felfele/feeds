@@ -8,6 +8,7 @@ import { Post } from '../../../models/Post';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { ComponentColors } from '../../../styles';
 import { TypedNavigation } from '../../../helpers/navigation';
+import { View } from 'react-native';
 
 export interface DispatchProps {
     onRefreshPosts: (feeds: Feed[]) => void;
@@ -54,6 +55,7 @@ export class PublicChannelsScreen extends React.Component<Props> {
                             }}
                             onPressTitle={this.ref && this.ref.scrollToTop}
                         />,
+                    listHeader: <View style={{paddingTop: 10}}/>,
                 }}
             </RefreshableFeed>
         );

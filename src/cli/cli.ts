@@ -96,7 +96,7 @@ const definitions =
     .
     addCommand('addFeed <url>', 'Test add feed input', async (url: string) => {
         const feeds = await fetchFeedsFromUrl(url);
-        output({feeds});
+        output(JSON.stringify(feeds, undefined, 4));
     })
 ;
 
