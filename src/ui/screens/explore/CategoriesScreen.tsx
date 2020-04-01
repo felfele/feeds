@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
 import { Colors, ComponentColors } from '../../../styles';
 import { RegularText } from '../../misc/text';
-import { CategoryMap } from '../../../models/recommendation/NewsSource';
+import { CategoryMap, SubCategoryMap } from '../../../models/recommendation/NewsSource';
 import { NavigationHeader } from '../../misc/NavigationHeader';
 import { RowItem } from '../../buttons/RowButton';
 import { TypedNavigation } from '../../../helpers/navigation';
@@ -13,24 +13,29 @@ import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
 const CATEGORIES_LABEL = 'CATEGORIES';
 
 export interface StateProps {
-    categories: CategoryMap<Feed>;
+    categories: string[];
     navigation: TypedNavigation;
 }
 
 export interface DispatchProps { }
 
 export const CategoriesScreen = (props: StateProps & DispatchProps) => {
-    const categories = Object.keys(props.categories).map((categoryName: string) => {
+    const categories = props.categories.map((categoryName: string) => {
         return (
             <RowItem
                 key={categoryName}
                 title={categoryName}
                 buttonStyle='navigate'
                 onPress={() => {
-                    props.navigation.navigate('SubCategoriesContainer', {
-                        title: categoryName,
-                        subCategories: props.categories[categoryName],
-                    });
+                    // props.navigation.navigate('SubCategoriesContainer', {
+                    //     title: categoryName,
+                    //     subCategories: props.categories[categoryName],
+                    // });
+                        props.navigation.navigate('NewsSourceGridContainer', {
+                            // feeds: props.categories[categoryName],
+                            // subCategoryName: categoryName,
+                            categoryName,
+                        });
                 }}
             />
         );
@@ -39,10 +44,7 @@ export const CategoriesScreen = (props: StateProps & DispatchProps) => {
         <FragmentSafeAreaView>
             <View style={{flex: 1}}>
                 <NavigationHeader navigation={props.navigation} title='Explore'/>
-                <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR }}>
-                    <RegularText style={styles.label}>
-                        {CATEGORIES_LABEL}
-                    </RegularText>
+                <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, paddingTop: 10 }}>
                     {categories}
                     <TabBarPlaceholder/>
                 </ScrollView>

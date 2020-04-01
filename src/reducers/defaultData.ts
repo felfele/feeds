@@ -57,7 +57,7 @@ Feeds is a completely free and independent mobile RSS reader with the following 
 
 We would like to hear about you! You can always ask questions or send feedback to us at [hello@felfele.org](mailto:hello@felfele.org)
 
-If you find something is broken or you don't like please send us a bug report from the Settings menu.
+If you find something is broken or you don't like, please send us a bug report from the Settings menu.
 
 `,
     author: onboardingAuthor,

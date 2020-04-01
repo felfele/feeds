@@ -159,6 +159,7 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
         '/social-media/feed/',
         '/feed/',
         '/feed/rss/',
+        '/index.xml',
         '/',
     ];
     for (const altFeedLocation of altFeedLocations) {
@@ -351,7 +352,7 @@ const tryFetchFeed = async (feedUrl: string): Promise<RSSFeedWithMetrics | null>
         const rss = await fetchFeed(feedUrl);
         return rss;
     } catch (e) {
-        Debug.log('RSSPostManager.loadFeed', {e, feedUrl});
+        Debug.log('tryFetchFeed', {e, feedUrl});
         return null;
     }
 };

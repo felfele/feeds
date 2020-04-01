@@ -134,3 +134,22 @@ test('Test getLinkFromText with https link in a sentence', () => {
 
     expect(result).toBe(link);
 });
+
+describe('comparing URLs', () => {
+    const inputs = ['example.com', 'www.example.com', 'https://example.com/', 'http://example.com/', 'http://example.com', 'https://www.example.com/'];
+
+    test('basic comparison', () => {
+        const link = 'example.com';
+        for (const input of inputs) {
+            const result = urlUtils.compareUrls(input, link);
+            expect(result).toBeTruthy();
+        }
+    });
+    test('basic comparison with protocol and www', () => {
+        const link = 'https://www.example.com/';
+        for (const input of inputs) {
+            const result = urlUtils.compareUrls(input, link);
+            expect(result).toBeTruthy();
+        }
+    });
+});

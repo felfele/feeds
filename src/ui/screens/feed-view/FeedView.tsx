@@ -37,7 +37,7 @@ const ListHeader = (props: {
     onPressFollow: () => void,
     isLoading: boolean,
 }) => (
-    <View style={{flexDirection: 'column'}}>
+    <View style={{flexDirection: 'column', paddingTop: props.isFollowed ? 10 : 0}}>
         { props.isFollowed === false &&
             <WideButton
                 label='Follow this feed'

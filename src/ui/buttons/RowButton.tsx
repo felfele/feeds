@@ -21,20 +21,19 @@ interface Props {
     onSwitchValueChange?: (value: boolean) => void;
     switchState?: boolean;
     switchDisabled?: boolean;
-    buttonStyle: 'none' | 'switch' | 'navigate';
+    buttonStyle: 'none' | 'switch' | 'navigate' | 'link';
     containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const RowItem = React.memo((props: Props) => {
     switch (props.buttonStyle) {
-        case 'navigate': {
+        case 'navigate':
+        case 'link':
+        case 'none': {
             return <RowButton {...props}/>;
         }
         case 'switch': {
             return <RowSwitchButton {...props}/>;
-        }
-        case 'none': {
-            return <RowButton {...props}/>;
         }
         default: {
             return null;
@@ -64,6 +63,13 @@ const RowButton = (props: Props) => {
                     <Icon
                         name='chevron-right'
                         size={24}
+                        color={Colors.DARK_GRAY}
+                    />
+                    }
+                    {props.buttonStyle === 'link' &&
+                    <Icon
+                        name='open-in-new'
+                        size={20}
                         color={Colors.DARK_GRAY}
                     />
                     }

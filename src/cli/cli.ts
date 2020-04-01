@@ -6,7 +6,7 @@ import { output, setOutput } from './cliHelpers';
 import * as urlUtils from '../helpers/urlUtils';
 import { fetchOpenGraphData } from '../helpers/openGraph';
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData';
-import { fetchAndImportOpml } from '../helpers/opmlImport';
+import { tryFetchOPML } from '../helpers/opmlImport';
 import { fetchFeedsFromUrl } from '../helpers/feedHelpers';
 import { fetchFeedFromUrl } from '../helpers/RSSPostHelpers';
 
@@ -90,13 +90,13 @@ const definitions =
     })
     .
     addCommand('opml <url>', 'Download and conver OPML data', async (url: string) => {
-        const data = await fetchAndImportOpml(url);
+        const data = await tryFetchOPML(url);
         output({data});
     })
     .
     addCommand('addFeed <url>', 'Test add feed input', async (url: string) => {
         const feeds = await fetchFeedsFromUrl(url);
-        output({feeds});
+        output(JSON.stringify(feeds, undefined, 4));
     })
 ;
 
