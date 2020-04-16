@@ -16,6 +16,8 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 // tslint:disable-next-line:no-var-requires
 const fs = require('fs');
+// tslint:disable-next-line: no-var-requires
+const qrcode = require('qrcode');
 
 declare var process: {
     argv: string[];
@@ -69,6 +71,23 @@ const definitions =
         const canonicalUrl = urlUtils.getCanonicalUrl(url);
         const feed = await fetchFeedFromUrl(canonicalUrl);
         output('rss feed', {feed});
+    })
+    .
+    addCommand('qr <url>', 'Show QR code of url', async (url: string) => {
+        qrcode.toString(url, {type: 'terminal'}, (err: any, code: string) => {
+            output(code);
+        });
+    })
+    .
+    addCommand('rssQR <url>', 'Fetch RSS feed of url and show QR code', async (url: string) => {
+        const canonicalUrl = urlUtils.getCanonicalUrl(url);
+        const feed = await fetchFeedFromUrl(canonicalUrl);
+        output('rss feed', {feed});
+        if (feed?.feedUrl != null) {
+            qrcode.toString(feed.feedUrl, {type: 'terminal'}, (err: any, code: string) => {
+                output(code);
+            });
+        }
     })
     .
     addCommand('opengraph <url>', 'Fetch OpenGraph data of url', async (url: string) => {
