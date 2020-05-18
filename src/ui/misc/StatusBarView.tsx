@@ -13,7 +13,7 @@ interface Props extends StatusBarProps {
 
 export const StatusBarView = (props: Props) => (
     <View style={[styles.statusBar, { backgroundColor: props.backgroundColor }]}>
-        <StatusBar translucent backgroundColor={props.backgroundColor} {...props} />
+        <StatusBar translucent {...props} backgroundColor={props.backgroundColor} />
     </View>
 );
 

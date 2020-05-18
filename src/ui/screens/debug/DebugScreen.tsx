@@ -48,13 +48,13 @@ const IconContainer = (props: { children: React.ReactNode, style?: ViewStyle }) 
 
 const IonIcon = (props: IconProps) => (
     <IconContainer>
-        <Ionicons name={props.name} size={24} color={Colors.GRAY} {...props} />
+        <Ionicons {...props} name={props.name} size={24} color={Colors.GRAY} />
     </IconContainer>
 );
 
 const MaterialCommunityIcon = (props: IconProps) => (
     <IconContainer>
-        <MaterialCommunityIcons name={props.name} size={20} color={Colors.GRAY} {...props} />
+        <MaterialCommunityIcons {...props} name={props.name} size={20} color={Colors.GRAY} />
     </IconContainer>
 );
 
