@@ -1,7 +1,7 @@
 import { Post, PublicPost } from '../models/Post';
 import { ImageData } from '../models/ImageData';
 import { Feed } from '../models/Feed';
-import { findBestIconFromLinks } from './favicon';
+import { findBestIconFromLinks, fetchSiteFaviconUrl, parseFaviconFromHtml } from './favicon';
 import * as urlUtils from './urlUtils';
 import { HtmlUtils } from './HtmlUtils';
 import { Debug } from './Debug';
@@ -231,6 +231,15 @@ export const augmentFeedWithMetadata = async (url: string, rssFeed: RSSFeedWithM
         feed.name = feedFromHtml.name;
     }
     feed.favicon = feedFromHtml.favicon || rssFeed.feed.icon || '';
+    if (feed.favicon === '') {
+        const baseHtmlResult = await fetchContentResult(baseUrl);
+        if (baseHtmlResult != null) {
+            const feedFavicon = parseFaviconFromHtml(baseHtmlResult.content);
+            if (feedFavicon != null) {
+                feed.favicon = urlUtils.createUrlFromUrn(feedFavicon, url);
+            }
+        }
+    }
     return feed;
 };
 

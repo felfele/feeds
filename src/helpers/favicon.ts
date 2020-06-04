@@ -108,7 +108,7 @@ const downloadIndexAndParseFavicon = async (url: string): Promise<string | undef
     return undefined;
 };
 
-const parseFaviconFromHtml = (html: string): string | undefined => {
+export const parseFaviconFromHtml = (html: string): string | undefined => {
     const document = HtmlUtils.parse(html);
     const links = HtmlUtils.findPath(document, ['html', 'head', 'link']);
     return findBestIconFromLinks(links);
