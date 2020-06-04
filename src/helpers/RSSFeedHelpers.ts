@@ -67,19 +67,38 @@ export interface RSSFeedWithMetrics {
 
 const FEED_FETCH_TIMEOUT = 15000;
 
+const fetchResponse = async (fetchUrl: string, headers: RequestInit): Promise<{response: Response, feedUrl: string}> => {
+    if (fetchUrl.startsWith('http://')) {
+        try {
+            fetchUrl = fetchUrl.replace('http://', 'https://');
+            return {
+                response: await timeout(FEED_FETCH_TIMEOUT, safeFetch(fetchUrl, headers)),
+                feedUrl: fetchUrl,
+            };
+        } catch (e) {
+        }
+    }
+
+    const response = await timeout(FEED_FETCH_TIMEOUT, safeFetch(fetchUrl, headers));
+    return {
+        response,
+        feedUrl: fetchUrl,
+    };
+};
+
 export const fetchFeed = async (url: string): Promise<RSSFeedWithMetrics> => {
     const startTime = Date.now();
-    const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
-    Debug.log('rssFeedHelper.fetch', {url, isRedditUrl});
-    const fetchUrl = isRedditUrl ? redditFeedUrl(url) : url;
-    const response = await timeout(FEED_FETCH_TIMEOUT, safeFetch(fetchUrl, {
-        headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI,
-    }));
     const downloadTime = Date.now();
+    const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
+    Debug.log('rssFeedHelper.fetchResponse', {url, isRedditUrl});
+    const headers = isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI;
+    const fetchUrl = isRedditUrl ? redditFeedUrl(url) : url;
+    const {response, feedUrl} = await fetchResponse(fetchUrl, { headers });
+    Debug.log('rssFeedHelper.fetchResponse', {feedUrl});
     const text = await response.text();
     const feedLoader = isRedditUrl
-        ? Promise.resolve(loadRedditFeed(url, text, startTime, downloadTime))
-        : loadRSSFeed(url, text, startTime, downloadTime)
+        ? Promise.resolve(loadRedditFeed(feedUrl, text, startTime, downloadTime))
+        : loadRSSFeed(feedUrl, text, startTime, downloadTime)
     ;
     const feed = await timeout(FEED_FETCH_TIMEOUT, feedLoader);
     return feed;

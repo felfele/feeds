@@ -2,7 +2,7 @@ import { fetchFeedsFromUrl } from '../../src/helpers/feedHelpers';
 
 describe('fetchFeedsFromUrl', () => {
     const failingFetchConfiguration = {
-        fetchContentWithMimeType: () => Promise.resolve(null),
+        fetchContentResult: () => Promise.resolve(null),
         fetchFeedByContentWithMimeType: () => Promise.resolve(null),
         fetchOPML: () => Promise.resolve(undefined),
     };

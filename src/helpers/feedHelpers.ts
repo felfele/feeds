@@ -2,8 +2,8 @@ import { Feed } from '../models/Feed';
 import { ImageData } from '../models/ImageData';
 import { isBundledImage } from './imageDataHelpers';
 import * as urlUtils from '../helpers/urlUtils';
-import { ContentWithMimeType, fetchContentWithMimeType, isRssMimeType, fetchFeedByContentWithMimeType } from './RSSPostHelpers';
-import { fetchOPML } from './opmlImport';
+import { ContentWithMimeType, fetchContentResult, isRssMimeType, fetchFeedByContentWithMimeType, ContentResult } from './RSSPostHelpers';
+import { parseOPML } from './opmlImport';
 import { isRedditLink, fetchRedditFeed } from './redditFeedHelpers';
 import { exploreData } from '../models/recommendation/NewsSource';
 
@@ -25,16 +25,16 @@ export const sortFeedsByName = (feeds: Feed[]): Feed[] => {
     return feeds.sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()));
 };
 
-const tryFetchFeedByContentWithMimeType = async (inputUrl: string, canonicalUrl: string, contentWithMimeType: ContentWithMimeType, fetchConfiguration = defaultFetchConfiguration): Promise<Feed | Feed[] | undefined> => {
-    const feed = await fetchConfiguration.fetchFeedByContentWithMimeType(canonicalUrl, contentWithMimeType);
+const tryFetchFeedByContentWithMimeType = async (inputUrl: string, contentResult: ContentResult, fetchConfiguration = defaultFetchConfiguration): Promise<Feed | Feed[] | undefined> => {
+    const feed = await fetchConfiguration.fetchFeedByContentWithMimeType(contentResult.url, contentResult);
     if (feed != null) {
         return feed;
     }
-    const feeds = await fetchConfiguration.fetchOPML(contentWithMimeType.content);
+    const feeds = await fetchConfiguration.parseOPML(contentResult.content);
     if (feeds != null) {
         return feeds;
     }
-    const exploreFeed = tryFindFeedInExploreData(inputUrl, canonicalUrl);
+    const exploreFeed = tryFindFeedInExploreData(inputUrl, contentResult.url);
     if (exploreFeed != null) {
         return exploreFeed;
     }
@@ -68,9 +68,9 @@ const tryFindFeedInExploreData = (inputUrl: string, canonicalUrl: string): Feed 
 };
 
 const defaultFetchConfiguration = {
-    fetchContentWithMimeType,
     fetchFeedByContentWithMimeType,
-    fetchOPML,
+    fetchContentResult,
+    parseOPML,
 };
 
 // this is a bit messy because we try to interpret the user input
@@ -91,29 +91,32 @@ export const fetchFeedsFromUrl = async (inputUrl: string, fetchConfiguration = d
     }
 
     // the url was an RSS url
-    const originalContentWithMimeType = await fetchConfiguration.fetchContentWithMimeType(url);
-    if (originalContentWithMimeType != null && isRssMimeType(originalContentWithMimeType?.mimeType)) {
-        return tryFetchFeedByContentWithMimeType(inputUrl, url, originalContentWithMimeType);
+    const originalContentResult = await fetchConfiguration.fetchContentResult(url);
+    if (originalContentResult != null) {
+        const originalUrlFeed = tryFetchFeedByContentWithMimeType(inputUrl, originalContentResult, fetchConfiguration);
+        if (originalUrlFeed != null) {
+            return originalUrlFeed;
+        }
     }
 
     const canonicalUrl = urlUtils.getCanonicalUrl(url);
-    const contentWithMimeType = await fetchConfiguration.fetchContentWithMimeType(canonicalUrl);
-    if (contentWithMimeType == null) {
+    const result = await fetchConfiguration.fetchContentResult(canonicalUrl);
+    if (result == null) {
         // try searching in explore data as a last resort
         const feed = tryFindFeedInExploreData(inputUrl, canonicalUrl);
         return feed;
     }
 
-    if (contentWithMimeType.mimeType === FELFELE_FEEDS_MIME_TYPE) {
+    if (result.mimeType === FELFELE_FEEDS_MIME_TYPE) {
         try {
-            const data = JSON.parse(contentWithMimeType.content) as {feeds: Feed[]};
+            const data = JSON.parse(result.content) as {feeds: Feed[]};
             const rssFeeds = data.feeds.filter(feed => urlUtils.getHttpLinkFromText(feed.feedUrl) === feed.feedUrl);
             return rssFeeds;
         } catch (e) {
             return undefined;
         }
     } else {
-        return tryFetchFeedByContentWithMimeType(inputUrl, canonicalUrl, contentWithMimeType, fetchConfiguration);
+        return tryFetchFeedByContentWithMimeType(inputUrl, result, fetchConfiguration);
     }
 };
 

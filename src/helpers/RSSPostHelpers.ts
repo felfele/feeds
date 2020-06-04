@@ -90,6 +90,35 @@ const parseFeedFromHtml = (html: any): Feed => {
     return feed;
 };
 
+export interface ContentResult {
+    content: string;
+    mimeType: string;
+    url: string;
+}
+
+export const fetchContentResult = async (url: string): Promise<ContentResult | null> => {
+    if (url.startsWith('http://')) {
+        const urlHTTPS = url.replace('http://', 'https://');
+        const contentWithMimeTypeHTTPS = await fetchContentWithMimeType(urlHTTPS);
+        if (contentWithMimeTypeHTTPS != null) {
+            return {
+                content: contentWithMimeTypeHTTPS.content,
+                mimeType: contentWithMimeTypeHTTPS.mimeType,
+                url: urlHTTPS,
+            };
+        }
+    }
+    const contentWithMimeType = await fetchContentWithMimeType(url);
+    return contentWithMimeType == null
+        ? null
+        : {
+            content: contentWithMimeType.content,
+            mimeType: contentWithMimeType.mimeType,
+            url,
+        }
+    ;
+};
+
 export const fetchContentWithMimeType = async (url: string): Promise<ContentWithMimeType | null> => {
     const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
 
@@ -207,18 +236,18 @@ export const augmentFeedWithMetadata = async (url: string, rssFeed: RSSFeedWithM
 
 // url can be either a website url or a feed url
 export const fetchFeedFromUrl = async (url: string): Promise<Feed | null> => {
-    const contentWithMimeType = await fetchContentWithMimeType(url);
-    if (!contentWithMimeType) {
+    const contentResult = await fetchContentResult(url);
+    if (!contentResult) {
         return null;
     }
-    return await fetchFeedByContentWithMimeType(url, contentWithMimeType);
+    return await fetchFeedByContentWithMimeType(contentResult.url, contentResult);
 };
 
 export const fetchFeedByContentWithMimeType = async (url: string, contentWithMimeType: ContentWithMimeType): Promise<Feed | null> => {
     Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, mimeType: contentWithMimeType.mimeType});
 
     if (contentWithMimeType.mimeType === 'text/html') {
-        const baseUrl = urlUtils.getBaseUrl(url);
+        const baseUrl = urlUtils.getBaseUrl(url).replace('http://', 'https://');
         Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, baseUrl});
         const feed = getFeedFromHtml(baseUrl, contentWithMimeType.content);
         Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, feed});

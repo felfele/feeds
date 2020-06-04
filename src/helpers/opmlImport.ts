@@ -18,13 +18,13 @@ export const tryFetchOPML = async (url: string): Promise<Feed[] | undefined> => 
     try {
         const response = await fetch(url);
         const xml = await response.text();
-        return fetchOPML(xml);
+        return parseOPML(xml);
     } catch (e) {
         return undefined;
     }
 };
 
-export const fetchOPML = async (xml: string): Promise<Feed[] | undefined> => {
+export const parseOPML = async (xml: string): Promise<Feed[] | undefined> => {
     try {
         const opmlFeeds = await new Promise<OPMLFeed[]>((resolve, reject) => {
             try {
