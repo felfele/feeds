@@ -4,7 +4,7 @@ describe('fetchFeedsFromUrl', () => {
     const failingFetchConfiguration = {
         fetchContentResult: () => Promise.resolve(null),
         fetchFeedByContentWithMimeType: () => Promise.resolve(null),
-        fetchOPML: () => Promise.resolve(undefined),
+        parseOPML: () => Promise.resolve(undefined),
     };
 
     it('from user input', async () => {
