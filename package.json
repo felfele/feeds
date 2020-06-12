@@ -83,7 +83,7 @@
     "react-native-camera": "3.17.0",
     "react-native-device-info": "5.5.3",
     "react-native-global-props": "1.1.5",
-    "react-native-markdown-renderer": "3.2.8",
+    "react-native-markdown-display": "6.1.4",
     "react-native-parse-html": "2.2.6",
     "react-native-permissions": "2.0.9",
     "react-native-picker-select": "6.3.4",

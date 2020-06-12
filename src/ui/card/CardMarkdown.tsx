@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Linking } from 'react-native';
 
-import Markdown from 'react-native-markdown-renderer';
+import Markdown from 'react-native-markdown-display';
 import { ErrorBoundary } from '../misc/ErrorBoundary';
 
 export const CardMarkdown = (props: { text: string }) => (
