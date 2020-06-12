@@ -292,7 +292,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
 };
 
 const feedFaviconString = (favicon: string | number): string => {
-    return typeof favicon === 'number' ? '' : favicon;
+    return typeof favicon === 'string' ? favicon : '';
 };
 
 export const loadPosts = async (storedFeeds: Feed[]): Promise<PublicPost[]> => {

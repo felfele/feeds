@@ -1,6 +1,6 @@
 import * as urlUtils from './urlUtils';
 import { Version } from '../Version';
-import { loadRedditFeed, redditFeedUrl } from './redditFeedHelpers';
+import { loadRedditFeed, redditJsonFeedUrl } from './redditFeedHelpers';
 import { Debug } from './Debug';
 import { timeout } from './Utils';
 import { safeFetch } from './safeFetch';
@@ -92,12 +92,13 @@ export const fetchFeed = async (url: string): Promise<RSSFeedWithMetrics> => {
     const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM;
     Debug.log('rssFeedHelper.fetchResponse', {url, isRedditUrl});
     const headers = isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI;
-    const fetchUrl = isRedditUrl ? redditFeedUrl(url) : url;
+    const fetchUrl = isRedditUrl ? redditJsonFeedUrl(url) : url;
     const {response, feedUrl} = await fetchResponse(fetchUrl, { headers });
     Debug.log('rssFeedHelper.fetchResponse', {feedUrl});
     const text = await response.text();
     const feedLoader = isRedditUrl
-        ? Promise.resolve(loadRedditFeed(feedUrl, text, startTime, downloadTime))
+        // in case of a reddit feed we want to use the original url, not the .json one
+        ? Promise.resolve(loadRedditFeed(url, text, startTime, downloadTime))
         : loadRSSFeed(feedUrl, text, startTime, downloadTime)
     ;
     const feed = await timeout(FEED_FETCH_TIMEOUT, feedLoader);

@@ -49,7 +49,7 @@ interface RedditAboutData {
 
 const IMAGE_DIMENSION_THRESHOLD = 1200;
 
-export const redditFeedUrl = (url: string) => {
+export const redditJsonFeedUrl = (url: string) => {
     if (url.endsWith('.rss')) {
         return url.slice(0, -4).concat('.json');
     }
