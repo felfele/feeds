@@ -2,7 +2,7 @@ import { Feed } from '../models/Feed';
 import { ImageData } from '../models/ImageData';
 import { isBundledImage } from './imageDataHelpers';
 import * as urlUtils from '../helpers/urlUtils';
-import { ContentWithMimeType, fetchContentResult, isRssMimeType, fetchFeedByContentWithMimeType, ContentResult } from './RSSPostHelpers';
+import { fetchContentResult, fetchFeedByContentWithMimeType, ContentResult } from './RSSPostHelpers';
 import { parseOPML } from './opmlImport';
 import { isRedditLink, fetchRedditFeed } from './redditFeedHelpers';
 import { exploreData } from '../models/recommendation/NewsSource';
@@ -25,7 +25,20 @@ export const sortFeedsByName = (feeds: Feed[]): Feed[] => {
     return feeds.sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()));
 };
 
+const tryFetchFelfeleFeeds = (result: ContentResult): Feed[] | undefined => {
+    try {
+        const data = JSON.parse(result.content) as {feeds: Feed[]};
+        const rssFeeds = data.feeds.filter(feed => urlUtils.getHttpLinkFromText(feed.feedUrl) === feed.feedUrl);
+        return rssFeeds;
+    } catch (e) {
+        return undefined;
+    }
+};
+
 const tryFetchFeedByContentWithMimeType = async (inputUrl: string, contentResult: ContentResult, fetchConfiguration = defaultFetchConfiguration): Promise<Feed | Feed[] | undefined> => {
+    if (contentResult.mimeType === FELFELE_FEEDS_MIME_TYPE) {
+        return tryFetchFelfeleFeeds(contentResult);
+    }
     const feed = await fetchConfiguration.fetchFeedByContentWithMimeType(contentResult.url, contentResult);
     if (feed != null) {
         return feed;
@@ -59,7 +72,7 @@ const tryFindFeedInExploreData = (inputUrl: string, canonicalUrl: string): Feed 
         .filter(feed =>
             urlUtils.compareUrls(feed.feedUrl, canonicalUrl) ||
             urlUtils.compareUrls(feed.url, canonicalUrl) ||
-            feed.name === inputUrl
+            feed.name.toLocaleLowerCase() === inputUrl.toLocaleLowerCase()
         );
     return feeds.length > 0
         ? feeds[0]
@@ -90,7 +103,6 @@ export const fetchFeedsFromUrl = async (inputUrl: string, fetchConfiguration = d
         return fetchRedditFeed(url);
     }
 
-    // the url was an RSS url
     const originalContentResult = await fetchConfiguration.fetchContentResult(url);
     if (originalContentResult != null) {
         const originalUrlFeed = tryFetchFeedByContentWithMimeType(inputUrl, originalContentResult, fetchConfiguration);
@@ -101,23 +113,14 @@ export const fetchFeedsFromUrl = async (inputUrl: string, fetchConfiguration = d
 
     const canonicalUrl = urlUtils.getCanonicalUrl(url);
     const result = await fetchConfiguration.fetchContentResult(canonicalUrl);
-    if (result == null) {
-        // try searching in explore data as a last resort
-        const feed = tryFindFeedInExploreData(inputUrl, canonicalUrl);
-        return feed;
+    if (result != null) {
+        const feed = tryFetchFeedByContentWithMimeType(inputUrl, result, fetchConfiguration);
+        if (feed != null) {
+            return feed;
+        }
     }
 
-    if (result.mimeType === FELFELE_FEEDS_MIME_TYPE) {
-        try {
-            const data = JSON.parse(result.content) as {feeds: Feed[]};
-            const rssFeeds = data.feeds.filter(feed => urlUtils.getHttpLinkFromText(feed.feedUrl) === feed.feedUrl);
-            return rssFeeds;
-        } catch (e) {
-            return undefined;
-        }
-    } else {
-        return tryFetchFeedByContentWithMimeType(inputUrl, result, fetchConfiguration);
-    }
+    return tryFindFeedInExploreData(inputUrl, canonicalUrl);
 };
 
 const feedId = (feed: Feed) => feed.feedUrl;

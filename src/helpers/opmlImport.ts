@@ -39,12 +39,12 @@ export const parseOPML = async (xml: string): Promise<Feed[] | undefined> => {
                 reject(e);
             }
         });
-        Debug.log('importOpml', {result: opmlFeeds});
+        Debug.log('parseOPML', {result: opmlFeeds});
         const feeds = await convertOPMLFeeds(opmlFeeds);
         const isFeed = (feed: Feed | undefined): feed is Feed => feed != null;
         return feeds.filter<Feed>(isFeed);
     } catch (e) {
-        Debug.log('importOpml', {e});
+        Debug.log('parseOPML', {e});
         return undefined;
     }
 };
