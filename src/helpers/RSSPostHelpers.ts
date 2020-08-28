@@ -423,7 +423,7 @@ const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: stri
                     : '**' + item.title + '**' + '\n\n'
                 ;
             const post: Post = {
-                _id: item.link,
+                _id: feedUrl + '/' + item.link,
                 text: (title + text).trim(),
                 createdAt: adjustCreatedAt(item.created),
                 images,
