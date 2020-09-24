@@ -6,6 +6,7 @@ import { fetchContentResult, fetchFeedByContentWithMimeType, ContentResult } fro
 import { parseOPML } from './opmlImport';
 import { isRedditLink, fetchRedditFeed } from './redditFeedHelpers';
 import { exploreData } from '../models/recommendation/NewsSource';
+import { isYoutubeLink, fetchYoutubeFeed } from './youtubeFeedHelpers';
 
 export const FELFELE_FEEDS_MIME_TYPE = 'application/felfele-feeds+json';
 
@@ -101,6 +102,10 @@ export const fetchFeedsFromUrl = async (inputUrl: string, fetchConfiguration = d
     // special cases
     if (isRedditLink(url)) {
         return fetchRedditFeed(url);
+    }
+
+    if (isYoutubeLink(url)) {
+        return fetchYoutubeFeed(url);
     }
 
     const originalContentResult = await fetchConfiguration.fetchContentResult(url);
