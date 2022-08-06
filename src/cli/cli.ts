@@ -73,6 +73,21 @@ const definitions =
         output('rss feed', {feed});
     })
     .
+    addCommand('rss-test <feed-file>', 'Test fetching feeds from file', async (filename: string) => {
+        const content = fs.readFileSync(filename)
+        const feeds = JSON.parse(content) as { feeds: [] }
+        const feedUrls = feeds.feeds.map((f: { feedUrl: string}) => f.feedUrl)
+        const fetchFeed = (url: string) => {
+            const canonicalUrl = urlUtils.getCanonicalUrl(url);
+            console.log(`fetching feed at ${canonicalUrl}`)
+            return fetchFeedFromUrl(canonicalUrl);
+        }
+        const testResults = await Promise.allSettled(feedUrls.map(fetchFeed))
+        if (!testResults.every(r => r.status === 'fulfilled')) {
+            console.error(testResults)
+        }
+    })
+    .
     addCommand('qr <url>', 'Show QR code of url', async (url: string) => {
         qrcode.toString(url, {type: 'terminal'}, (err: any, code: string) => {
             output(code);
