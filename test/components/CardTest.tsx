@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ShallowRenderer from 'react-test-renderer/shallow';
 import { Card } from '../../src/ui/card/Card';
 import { Post } from '../../src/models/Post';
 import { Author } from '../../src/models/Author';
@@ -68,7 +67,6 @@ describe('card test', () => {
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
-                originalAuthorFeed={undefined}
                 authorFeed={undefined}
                 showActions={false}
             />
@@ -89,7 +87,6 @@ describe('card test', () => {
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
-                originalAuthorFeed={undefined}
                 authorFeed={undefined}
                 showActions={false}
             />
@@ -110,7 +107,6 @@ describe('card test', () => {
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
-                originalAuthorFeed={undefined}
                 authorFeed={undefined}
                 showActions={false}
             />
@@ -132,7 +128,6 @@ describe('card test', () => {
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
-                originalAuthorFeed={undefined}
                 authorFeed={undefined}
                 showActions={false}
             />
@@ -153,7 +148,6 @@ describe('card test', () => {
                 togglePostSelection={(_) => {}}
                 currentTimestamp={0}
                 onDownloadFeedPosts={() => {}}
-                originalAuthorFeed={undefined}
                 authorFeed={undefined}
                 showActions={false}
             />

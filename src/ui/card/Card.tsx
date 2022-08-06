@@ -40,7 +40,6 @@ export interface StateProps {
     togglePostSelection: (post: Post) => void;
     navigation: TypedNavigation;
     authorFeed: AuthorFeed | undefined;
-    originalAuthorFeed: AuthorFeed | undefined;
 }
 
 export interface DispatchProps {
@@ -78,22 +77,11 @@ const CardBody = (props: {
     currentTimestamp: number,
     width: number,
     navigation: TypedNavigation,
-    originalAuthorFeed: AuthorFeed | undefined,
     authorFeed: AuthorFeed | undefined;
     showActions: boolean,
     onRemovePost: (post: Post) => void,
     onDownloadFeedPosts: (feed: Feed) => void;
 }) => {
-    const isOriginalPost = props.post.references == null;
-    const originalAuthor = props.post.references != null
-        ? props.post.references.originalAuthor
-        : props.post.author
-    ;
-    const originalPost = {
-        ...props.post,
-        author: originalAuthor,
-        references: undefined,
-    };
     const authorFeed = props.authorFeed;
     const cardTopOnPress = authorFeed != null
         ? authorFeed.feedUrl !== ''
@@ -115,31 +103,15 @@ const CardBody = (props: {
                 onRemovePost={props.onRemovePost}
                 onPress={cardTopOnPress}
             />
-            {
-                isOriginalPost
-                    ?
-                    <View>
-                        <DisplayImage
-                            post={props.post}
-                            width={props.width}
-                        />
-                        {
-                            props.post.text === '' || <CardMarkdown text={props.post.text} />
-                        }
-                    </View>
-                    :
-                    <View style={styles.previewContainer}>
-                        <CardBody
-                            {...props}
-                            authorFeed={props.originalAuthorFeed}
-                            originalAuthorFeed={undefined}
-                            onRemovePost={props.onRemovePost}
-                            post={originalPost}
-                            currentTimestamp={originalPost.createdAt}
-                            width={props.width - 22}
-                        />
-                    </View>
-            }
+            <View>
+                <DisplayImage
+                    post={props.post}
+                    width={props.width}
+                />
+                {
+                    props.post.text === '' || <CardMarkdown text={props.post.text} />
+                }
+            </View>
         </View>
     );
 };

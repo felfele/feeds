@@ -5,7 +5,6 @@ import { Post } from '../../models/Post';
 import { Feed } from '../../models/Feed';
 import { AsyncActions } from '../../actions/asyncActions';
 import { TypedNavigation } from '../../helpers/navigation';
-import { getAllFeeds } from '../../selectors/selectors';
 import { Debug } from '../../helpers/Debug';
 import { Actions } from '../../actions/Actions';
 
@@ -15,27 +14,6 @@ interface OwnProps {
     togglePostSelection: (post: Post) => void;
     navigation: TypedNavigation;
 }
-
-const getOriginalAuthorFeed = (post: Post, state: AppState): AuthorFeed | undefined => {
-    if (post.references == null) {
-        return;
-    }
-    const originalAuthor = post.references.originalAuthor;
-    const knownFeed = getAllFeeds(state).find(feed => originalAuthor != null && feed.feedUrl === originalAuthor.uri);
-    return knownFeed != null
-        ? {
-            ...knownFeed,
-            isKnownFeed: true,
-        }
-        : {
-            name: originalAuthor.name,
-            feedUrl: originalAuthor.uri,
-            url: originalAuthor.uri,
-            favicon: originalAuthor.image.uri || '',
-            isKnownFeed: false,
-        }
-    ;
-};
 
 const getAuthorFeedOrUndefined = (
     feed: Feed | undefined
@@ -64,7 +42,6 @@ const getAuthorFeed = (post: Post, state: AppState): AuthorFeed | undefined => {
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps): StateProps => {
     const authorFeed = getAuthorFeed(ownProps.post, state);
-    const originalAuthorFeed = getOriginalAuthorFeed(ownProps.post, state);
     return {
         post: {
             ...ownProps.post,
@@ -75,7 +52,6 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps): StateProps => {
         showActions: state.settings.showDebugMenu,
         navigation: ownProps.navigation,
         authorFeed,
-        originalAuthorFeed,
     };
 };
 
