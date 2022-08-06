@@ -7,22 +7,20 @@ export function isTwitterLink(url: string): boolean {
     const canonicalUrl = urlUtils.getCanonicalUrl(url);
     const humanHostName = urlUtils.getHumanHostname(canonicalUrl);
     return humanHostName === 'twitter.com';
-};
+}
 
-export const fetchTwitterFeed = async (url: string): Promise<Feed | undefined> => {
+export async function fetchTwitterFeed(url: string): Promise<Feed | undefined> {
     const nitterUrl = url.replace('twitter.com', 'nitter.net');
     const canonicalUrl = urlUtils.getCanonicalUrl(nitterUrl);
-    console.log({ url, nitterUrl, canonicalUrl })
     const feed = await fetchFeedFromUrl(canonicalUrl);
     if (!feed) {
-        return undefined
+        return undefined;
     }
-    const pageUrl = feed.feedUrl.replace(/\/rss$/, '')
-    const meta = await fetchHtmlMetaData(pageUrl)
-    console.log({ meta })
-    const favicon = meta.image ?? feed.favicon
+    const pageUrl = feed.feedUrl.replace(/\/rss$/, '');
+    const meta = await fetchHtmlMetaData(pageUrl);
+    const favicon = meta.image ?? feed.favicon;
     return {
         ...feed,
         favicon,
-    }
-};
+    };
+}
