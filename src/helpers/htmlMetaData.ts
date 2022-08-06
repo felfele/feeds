@@ -1,30 +1,30 @@
-import { OpenGraphData, getHtmlOpenGraphData } from './openGraph';
-import { fetchFeedFromUrl } from './RSSPostHelpers';
-import { fetchSiteFaviconUrl } from './favicon';
-import { HtmlUtils } from './HtmlUtils';
-import { Feed } from '../models/Feed';
-import { Debug } from './Debug';
+import { OpenGraphData, getHtmlOpenGraphData } from './openGraph'
+import { fetchFeedFromUrl } from './RSSPostHelpers'
+import { fetchSiteFaviconUrl } from './favicon'
+import { HtmlUtils } from './HtmlUtils'
+import { Feed } from '../models/Feed'
+import { Debug } from './Debug'
 
 export interface HtmlMetaData extends OpenGraphData {
-    icon: string;
-    feedUrl: string;
-    feedTitle: string;
-    createdAt: number;
-    updatedAt: number;
+    icon: string
+    feedUrl: string
+    feedTitle: string
+    createdAt: number
+    updatedAt: number
 }
 
 export const fetchHtmlMetaData = async (url: string): Promise<HtmlMetaData> => {
-    const response = await fetch(url);
-    const html = await response.text();
-    const feed = await tryFetchFeedFromUrl(url);
-    const document = HtmlUtils.parse(html);
-    const openGraphData = getHtmlOpenGraphData(document, url);
-    const feedName = feed != null ? feed.name : '';
-    const name = getFirstNonEmpty([getMetaName(document), openGraphData.name, feedName]);
-    const title = getHtmlTitle(document, openGraphData.title);
-    const icon = await fetchSiteFaviconUrl(url);
-    const createdAt = getPublishedTime(document);
-    const updatedAt = getModifiedTime(document, createdAt);
+    const response = await fetch(url)
+    const html = await response.text()
+    const feed = await tryFetchFeedFromUrl(url)
+    const document = HtmlUtils.parse(html)
+    const openGraphData = getHtmlOpenGraphData(document, url)
+    const feedName = feed != null ? feed.name : ''
+    const name = getFirstNonEmpty([getMetaName(document), openGraphData.name, feedName])
+    const title = getHtmlTitle(document, openGraphData.title)
+    const icon = await fetchSiteFaviconUrl(url)
+    const createdAt = getPublishedTime(document)
+    const updatedAt = getModifiedTime(document, createdAt)
     return {
         ...openGraphData,
         title,
@@ -34,33 +34,33 @@ export const fetchHtmlMetaData = async (url: string): Promise<HtmlMetaData> => {
         feedTitle: feedName,
         createdAt,
         updatedAt,
-    };
-};
+    }
+}
 
 const tryFetchFeedFromUrl = async (url: string): Promise<Feed | null> => {
     try {
-        const feed = await fetchFeedFromUrl(url);
-        return feed;
+        const feed = await fetchFeedFromUrl(url)
+        return feed
     } catch (e) {
-        Debug.log('tryFetchFeedFromUrl', {e});
-        return null;
+        Debug.log('tryFetchFeedFromUrl', {e})
+        return null
     }
-};
+}
 
 interface HtmlChildNode extends ChildNode {
-    value: string;
+    value: string
 }
 
 const getHtmlTitle = (document: HTMLElement, defaultTitle: string): string => {
-    const htmlTitleNodes = HtmlUtils.findPath(document, ['html', 'head', 'title']);
+    const htmlTitleNodes = HtmlUtils.findPath(document, ['html', 'head', 'title'])
     return htmlTitleNodes.length > 0
         ? (htmlTitleNodes[0].childNodes[0] as HtmlChildNode)?.value || defaultTitle
         : defaultTitle
-    ;
-};
+
+}
 
 const getMetaName = (document: HTMLElement, defaultTitle: string = ''): string => {
-    const metaNodes = HtmlUtils.findPath(document, ['html', 'head', 'meta']);
+    const metaNodes = HtmlUtils.findPath(document, ['html', 'head', 'meta'])
     for (const meta of metaNodes) {
         if (HtmlUtils.matchAttributes(meta, [{ name: 'property', value: 'al:iphone:app_name' }]) ||
             HtmlUtils.matchAttributes(meta, [{ name: 'property', value: 'al:android:app_name' }]) ||
@@ -68,50 +68,50 @@ const getMetaName = (document: HTMLElement, defaultTitle: string = ''): string =
             HtmlUtils.matchAttributes(meta, [{ name: 'name', value: 'apple-mobile-web-app-title' }]) ||
             HtmlUtils.matchAttributes(meta, [{ name: 'name', value: 'application-name' }])
         ) {
-            const content = HtmlUtils.getAttribute(meta, 'content');
+            const content = HtmlUtils.getAttribute(meta, 'content')
             if (content != null) {
-                return content;
+                return content
             }
         }
     }
-    return defaultTitle;
-};
+    return defaultTitle
+}
 
 const getPublishedTime = (document: HTMLElement): number => {
-    const metaNodes = HtmlUtils.findPath(document, ['html', 'head', 'meta']);
+    const metaNodes = HtmlUtils.findPath(document, ['html', 'head', 'meta'])
     for (const meta of metaNodes) {
         if (HtmlUtils.matchAttributes(meta, [{ name: 'property', value: 'article:published' }]) ||
             HtmlUtils.matchAttributes(meta, [{ name: 'property', value: 'article:published_time' }])
         ) {
-            const content = HtmlUtils.getAttribute(meta, 'content');
+            const content = HtmlUtils.getAttribute(meta, 'content')
             if (content != null) {
-                return Date.parse(content);
+                return Date.parse(content)
             }
         }
     }
-    return 0;
-};
+    return 0
+}
 
 const getModifiedTime = (document: HTMLElement, defaultTime: number): number => {
-    const metaNodes = HtmlUtils.findPath(document, ['html', 'head', 'meta']);
+    const metaNodes = HtmlUtils.findPath(document, ['html', 'head', 'meta'])
     for (const meta of metaNodes) {
         if (HtmlUtils.matchAttributes(meta, [{ name: 'property', value: 'article:modified' }]) ||
             HtmlUtils.matchAttributes(meta, [{ name: 'property', value: 'article:modified_time' }])
         ) {
-            const content = HtmlUtils.getAttribute(meta, 'content');
+            const content = HtmlUtils.getAttribute(meta, 'content')
             if (content != null) {
-                return Date.parse(content);
+                return Date.parse(content)
             }
         }
     }
-    return defaultTime;
-};
+    return defaultTime
+}
 
 const getFirstNonEmpty = (items: string[], defaultValue = ''): string => {
     for (const item of items) {
         if (item !== '') {
-            return item;
+            return item
         }
     }
-    return defaultValue;
-};
+    return defaultValue
+}

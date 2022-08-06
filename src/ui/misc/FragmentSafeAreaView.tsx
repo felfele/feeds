@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { SafeAreaView } from 'react-native';
-import { ComponentColors } from '../../styles';
-import { StatusBarView } from './StatusBarView';
+import * as React from 'react'
+import { SafeAreaView } from 'react-native'
+import { ComponentColors } from '../../styles'
+import { StatusBarView } from './StatusBarView'
 
 interface Props {
-    children: React.ReactNode | React.ReactNode[];
-    topBackgroundColor?: string;
-    bottomBackgroundColor?: string;
+    children: React.ReactNode | React.ReactNode[]
+    topBackgroundColor?: string
+    bottomBackgroundColor?: string
 }
 
 export const FragmentSafeAreaView = (props: Props) => (
@@ -21,4 +21,4 @@ export const FragmentSafeAreaView = (props: Props) => (
         <SafeAreaView style={{ flex: 0, backgroundColor: ComponentColors.HEADER_COLOR }} />
         {props.children}
     </React.Fragment>
-);
+)

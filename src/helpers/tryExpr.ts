@@ -1,20 +1,20 @@
 export const tryExpr = <T>(expr: () => T | never): T | Error => {
     try {
-        return expr();
+        return expr()
     } catch (e) {
-        return e as Error;
+        return e as Error
     }
-};
+}
 
 export const asyncTryExpr = async <T>(expr: () => Promise<T> | never): Promise<T | Error> => {
     try {
-        const result = await expr();
-        return result;
+        const result = await expr()
+        return result
     } catch (e) {
-        return e as Error;
+        return e as Error
     }
-};
+}
 
 export const isError = <T>(e: T | Error): e is Error => {
-    return e instanceof Error;
-};
+    return e instanceof Error
+}

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Colors } from '../../styles';
+import * as React from 'react'
+import { Colors } from '../../styles'
 import {
     StyleSheet,
     Switch,
@@ -8,21 +8,21 @@ import {
     TouchableWithoutFeedback,
     ViewStyle,
     StyleProp,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { RegularText } from '../misc/text';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import { RegularText } from '../misc/text'
 
 interface Props {
-    title: string;
-    description?: string;
-    icon?: React.ReactNode;
-    onPress?: (event?: GestureResponderEvent) => void;
-    onLongPress?: (event?: GestureResponderEvent) => void;
-    onSwitchValueChange?: (value: boolean) => void;
-    switchState?: boolean;
-    switchDisabled?: boolean;
-    buttonStyle: 'none' | 'switch' | 'navigate' | 'link';
-    containerStyle?: StyleProp<ViewStyle>;
+    title: string
+    description?: string
+    icon?: React.ReactNode
+    onPress?: (event?: GestureResponderEvent) => void
+    onLongPress?: (event?: GestureResponderEvent) => void
+    onSwitchValueChange?: (value: boolean) => void
+    switchState?: boolean
+    switchDisabled?: boolean
+    buttonStyle: 'none' | 'switch' | 'navigate' | 'link'
+    containerStyle?: StyleProp<ViewStyle>
 }
 
 export const RowItem = React.memo((props: Props) => {
@@ -30,16 +30,16 @@ export const RowItem = React.memo((props: Props) => {
         case 'navigate':
         case 'link':
         case 'none': {
-            return <RowButton {...props}/>;
+            return <RowButton {...props}/>
         }
         case 'switch': {
-            return <RowSwitchButton {...props}/>;
+            return <RowSwitchButton {...props}/>
         }
         default: {
-            return null;
+            return null
         }
     }
-});
+})
 
 const RowButton = (props: Props) => {
     return (
@@ -76,8 +76,8 @@ const RowButton = (props: Props) => {
                 </View>
             </View>
         </TouchableWithoutFeedback>
-    );
-};
+    )
+}
 
 const RowSwitchButton = (props: Props) => {
     return (
@@ -98,14 +98,14 @@ const RowSwitchButton = (props: Props) => {
                 disabled={props.switchDisabled}
             />
         </View>
-    );
-};
+    )
+}
 
 const RowIcon = (props: { children: React.ReactNode}) => (
     <View style={styles.rowIcon}>
         {props.children}
     </View>
-);
+)
 
 const styles = StyleSheet.create({
     container: {
@@ -135,4 +135,4 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         alignItems: 'center',
     },
-});
+})

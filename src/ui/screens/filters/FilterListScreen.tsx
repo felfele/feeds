@@ -1,21 +1,21 @@
-import * as React from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { ContentFilter } from '../../../models/ContentFilter';
-import { printableElapsedTime } from '../../../helpers/dateHelpers';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { ComponentColors, Colors } from '../../../styles';
-import { RowItem } from '../../buttons/RowButton';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { BoldText, RegularText } from '../../misc/text';
-import { WideButton } from '../../buttons/WideButton';
+import * as React from 'react'
+import { StyleSheet, ScrollView, View } from 'react-native'
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+import { ContentFilter } from '../../../models/ContentFilter'
+import { printableElapsedTime } from '../../../helpers/dateHelpers'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { ComponentColors, Colors } from '../../../styles'
+import { RowItem } from '../../buttons/RowButton'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { BoldText, RegularText } from '../../misc/text'
+import { WideButton } from '../../buttons/WideButton'
 
-const AddWordIcon = (props: {color: string}) => <MaterialIcon name='add-box' size={24} color={props.color} />;
+const AddWordIcon = (props: {color: string}) => <MaterialIcon name='add-box' size={24} color={props.color} />
 
 export interface StateProps {
-    navigation: TypedNavigation;
-    filters: ContentFilter[];
+    navigation: TypedNavigation
+    filters: ContentFilter[]
 }
 
 export interface DispatchProps {
@@ -24,24 +24,24 @@ export interface DispatchProps {
 
 export function FilterListScreen(props: StateProps & DispatchProps) {
     const editFilter = (filter: ContentFilter) => {
-        props.navigation.navigate('EditFilter', { filter: filter });
-    };
+        props.navigation.navigate('EditFilter', { filter: filter })
+    }
 
     const onAddFilter = () => {
         const filter: ContentFilter = {
             text: '',
             createdAt: 0,
             validUntil: 0,
-        };
-        props.navigation.navigate('EditFilter', { filter: filter });
-    };
+        }
+        props.navigation.navigate('EditFilter', { filter: filter })
+    }
 
     const filterDescription = (filter: ContentFilter) => {
         if (filter.validUntil === 0) {
-            return undefined;
+            return undefined
         }
-        return 'Expires in ' + printableElapsedTime(Date.now(), Math.floor(filter.createdAt + (filter.validUntil * 1.05)));
-    };
+        return 'Expires in ' + printableElapsedTime(Date.now(), Math.floor(filter.createdAt + (filter.validUntil * 1.05)))
+    }
 
     return (
         <FragmentSafeAreaView>
@@ -72,13 +72,13 @@ export function FilterListScreen(props: StateProps & DispatchProps) {
                         key={filter.text}
                         buttonStyle='navigate'
                         onPress={() => {
-                            editFilter(filter);
+                            editFilter(filter)
                         }}
                     />
                 ))}
             </ScrollView>
         </FragmentSafeAreaView>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         color: ComponentColors.HINT_TEXT_COLOR,
     },
-});
+})

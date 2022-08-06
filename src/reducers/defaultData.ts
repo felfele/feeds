@@ -1,18 +1,18 @@
-import { AppState } from './AppState';
-import { Settings } from '../models/Settings';
-import { Author } from '../models/Author';
-import { Post } from '../models/Post';
-import { Feed } from '../models/Feed';
-import { defaultImages } from '../defaultImages';
-import { defaultGateway } from '../swarm/Swarm';
+import { AppState } from './AppState'
+import { Settings } from '../models/Settings'
+import { Author } from '../models/Author'
+import { Post } from '../models/Post'
+import { Feed } from '../models/Feed'
+import { defaultImages } from '../defaultImages'
+import { defaultGateway } from '../swarm/Swarm'
 
 export const defaultSettings: Settings = {
     showSquareImages: false,
     showDebugMenu: false,
     swarmGatewayAddress: defaultGateway,
-};
+}
 
-export const DEFAULT_AUTHOR_NAME = '';
+export const DEFAULT_AUTHOR_NAME = ''
 
 export const defaultAuthor: Author = {
     name: DEFAULT_AUTHOR_NAME,
@@ -20,10 +20,10 @@ export const defaultAuthor: Author = {
     image: {
         uri: '',
     },
-};
+}
 
-export const FEEDS_ASSISTANT_NAME = 'Feeds app';
-export const FEEDS_ASSISTANT_URL = 'local/onboarding';
+export const FEEDS_ASSISTANT_NAME = 'Feeds app'
+export const FEEDS_ASSISTANT_URL = 'local/onboarding'
 
 const onboardingAuthor: Author = {
     name: FEEDS_ASSISTANT_NAME,
@@ -31,7 +31,7 @@ const onboardingAuthor: Author = {
     image: {
         localPath: defaultImages.felfeleAssistant,
     },
-};
+}
 
 const defaultPost1: Post = {
     _id: 0,
@@ -61,15 +61,15 @@ If you find something is broken or you don't like, please send us a bug report f
 
 `,
     author: onboardingAuthor,
-};
+}
 
-export const defaultLocalPosts = [defaultPost1];
+export const defaultLocalPosts = [defaultPost1]
 
-export const defaultCurrentTimestamp = 0;
+export const defaultCurrentTimestamp = 0
 
 export const defaultMetadata = {
     highestSeenPostId: defaultLocalPosts.length - 1,
-};
+}
 
 export const defaultFeeds: Feed[] = [
     {
@@ -79,7 +79,7 @@ export const defaultFeeds: Feed[] = [
         favicon: defaultImages.felfeleAssistant,
         followed: true,
     },
-];
+]
 
 export const defaultState: AppState = {
     contentFilters: [],
@@ -87,4 +87,4 @@ export const defaultState: AppState = {
     settings: defaultSettings,
     currentTimestamp: defaultCurrentTimestamp,
     rssPosts: defaultLocalPosts,
-};
+}

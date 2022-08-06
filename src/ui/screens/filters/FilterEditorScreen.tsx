@@ -1,84 +1,84 @@
-import * as React from 'react';
-import { useState } from 'react';
+import * as React from 'react'
+import { useState } from 'react'
 import {
     Alert,
     StyleSheet,
     View,
     Text,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import RNPickerSelect from 'react-native-picker-select';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import RNPickerSelect from 'react-native-picker-select'
 
-import { ContentFilter } from '../../../models/ContentFilter';
-import { ComponentColors, defaultTextProps, Colors } from '../../../styles';
-import { DAY, MONTH31, WEEK } from '../../../helpers/dateHelpers';
-import { SimpleTextInput } from '../../misc/SimpleTextInput';
-import { Debug } from '../../../helpers/Debug';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { WideButton } from '../../buttons/WideButton';
-import { TwoButton } from '../../buttons/TwoButton';
-import { errorDialog } from '../../../helpers/dialogs';
+import { ContentFilter } from '../../../models/ContentFilter'
+import { ComponentColors, defaultTextProps, Colors } from '../../../styles'
+import { DAY, MONTH31, WEEK } from '../../../helpers/dateHelpers'
+import { SimpleTextInput } from '../../misc/SimpleTextInput'
+import { Debug } from '../../../helpers/Debug'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { WideButton } from '../../buttons/WideButton'
+import { TwoButton } from '../../buttons/TwoButton'
+import { errorDialog } from '../../../helpers/dialogs'
 
 export interface DispatchProps {
-    onAddFilter: (filter: ContentFilter) => void;
-    onRemoveFilter: (filter: ContentFilter) => void;
+    onAddFilter: (filter: ContentFilter) => void
+    onRemoveFilter: (filter: ContentFilter) => void
 }
 
 export interface StateProps {
-    filter: ContentFilter;
-    navigation: TypedNavigation;
+    filter: ContentFilter
+    navigation: TypedNavigation
 }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps
 
 export function FilterEditorScreen(props: Props) {
-    const [filterText, setFilterText] = useState(props.filter.text);
-    const [filterValue, setFilterValue] = useState( 2 * WEEK);
+    const [filterText, setFilterText] = useState(props.filter.text)
+    const [filterValue, setFilterValue] = useState( 2 * WEEK)
 
     const goBack = () => {
-        props.navigation.goBack();
-    };
+        props.navigation.goBack()
+    }
 
     const onAddFilter = async () => {
         if (filterText.match(/^ ?$/) != null) {
-            await errorDialog('Keyword is empty!', 'Please enter a keyword');
-            return;
+            await errorDialog('Keyword is empty!', 'Please enter a keyword')
+            return
         }
         const filter: ContentFilter = {
             text: filterText,
             validUntil: filterValue,
             createdAt: Date.now(),
-        };
-        props.onAddFilter(filter);
-        goBack();
-    };
+        }
+        props.onAddFilter(filter)
+        goBack()
+    }
     const deleteFilterAndGoBack = () => {
-        props.onRemoveFilter(props.filter);
-        goBack();
-    };
+        props.onRemoveFilter(props.filter)
+        goBack()
+    }
     const onDeleteFilter = () => {
         const options: any[] = [
             { text: 'Yes', onPress: async () => deleteFilterAndGoBack() },
             { text: 'Cancel', onPress: () => Debug.log('Cancel Pressed'), style: 'cancel' },
-        ];
+        ]
 
         Alert.alert('Are you sure you want to delete the keyword?',
             undefined,
             options,
             { cancelable: true },
-        );
-    };
+        )
+    }
 
-    const isDelete = props.filter.text.length > 0;
+    const isDelete = props.filter.text.length > 0
     const addOrEditFilter = isDelete
         ? () => {
-            props.onRemoveFilter(props.filter);
-            onAddFilter();
+            props.onRemoveFilter(props.filter)
+            onAddFilter()
         }
         : onAddFilter
-    ;
+
 
     const button = isDelete
         ? <TwoButton
@@ -111,7 +111,7 @@ export function FilterEditorScreen(props: Props) {
             />}
             onPress={addOrEditFilter}
         />
-    ;
+
     return (
         <FragmentSafeAreaView>
             <NavigationHeader
@@ -154,7 +154,7 @@ export function FilterEditorScreen(props: Props) {
                 {button}
             </View>
         </FragmentSafeAreaView>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -211,4 +211,4 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.WHITE,
         color: ComponentColors.TEXT_COLOR,
     },
-});
+})

@@ -1,8 +1,8 @@
-import { HtmlUtils } from '../../src/helpers/HtmlUtils';
+import { HtmlUtils } from '../../src/helpers/HtmlUtils'
 
 test('match html attributes', () => {
-    const mimeType = 'application/rss+xml';
-    const matcher = [{name: 'type', value: mimeType}];
+    const mimeType = 'application/rss+xml'
+    const matcher = [{name: 'type', value: mimeType}]
     const link = {
         attrs: [
             {
@@ -10,15 +10,15 @@ test('match html attributes', () => {
                 value: mimeType,
             },
         ],
-    };
-    const result = HtmlUtils.matchAttributes(link, matcher);
+    }
+    const result = HtmlUtils.matchAttributes(link, matcher)
 
-    expect(result).toBe(true);
-});
+    expect(result).toBe(true)
+})
 
 test('match html attributes with multiple attributes', () => {
-    const mimeType = 'application/rss+xml';
-    const matcher = [{name: 'type', value: mimeType}];
+    const mimeType = 'application/rss+xml'
+    const matcher = [{name: 'type', value: mimeType}]
     const link = {
         attrs: [
             {
@@ -30,15 +30,15 @@ test('match html attributes with multiple attributes', () => {
                 value: 'y',
             },
         ],
-    };
-    const result = HtmlUtils.matchAttributes(link, matcher);
+    }
+    const result = HtmlUtils.matchAttributes(link, matcher)
 
-    expect(result).toBe(true);
-});
+    expect(result).toBe(true)
+})
 
 test('match multiple html attributes with multiple attributes', () => {
-    const mimeType = 'application/rss+xml';
-    const matcher = [{name: 'type', value: mimeType}, {name: 'type', value: 'vvv'}];
+    const mimeType = 'application/rss+xml'
+    const matcher = [{name: 'type', value: mimeType}, {name: 'type', value: 'vvv'}]
     const link = {
         attrs: [
             {
@@ -50,11 +50,11 @@ test('match multiple html attributes with multiple attributes', () => {
                 value: 'y',
             },
         ],
-    };
-    const result = HtmlUtils.matchAttributes(link, matcher);
+    }
+    const result = HtmlUtils.matchAttributes(link, matcher)
 
-    expect(result).toBe(false);
-});
+    expect(result).toBe(false)
+})
 
 test('find path in html document', () => {
     const html =
@@ -62,9 +62,9 @@ test('find path in html document', () => {
     <html>
         <head>
             <link>
-    `;
-    const document = HtmlUtils.parse(html);
-    const links = HtmlUtils.findPath(document, ['html', 'head', 'link']);
+    `
+    const document = HtmlUtils.parse(html)
+    const links = HtmlUtils.findPath(document, ['html', 'head', 'link'])
 
-    expect(links.length).toBe(1);
-});
+    expect(links.length).toBe(1)
+})

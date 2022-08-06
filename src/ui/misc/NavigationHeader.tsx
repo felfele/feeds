@@ -1,36 +1,36 @@
-import * as React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as React from 'react'
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { Colors, ComponentColors, DefaultNavigationBarHeight } from '../../styles';
-import { TouchableView, TOUCHABLE_VIEW_DEFAULT_HIT_SLOP } from './TouchableView';
-import { MediumText, RegularText } from './text';
-import { TypedNavigation } from '../../helpers/navigation';
+import { Colors, ComponentColors, DefaultNavigationBarHeight } from '../../styles'
+import { TouchableView, TOUCHABLE_VIEW_DEFAULT_HIT_SLOP } from './TouchableView'
+import { MediumText, RegularText } from './text'
+import { TypedNavigation } from '../../helpers/navigation'
 
 export interface ButtonProps {
-    label: string | React.ReactNode;
-    onPress: () => void;
-    disabled?: boolean;
-    testID?: string;
+    label: string | React.ReactNode
+    onPress: () => void
+    disabled?: boolean
+    testID?: string
 }
 
 interface HeaderProps {
-    leftButton?: ButtonProps;
-    rightButton1?: ButtonProps;
-    rightButton2?: ButtonProps;
-    title?: string;
-    titleImage?: React.ReactNode;
-    onPressTitle?: () => void;
-    onLongPressTitle?: () => void;
-    navigation?: TypedNavigation;
-    style?: StyleProp<ViewStyle>;
+    leftButton?: ButtonProps
+    rightButton1?: ButtonProps
+    rightButton2?: ButtonProps
+    title?: string
+    titleImage?: React.ReactNode
+    onPressTitle?: () => void
+    onLongPressTitle?: () => void
+    navigation?: TypedNavigation
+    style?: StyleProp<ViewStyle>
 }
 
-export type Props = HeaderProps;
+export type Props = HeaderProps
 
-const BUTTON_COLOR = Colors.WHITE;
+const BUTTON_COLOR = Colors.WHITE
 
-export const HeaderDefaultLeftButtonIcon = <Icon name={'arrow-left'} color={BUTTON_COLOR} size={24} />;
+export const HeaderDefaultLeftButtonIcon = <Icon name={'arrow-left'} color={BUTTON_COLOR} size={24} />
 
 export const NavigationHeader = (props: Props) => (
     <View style={[styles.headerContainer, props.style]}>
@@ -88,7 +88,7 @@ export const NavigationHeader = (props: Props) => (
             }
         </View>
     </View>
-);
+)
 
 const ButtonLabel = (props: { label?: string | React.ReactNode }) => {
     return typeof props.label === 'string'
@@ -96,8 +96,8 @@ const ButtonLabel = (props: { label?: string | React.ReactNode }) => {
                 {props.label}
             </RegularText>
         : <View>{props.label}</View>
-    ;
-};
+
+}
 
 const RightButton = (props: { onPress?: () => void, label?: string | React.ReactNode, testID?: string }) => {
     return (
@@ -109,8 +109,8 @@ const RightButton = (props: { onPress?: () => void, label?: string | React.React
         >
             <ButtonLabel label={props.label} />
         </TouchableView>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -152,4 +152,4 @@ const styles = StyleSheet.create({
     rightButtonContainer: {
         marginLeft: 30,
     },
-});
+})

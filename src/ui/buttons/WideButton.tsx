@@ -1,12 +1,12 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     TouchableWithoutFeedback,
     StyleSheet,
     View,
-} from 'react-native';
-import { Colors } from '../../styles';
-import { MediumText } from '../misc/text';
-import { ButtonProps } from './TwoButton';
+} from 'react-native'
+import { Colors } from '../../styles'
+import { MediumText } from '../misc/text'
+import { ButtonProps } from './TwoButton'
 
 export const WideButton = (props: ButtonProps) => {
     return (
@@ -18,8 +18,8 @@ export const WideButton = (props: ButtonProps) => {
                 </View>
             </View>
         </TouchableWithoutFeedback>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingRight: 6,
     },
-});
+})

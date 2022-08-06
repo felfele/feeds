@@ -1,50 +1,49 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     View,
     StyleSheet,
     Dimensions,
     ActivityIndicator,
-} from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+} from 'react-native'
+import QRCode from 'react-native-qrcode-svg'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { Colors, ComponentColors, DefaultNavigationBarHeight, defaultMediumFont } from '../../../styles';
-import { AppState } from '../../../reducers/AppState';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { TouchableView } from '../../misc/TouchableView';
-import { MediumText, RegularText } from '../../misc/text';
-import { WideButton } from '../../buttons/WideButton';
-import { upload } from '../../../swarm/Swarm';
-import { Debug } from '../../../helpers/Debug';
-import { errorDialog, shareDialog } from '../../../helpers/dialogs';
-import { FELFELE_FEEDS_MIME_TYPE } from '../../../helpers/feedHelpers';
-import { makeFeedsLinkMessage } from '../../../helpers/linkHelpers';
-import { LoadingView } from '../../misc/LoadingView';
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { Colors, ComponentColors, DefaultNavigationBarHeight, defaultMediumFont } from '../../../styles'
+import { AppState } from '../../../reducers/AppState'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { TouchableView } from '../../misc/TouchableView'
+import { MediumText, RegularText } from '../../misc/text'
+import { WideButton } from '../../buttons/WideButton'
+import { upload } from '../../../swarm/Swarm'
+import { Debug } from '../../../helpers/Debug'
+import { errorDialog, shareDialog } from '../../../helpers/dialogs'
+import { FELFELE_FEEDS_MIME_TYPE } from '../../../helpers/feedHelpers'
+import { makeFeedsLinkMessage } from '../../../helpers/linkHelpers'
+import { LoadingView } from '../../misc/LoadingView'
 
-const QRCodeWidth = Dimensions.get('window').width * 0.6;
+const QRCodeWidth = Dimensions.get('window').width * 0.6
 
 export interface StateProps {
-    navigation: TypedNavigation;
-    appState: AppState;
+    navigation: TypedNavigation
+    appState: AppState
 }
 
 export interface DispatchProps {
 }
 
-export type Props = StateProps & DispatchProps;
+export type Props = StateProps & DispatchProps
 
 type State = |
     {
-        type: 'saving';
+        type: 'saving',
     }
     |
     {
-        type: 'saved';
-        link: string;
+        type: 'saved',
+        link: string,
     }
-;
 
 const QRCodeView = (props: {navigation: TypedNavigation, qrCodeValue: string, onPressShare: () => void}) => (
     <View style={styles.qrViewContainer}>
@@ -71,45 +70,45 @@ const QRCodeView = (props: {navigation: TypedNavigation, qrCodeValue: string, on
             onPress={props.onPressShare}
         />
     </View>
-);
+)
 
 const uploadFeeds = async (appState: AppState): Promise<string> => {
     const exportedData = {
         feeds: appState.feeds.filter(feed => !feed.url.startsWith('local/')),
-    };
-    const data = JSON.stringify(exportedData);
+    }
+    const data = JSON.stringify(exportedData)
     const link = await upload(
         data,
         appState.settings.swarmGatewayAddress,
         {
             'Content-type': FELFELE_FEEDS_MIME_TYPE,
         }
-    );
-    return link;
-};
+    )
+    return link
+}
 
 const showShareFeedsLinkDialog = (link: string) => {
-    const title = 'Share your feeds';
-    const message = makeFeedsLinkMessage(link);
-    shareDialog(title, message);
-};
+    const title = 'Share your feeds'
+    const message = makeFeedsLinkMessage(link)
+    shareDialog(title, message)
+}
 
 export class ExportScreen extends React.PureComponent<Props, State> {
     public state: State = {
         type: 'saving',
-    };
+    }
 
     public async componentDidMount() {
         try {
-            const link = await uploadFeeds(this.props.appState);
-            Debug.log('Backup.componentDidMount', {link});
+            const link = await uploadFeeds(this.props.appState)
+            Debug.log('Backup.componentDidMount', {link})
             this.setState({
                 type: 'saved',
                 link,
-            });
+            })
         } catch (e) {
-            await errorDialog('Error', 'Failed to export feeds, check your network connection', 'Bummer!');
-            this.props.navigation.goBack(null);
+            await errorDialog('Error', 'Failed to export feeds, check your network connection', 'Bummer!')
+            this.props.navigation.goBack(null)
         }
     }
 
@@ -194,4 +193,4 @@ const styles = StyleSheet.create({
         fontSize: 14,
         alignSelf: 'center',
     },
-});
+})

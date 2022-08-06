@@ -1,53 +1,53 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     View,
     FlatList,
     RefreshControl,
     LayoutAnimation,
-} from 'react-native';
-import { Post } from '../../models/Post';
-import { ComponentColors, Colors } from '../../styles';
-import { Feed } from '../../models/Feed';
-import { CardContainer } from '../card/CardContainer';
-import { Props as NavHeaderProps } from './NavigationHeader';
-import { TypedNavigation } from '../../helpers/navigation';
-import { FragmentSafeAreaView } from './FragmentSafeAreaView';
+} from 'react-native'
+import { Post } from '../../models/Post'
+import { ComponentColors, Colors } from '../../styles'
+import { Feed } from '../../models/Feed'
+import { CardContainer } from '../card/CardContainer'
+import { Props as NavHeaderProps } from './NavigationHeader'
+import { TypedNavigation } from '../../helpers/navigation'
+import { FragmentSafeAreaView } from './FragmentSafeAreaView'
 
 export interface DispatchProps {
-    onRefreshPosts: (feeds: Array<Feed>) => void;
+    onRefreshPosts: (feeds: Array<Feed>) => void
 }
 
 export interface StateProps {
-    navigation: TypedNavigation;
-    posts: Post[];
-    feeds: Array<Feed>;
+    navigation: TypedNavigation
+    posts: Post[]
+    feeds: Array<Feed>
     children: {
         // WARNING, type parameter included for reference, but it does not typecheck
-        listHeader?: React.ReactElement<any>;
-        listFooter?: React.ReactElement<any>;
-        navigationHeader?: React.ReactElement<NavHeaderProps>;
-        placeholder?: React.ReactElement<any>;
-    };
+        listHeader?: React.ReactElement<any>
+        listFooter?: React.ReactElement<any>
+        navigationHeader?: React.ReactElement<NavHeaderProps>
+        placeholder?: React.ReactElement<any>
+    }
 }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps
 
 interface RefreshableFeedState {
-    selectedPost: Post | null;
-    isRefreshing: boolean;
+    selectedPost: Post | null
+    isRefreshing: boolean
 }
 
 export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedState> {
     public state: RefreshableFeedState = {
         selectedPost: null,
         isRefreshing: false,
-    };
+    }
 
-    private flatList?: FlatList<Post> = undefined;
+    private flatList?: FlatList<Post> = undefined
 
     public scrollToTop = () => {
         if (this.flatList != null) {
-            this.flatList.scrollToOffset({offset: 0});
+            this.flatList.scrollToOffset({offset: 0})
         }
     }
 
@@ -55,7 +55,7 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
         if (this.props.posts !== prevProps.posts) {
             this.setState({
                 isRefreshing: false,
-            });
+            })
         }
     }
 
@@ -93,26 +93,26 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                     ref={value => this.flatList = value || undefined}
                 />
             </FragmentSafeAreaView>
-        );
+        )
     }
 
     private onRefresh() {
         this.setState({
             isRefreshing: true,
-        });
-        this.props.onRefreshPosts(this.props.feeds);
+        })
+        this.props.onRefreshPosts(this.props.feeds)
     }
 
     private isPostSelected = (post: Post): boolean => {
-        return this.state.selectedPost != null && this.state.selectedPost._id === post._id;
+        return this.state.selectedPost != null && this.state.selectedPost._id === post._id
     }
 
     private togglePostSelection = (post: Post) => {
-        LayoutAnimation.easeInEaseOut();
+        LayoutAnimation.easeInEaseOut()
         if (this.isPostSelected(post)) {
-            this.setState({ selectedPost: null });
+            this.setState({ selectedPost: null })
         } else {
-            this.setState({ selectedPost: post });
+            this.setState({ selectedPost: post })
         }
     }
 
@@ -125,8 +125,8 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                 }}
                 />
             </View>
-        );
+        )
     }
 }
 
-const HeaderOffset = 20;
+const HeaderOffset = 20

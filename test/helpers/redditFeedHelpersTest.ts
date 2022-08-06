@@ -1,4 +1,4 @@
-import { makeCanonicalRedditLink } from '../../src/helpers/redditFeedHelpers';
+import { makeCanonicalRedditLink } from '../../src/helpers/redditFeedHelpers'
 
 describe('Make canonical reddit link from any reddit link', () => {
     it('should work with all possible versions', () => {
@@ -10,7 +10,7 @@ describe('Make canonical reddit link from any reddit link', () => {
             'https://reddit.com/r/memes.rss',
             'https://wwww.reddit.com/r/memes',
             'https://www.reddit.com/r/memes/comments/fpvti0/thats_how_it_all_happened/',
-        ];
+        ]
         const expected = [
             'https://reddit.com/r/memes',
             'https://reddit.com/r/memes',
@@ -19,10 +19,10 @@ describe('Make canonical reddit link from any reddit link', () => {
             'https://reddit.com/r/memes',
             'https://reddit.com/r/memes',
             'https://reddit.com/r/memes',
-        ];
+        ]
 
-        const result = inputs.map(input => makeCanonicalRedditLink(input)?.canonicalUrl);
+        const result = inputs.map(input => makeCanonicalRedditLink(input)?.canonicalUrl)
 
-        expect(result).toEqual(expected);
-    });
-});
+        expect(result).toEqual(expected)
+    })
+})

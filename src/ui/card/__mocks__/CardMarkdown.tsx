@@ -1,1 +1,1 @@
-export const CardMarkdown = () => null;
+export const CardMarkdown = () => null

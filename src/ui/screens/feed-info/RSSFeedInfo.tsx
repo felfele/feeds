@@ -1,47 +1,47 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     StyleSheet,
     View,
     Dimensions,
-} from 'react-native';
+} from 'react-native'
 
-import { Feed } from '../../../models/Feed';
-import { ComponentColors, Colors } from '../../../styles';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as Dialogs from '../../../helpers/dialogs';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { RegularText } from '../../misc/text';
-import { ImageDataView } from '../../misc/ImageDataView';
-import { getFeedImage } from '../../../helpers/feedHelpers';
-import { WideButton } from '../../buttons/WideButton';
-import { TwoButton } from '../../buttons/TwoButton';
-import QRCode from 'react-native-qrcode-svg';
+import { Feed } from '../../../models/Feed'
+import { ComponentColors, Colors } from '../../../styles'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import * as Dialogs from '../../../helpers/dialogs'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { RegularText } from '../../misc/text'
+import { ImageDataView } from '../../misc/ImageDataView'
+import { getFeedImage } from '../../../helpers/feedHelpers'
+import { WideButton } from '../../buttons/WideButton'
+import { TwoButton } from '../../buttons/TwoButton'
+import QRCode from 'react-native-qrcode-svg'
 
-const IMAGE_WIDTH = Dimensions.get('window').width * 0.6;
+const IMAGE_WIDTH = Dimensions.get('window').width * 0.6
 
 export interface DispatchProps {
-    onFollowFeed: (feed: Feed) => void;
-    onRemoveFeed: (feed: Feed) => void;
-    onUnfollowFeed: (feed: Feed) => void;
+    onFollowFeed: (feed: Feed) => void
+    onRemoveFeed: (feed: Feed) => void
+    onUnfollowFeed: (feed: Feed) => void
 }
 
 export interface StateProps {
-    feed: Feed;
-    navigation: TypedNavigation;
-    isKnownFeed: boolean;
+    feed: Feed
+    navigation: TypedNavigation
+    isKnownFeed: boolean
 }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps
 
 interface State {
-    imageToShow: 'image' | 'qrcode';
+    imageToShow: 'image' | 'qrcode'
 }
 
-const PUBLIC_CHANNEL_LABEL = 'This is a public feed.';
-const NOT_FOLLOWED_STATUS = 'You are not following it.';
-const FOLLOWED_STATUS = 'You are following it.';
+const PUBLIC_CHANNEL_LABEL = 'This is a public feed.'
+const NOT_FOLLOWED_STATUS = 'You are not following it.'
+const FOLLOWED_STATUS = 'You are following it.'
 
 const QRCodeView = (props: {data: string}) => (
     <View style={styles.imageStyle}>
@@ -52,15 +52,15 @@ const QRCodeView = (props: {data: string}) => (
             backgroundColor={ComponentColors.BACKGROUND_COLOR}
         />
     </View>
-);
+)
 
 export class RSSFeedInfo extends React.Component<Props, State> {
     public state: State = {
         imageToShow: 'image',
-    };
+    }
 
     constructor(props: Props) {
-        super(props);
+        super(props)
     }
 
     public render() {
@@ -78,7 +78,7 @@ export class RSSFeedInfo extends React.Component<Props, State> {
                 style: styles.buttonStyle,
                 onPress: () => this.props.onFollowFeed(this.props.feed),
             }
-        ;
+
         const imageToShow = this.state.imageToShow === 'image'
             ? <ImageDataView
                 source={getFeedImage(this.props.feed)}
@@ -86,7 +86,7 @@ export class RSSFeedInfo extends React.Component<Props, State> {
                 resizeMode='cover'
             />
             : <QRCodeView data={this.props.feed.feedUrl} />
-        ;
+
         const rightButton = this.state.imageToShow === 'image'
             ? {
                 label: <Icon name='qrcode' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
@@ -96,7 +96,7 @@ export class RSSFeedInfo extends React.Component<Props, State> {
                 label: <Icon name='image' size={24} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
                 onPress: () => this.setState({imageToShow: 'image'}),
             }
-        ;
+
         return (
             <FragmentSafeAreaView>
                 <NavigationHeader
@@ -131,16 +131,16 @@ export class RSSFeedInfo extends React.Component<Props, State> {
                     }
                 </View>
             </FragmentSafeAreaView>
-        );
+        )
     }
 
     private onUnfollowFeed = async () => {
         const confirmUnfollow = await Dialogs.areYouSureDialog(
             'Are you sure you want to unfollow?',
             'This will remove this feed from your feeds and you will no longer get updates from it.'
-        );
+        )
         if (confirmUnfollow) {
-            this.props.onUnfollowFeed(this.props.feed);
+            this.props.onUnfollowFeed(this.props.feed)
         }
     }
 
@@ -148,9 +148,9 @@ export class RSSFeedInfo extends React.Component<Props, State> {
         const confirmUnfollow = await Dialogs.areYouSureDialog(
             'Are you sure you want to delete feed?',
             'It will be removed from your feed list.'
-        );
+        )
         if (confirmUnfollow) {
-            this.props.onRemoveFeed(this.props.feed);
+            this.props.onRemoveFeed(this.props.feed)
         }
     }
 
@@ -175,4 +175,4 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginVertical: 20,
     },
-});
+})

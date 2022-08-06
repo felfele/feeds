@@ -1,12 +1,12 @@
-import { ActionsUnion } from './types';
-import { ActionTypes } from './ActionTypes';
-import { createAction } from './actionHelpers';
-import { Feed } from '../models/Feed';
-import { ContentFilter } from '../models/ContentFilter';
-import { AppState } from '../reducers/AppState';
-import { Post } from '../models/Post';
+import { ActionsUnion } from './types'
+import { ActionTypes } from './ActionTypes'
+import { createAction } from './actionHelpers'
+import { Feed } from '../models/Feed'
+import { ContentFilter } from '../models/ContentFilter'
+import { AppState } from '../reducers/AppState'
+import { Post } from '../models/Post'
 
-export type Actions = ActionsUnion<typeof Actions & typeof InternalActions>;
+export type Actions = ActionsUnion<typeof Actions & typeof InternalActions>
 
 export const InternalActions = {
     addFeed: (feed: Feed) =>
@@ -17,7 +17,7 @@ export const InternalActions = {
         createAction(ActionTypes.UPDATE_FEED, { feedUrl, feed }),
     appStateSet: (appState: AppState) =>
         createAction(ActionTypes.APP_STATE_SET, { appState }),
-};
+}
 
 export const Actions = {
     addContentFilter: (text: string, createdAt: number, validUntil: number) =>
@@ -59,4 +59,4 @@ export const Actions = {
 
     appStateReset: () =>
         createAction(ActionTypes.APP_STATE_RESET),
-};
+}

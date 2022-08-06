@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { View, Platform } from 'react-native';
-import { DefaultTabBarHeight, ComponentColors } from '../../styles';
+import * as React from 'react'
+import { View, Platform } from 'react-native'
+import { DefaultTabBarHeight, ComponentColors } from '../../styles'
 
 export const TabBarPlaceholder = (props: { color?: string }) => {
     if (Platform.OS === 'ios') {
@@ -11,9 +11,9 @@ export const TabBarPlaceholder = (props: { color?: string }) => {
                     backgroundColor: props.color ? props.color : ComponentColors.BACKGROUND_COLOR,
                 }}
             />
-        );
+        )
 
     } else {
-        return null;
+        return null
     }
-};
+}

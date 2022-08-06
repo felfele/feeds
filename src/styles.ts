@@ -1,10 +1,10 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native'
 
 export const IconSize = {
     LARGE_LIST_ICON: 40,
     MEDIUM_LIST_ICON: 24,
     SMALL_LIST_ICON: 10,
-};
+}
 
 export const Colors = {
     BLACK: '#000000',
@@ -23,7 +23,7 @@ export const Colors = {
     BRAND_PURPLE: '#6200EA',
     BRAND_PURPLE_LIGHT: '#BA76FA',
     BRAND_PURPLE_DARK: '#3700B4',
-};
+}
 
 export const ComponentColors = {
     STRONG_TEXT: '#303030',
@@ -47,18 +47,18 @@ export const ComponentColors = {
         : Colors.BRAND_PURPLE
     ,
 
-};
+}
 
-export const defaultBoldFont = 'Roboto-Bold';
-export const defaultRegularFont = 'Roboto-Regular';
-export const defaultMediumFont = 'Roboto-Medium';
-export const defaultFont = defaultRegularFont;
+export const defaultBoldFont = 'Roboto-Bold'
+export const defaultRegularFont = 'Roboto-Regular'
+export const defaultMediumFont = 'Roboto-Medium'
+export const defaultFont = defaultRegularFont
 export const defaultTextProps = {
     style: {
       fontFamily: defaultFont,
       fontSize: 15,
     },
-};
+}
 
 export const DefaultStyle = StyleSheet.create({
     container: {
@@ -77,9 +77,9 @@ export const DefaultStyle = StyleSheet.create({
         width: IconSize.MEDIUM_LIST_ICON,
         height: IconSize.MEDIUM_LIST_ICON,
     },
-});
+})
 
-export const DefaultNavigationBarHeight = 44;
-export const DefaultTabBarHeight = 50;
+export const DefaultNavigationBarHeight = 44
+export const DefaultTabBarHeight = 50
 
-export const BACK_ICON_NAME = 'md-arrow-back';
+export const BACK_ICON_NAME = 'md-arrow-back'

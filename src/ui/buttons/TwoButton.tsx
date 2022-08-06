@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     GestureResponderEvent,
     TouchableWithoutFeedback,
@@ -7,34 +7,34 @@ import {
     StyleProp,
     ViewStyle,
     TextStyle,
-} from 'react-native';
-import { Colors, ComponentColors } from '../../styles';
-import { MediumText } from '../misc/text';
+} from 'react-native'
+import { Colors, ComponentColors } from '../../styles'
+import { MediumText } from '../misc/text'
 
 interface Props {
-    leftButton: ButtonProps;
-    rightButton: ButtonProps;
+    leftButton: ButtonProps
+    rightButton: ButtonProps
 }
 
 export interface ButtonProps {
-    label?: string;
-    icon?: React.ReactNode;
-    onPress?: (event?: GestureResponderEvent) => void;
-    style?: StyleProp<ViewStyle>;
-    fontStyle?: StyleProp<TextStyle>;
-    disabled?: boolean;
+    label?: string
+    icon?: React.ReactNode
+    onPress?: (event?: GestureResponderEvent) => void
+    style?: StyleProp<ViewStyle>
+    fontStyle?: StyleProp<TextStyle>
+    disabled?: boolean
 }
 
 export const TwoButton = (props: Props) => {
-    const { style: leftButtonStyle, ...leftButtonProps } = props.leftButton;
-    const { style: rightButtonStyle, ...rightButtonProps } = props.rightButton;
+    const { style: leftButtonStyle, ...leftButtonProps } = props.leftButton
+    const { style: rightButtonStyle, ...rightButtonProps } = props.rightButton
     return (
         <View style={{ flexDirection: 'row' }}>
             <Button {...leftButtonProps} style={[{ marginRight: 5 }, leftButtonStyle]}/>
             <Button {...rightButtonProps} style={[{ marginLeft: 5 }, rightButtonStyle]}/>
         </View>
-    );
-};
+    )
+}
 
 const Button = (props: ButtonProps) => {
     return (
@@ -46,8 +46,8 @@ const Button = (props: ButtonProps) => {
                 </View>
             </View>
         </TouchableWithoutFeedback>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -73,4 +73,4 @@ const styles = StyleSheet.create({
         paddingRight: 6,
         paddingVertical: 5,
     },
-});
+})

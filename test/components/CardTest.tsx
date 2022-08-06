@@ -1,13 +1,13 @@
-import * as React from 'react';
-import { Card } from '../../src/ui/card/Card';
-import { Post } from '../../src/models/Post';
-import { Author } from '../../src/models/Author';
-import TestRenderer from 'react-test-renderer';
-import { Debug } from '../../src/helpers/Debug';
-import { TypedNavigation } from '../../src/helpers/navigation';
+import * as React from 'react'
+import { Card } from '../../src/ui/card/Card'
+import { Post } from '../../src/models/Post'
+import { Author } from '../../src/models/Author'
+import TestRenderer from 'react-test-renderer'
+import { Debug } from '../../src/helpers/Debug'
+import { TypedNavigation } from '../../src/helpers/navigation'
 
-Debug.setDebugMode(true);
-jest.mock('../../src/ui/card/CardMarkdown');
+Debug.setDebugMode(true)
+jest.mock('../../src/ui/card/CardMarkdown')
 
 const mockNavigation: TypedNavigation = {
     goBack: (routeKey?: string | null) => true,
@@ -17,14 +17,14 @@ const mockNavigation: TypedNavigation = {
     popToTop: () => {},
     getParam: (param: any) => param.name,
     setParams: (newParams: any) => true,
-};
+}
 
 describe('card test', () => {
     const testAuthor: Author = {
         name: 'Test Elek',
         uri: '',
         image: {},
-    };
+    }
 
     const testPostWithoutImage: Post = {
         _id: 0,
@@ -34,7 +34,7 @@ describe('card test', () => {
 
     Let's see if we can assert something useful.`,
         author: testAuthor,
-    };
+    }
 
     const testPostWithImage: Post = {
         _id: 0,
@@ -44,7 +44,7 @@ describe('card test', () => {
 
     Let's see if we can assert something useful.`,
         author: testAuthor,
-    };
+    }
 
     const testPostWithMultipleImages: Post = {
         _id: 0,
@@ -54,7 +54,7 @@ describe('card test', () => {
 
     Let's see if we can assert something useful.`,
         author: testAuthor,
-    };
+    }
 
     it('should render unselected post without images with the following components: Post, CardTop, without CardButtonList', () => {
         const result = TestRenderer.create(
@@ -70,11 +70,11 @@ describe('card test', () => {
                 authorFeed={undefined}
                 showActions={false}
             />
-        ).root;
-        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
-        expect(result.findByProps({ testID: 'CardTop' }));
-        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0);
-    });
+        ).root
+        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }))
+        expect(result.findByProps({ testID: 'CardTop' }))
+        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0)
+    })
 
     it('should render selected post without images with the following components: Post, CardTop, CardButtonList', () => {
         const result = TestRenderer.create(
@@ -90,11 +90,11 @@ describe('card test', () => {
                 authorFeed={undefined}
                 showActions={false}
             />
-        ).root;
-        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
-        expect(result.findByProps({ testID: 'CardTop' }));
-        expect(result.findAllByProps({ testID: 'CardButtonList' }));
-    });
+        ).root
+        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }))
+        expect(result.findByProps({ testID: 'CardTop' }))
+        expect(result.findAllByProps({ testID: 'CardButtonList' }))
+    })
 
     it('should render unselected post with image with the following components: Post, CardTop, Image, without CardButtonList', () => {
         const result = TestRenderer.create(
@@ -110,12 +110,12 @@ describe('card test', () => {
                 authorFeed={undefined}
                 showActions={false}
             />
-        ).root;
-        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
-        expect(result.findByProps({ testID: 'CardTop' }));
-        expect(result.findByProps({ testID: 'test-image-uri' }));
-        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0);
-    });
+        ).root
+        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }))
+        expect(result.findByProps({ testID: 'CardTop' }))
+        expect(result.findByProps({ testID: 'test-image-uri' }))
+        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0)
+    })
 
     it('should render unselected post with multiple images with the following components: Post, CardTop, without CardButtonList', () => {
         const result = TestRenderer.create(
@@ -131,11 +131,11 @@ describe('card test', () => {
                 authorFeed={undefined}
                 showActions={false}
             />
-        ).root;
-        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
-        expect(result.findByProps({ testID: 'CardTop' }));
-        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0);
-    });
+        ).root
+        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }))
+        expect(result.findByProps({ testID: 'CardTop' }))
+        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0)
+    })
 
     it('should render selected post with image with the following components: Post, CardTop, Image, CardButtonList', () => {
         const result = TestRenderer.create(
@@ -151,11 +151,11 @@ describe('card test', () => {
                 authorFeed={undefined}
                 showActions={false}
             />
-        ).root;
-        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }));
-        expect(result.findByProps({ testID: 'CardTop' }));
-        expect(result.findByProps({ testID: 'test-image-uri' }));
-        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0);
-    });
+        ).root
+        expect(result.findByProps({ testID: `YourFeed/Post${result.props.post._id}` }))
+        expect(result.findByProps({ testID: 'CardTop' }))
+        expect(result.findByProps({ testID: 'test-image-uri' }))
+        expect(result.findAllByProps({ testID: 'CardButtonList' }).length).toEqual(0)
+    })
 
-});
+})

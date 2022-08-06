@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Colors, ComponentColors } from '../../styles';
-import { BoldText, RegularText } from './text';
+import * as React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Colors, ComponentColors } from '../../styles'
+import { BoldText, RegularText } from './text'
 
 interface Props {
-    image?: React.ReactNode;
-    boldText: string;
-    regularText: string;
+    image?: React.ReactNode
+    boldText: string
+    regularText: string
 }
 
 export const PlaceholderCard = (props: Props) => {
@@ -23,8 +23,8 @@ export const PlaceholderCard = (props: Props) => {
             </View>
 
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
         backgroundColor: ComponentColors.BACKGROUND_COLOR,
         height: 10,
     },
-});
+})

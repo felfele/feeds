@@ -1,25 +1,25 @@
-import * as React from 'react';
-import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
-import { ComponentColors } from '../../../styles';
-import { RegularText } from '../../misc/text';
-import { SubCategoryMap } from '../../../models/recommendation/NewsSource';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { RowItem } from '../../buttons/RowButton';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView} from '../../misc/FragmentSafeAreaView';
-import { Feed } from '../../../models/Feed';
-import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
+import * as React from 'react'
+import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native'
+import { ComponentColors } from '../../../styles'
+import { RegularText } from '../../misc/text'
+import { SubCategoryMap } from '../../../models/recommendation/NewsSource'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { RowItem } from '../../buttons/RowButton'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView} from '../../misc/FragmentSafeAreaView'
+import { Feed } from '../../../models/Feed'
+import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder'
 
-const SUBCATEGORIES_LABEL = 'SUBCATEGORIES';
+const SUBCATEGORIES_LABEL = 'SUBCATEGORIES'
 
 export interface StateProps {
-    subCategories: SubCategoryMap<Feed>;
-    navigation: TypedNavigation;
-    title: string;
+    subCategories: SubCategoryMap<Feed>
+    navigation: TypedNavigation
+    title: string
 }
 
 export interface OwnProps {
-    navigation: TypedNavigation;
+    navigation: TypedNavigation
 }
 
 export interface DispatchProps { }
@@ -37,8 +37,8 @@ export const SubCategoriesScreen = (props: StateProps & DispatchProps) => {
                     categoryName: subCategoryName,
                 })}
             />
-        );
-    });
+        )
+    })
     return (
         <FragmentSafeAreaView>
             <View style={{flex: 1}}>
@@ -52,8 +52,8 @@ export const SubCategoriesScreen = (props: StateProps & DispatchProps) => {
                 </ScrollView>
             </View>
         </FragmentSafeAreaView>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     label: {
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
         paddingBottom: 7,
         color: ComponentColors.TEXT_COLOR,
     },
-});
+})

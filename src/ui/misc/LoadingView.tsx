@@ -1,13 +1,13 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     View,
     StyleSheet,
     Dimensions,
     ActivityIndicator,
-} from 'react-native';
+} from 'react-native'
 
-import { RegularText } from './text';
-import { ComponentColors, Colors } from '../../styles';
+import { RegularText } from './text'
+import { ComponentColors, Colors } from '../../styles'
 
 export const LoadingView = (props: {text: string}) => (
     <View style={styles.container}>
@@ -16,7 +16,7 @@ export const LoadingView = (props: {text: string}) => (
             <ActivityIndicator size='large' color='grey'/>
         </View>
     </View>
-);
+)
 
 const styles = StyleSheet.create({
         container: {
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 30,
     },
-});
+})

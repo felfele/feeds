@@ -1,35 +1,35 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     StyleSheet,
     View,
     Text,
     ActivityIndicator,
-} from 'react-native';
-import { ComponentColors, Colors } from '../../../styles';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
+} from 'react-native'
+import { ComponentColors, Colors } from '../../../styles'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
 
 export interface DispatchProps {
-    onLoad: () => void;
+    onLoad: () => void
 }
 
 export interface StateProps {
-    title: string | undefined;
-    navigation: TypedNavigation;
+    title: string | undefined
+    navigation: TypedNavigation
 }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps
 
 export class RSSFeedLoader extends React.Component<Props> {
     public async componentDidMount() {
-        this.props.onLoad();
+        this.props.onLoad()
     }
 
     public render() {
         const icon = (name: string, size: number = 20) =>
-            <Icon name={name} size={size} color={ComponentColors.NAVIGATION_BUTTON_COLOR}/>;
+            <Icon name={name} size={size} color={ComponentColors.NAVIGATION_BUTTON_COLOR}/>
         return (
             <FragmentSafeAreaView>
                 <NavigationHeader
@@ -47,7 +47,7 @@ export class RSSFeedLoader extends React.Component<Props> {
                     </View>
                 </View>
             </FragmentSafeAreaView>
-        );
+        )
     }
 }
 
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 30,
     },
-});
+})

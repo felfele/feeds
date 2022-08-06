@@ -1,47 +1,47 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     View,
     KeyboardAvoidingView,
     Text,
     StyleSheet,
     ScrollView,
-} from 'react-native';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+} from 'react-native'
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { SimpleTextInput } from '../../misc/SimpleTextInput';
-import { Colors, ComponentColors } from '../../../styles';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { RowItem } from '../../buttons/RowButton';
-import * as Swarm from '../../../swarm/Swarm';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { safeFetch } from '../../../helpers/safeFetch';
-import { Debug } from '../../../helpers/Debug';
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { SimpleTextInput } from '../../misc/SimpleTextInput'
+import { Colors, ComponentColors } from '../../../styles'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { RowItem } from '../../buttons/RowButton'
+import * as Swarm from '../../../swarm/Swarm'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { safeFetch } from '../../../helpers/safeFetch'
+import { Debug } from '../../../helpers/Debug'
 
 export interface StateProps {
-    swarmGatewayAddress: string;
-    navigation: TypedNavigation;
+    swarmGatewayAddress: string
+    navigation: TypedNavigation
 }
 
 export interface DispatchProps {
-    onChangeSwarmGatewayAddress: (address: string) => void;
+    onChangeSwarmGatewayAddress: (address: string) => void
 }
 
-export type Props = StateProps & DispatchProps;
+export type Props = StateProps & DispatchProps
 
 export interface State {
 }
 
 const pingSwarm = async (props: Props) => {
     try {
-        const url = props.swarmGatewayAddress + '/';
-        const result = await safeFetch(url);
-        const hash = await Swarm.upload('hello', props.swarmGatewayAddress);
-        Debug.log('SwarmSettings.pingSwarm', {result, hash});
+        const url = props.swarmGatewayAddress + '/'
+        const result = await safeFetch(url)
+        const hash = await Swarm.upload('hello', props.swarmGatewayAddress)
+        Debug.log('SwarmSettings.pingSwarm', {result, hash})
     } catch (e) {
-        Debug.log('SwarmSettings.pingSwarm', e);
+        Debug.log('SwarmSettings.pingSwarm', e)
     }
-};
+}
 
 export const SwarmSettings = (props: Props) => (
     <FragmentSafeAreaView>
@@ -105,7 +105,7 @@ export const SwarmSettings = (props: Props) => (
             </KeyboardAvoidingView>
         </ScrollView>
     </FragmentSafeAreaView>
-);
+)
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -135,4 +135,4 @@ const styles = StyleSheet.create({
         paddingBottom: 2,
         color: Colors.GRAY,
     },
-});
+})

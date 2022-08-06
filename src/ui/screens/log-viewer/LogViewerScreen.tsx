@@ -1,41 +1,41 @@
-import * as React from 'react';
+import * as React from 'react'
 import { View,
     Text,
     StyleSheet,
     FlatList,
     Platform,
     Dimensions,
-} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
+} from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { clearLog, filteredLog, setLogFilter } from '../../../helpers/log';
-import { Colors, ComponentColors, DefaultTabBarHeight } from '../../../styles';
-import { SimpleTextInput } from '../../misc/SimpleTextInput';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { clearLog, filteredLog, setLogFilter } from '../../../helpers/log'
+import { Colors, ComponentColors, DefaultTabBarHeight } from '../../../styles'
+import { SimpleTextInput } from '../../misc/SimpleTextInput'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
 
 export interface StateProps {
-    currentTimestamp: number;
-    navigation: TypedNavigation;
+    currentTimestamp: number
+    navigation: TypedNavigation
 }
 
 export interface DispatchProps {
-    onTickTime: () => void;
+    onTickTime: () => void
 }
 
-export type Props = StateProps & DispatchProps;
+export type Props = StateProps & DispatchProps
 
 export class LogViewerScreen extends React.PureComponent<Props> {
-    private tickInterval: any = null;
+    private tickInterval: any = null
 
     public componentDidMount = () => {
-        this.tickInterval = setInterval(() => this.props.onTickTime(), 1000);
+        this.tickInterval = setInterval(() => this.props.onTickTime(), 1000)
     }
 
     public componentWillUnmount = () => {
-        clearInterval(this.tickInterval);
-        this.tickInterval = null;
+        clearInterval(this.tickInterval)
+        this.tickInterval = null
     }
 
     public render = () => (
@@ -45,8 +45,8 @@ export class LogViewerScreen extends React.PureComponent<Props> {
                 rightButton1={{
                     label: 'Clear',
                     onPress: () => {
-                        clearLog();
-                        this.props.onTickTime();
+                        clearLog()
+                        this.props.onTickTime()
                     },
                 }}
                 title='Log viewer'
@@ -62,8 +62,8 @@ export class LogViewerScreen extends React.PureComponent<Props> {
                             placeholder='Filter logs'
                             placeholderTextColor={Colors.LIGHT_GRAY}
                             onChangeText={(text) => {
-                                setLogFilter(text.toLowerCase());
-                                this.props.onTickTime();
+                                setLogFilter(text.toLowerCase())
+                                this.props.onTickTime()
                             }}
                         />
                     </View>
@@ -82,7 +82,7 @@ export class LogViewerScreen extends React.PureComponent<Props> {
     )
 }
 
-const fontFamily = Platform.OS === 'ios' ? 'Courier' : 'monospace';
+const fontFamily = Platform.OS === 'ios' ? 'Courier' : 'monospace'
 const styles = StyleSheet.create({
     logLineContainer: {
     },
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
         paddingTop: 6,
         color: Colors.DARK_GRAY,
     },
-});
+})

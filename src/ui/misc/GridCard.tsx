@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { TouchableView, ZERO_HIT_SLOP } from './TouchableView';
+import * as React from 'react'
+import { TouchableView, ZERO_HIT_SLOP } from './TouchableView'
 import {
     Image,
     View,
@@ -8,30 +8,30 @@ import {
     Dimensions,
     StyleProp,
     ImageStyle,
-} from 'react-native';
-import { Colors } from '../../styles';
-import { MediumText } from './text';
-import { ImageDataView } from './ImageDataView';
-import { ImageData, BundledImage } from '../../models/ImageData';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+} from 'react-native'
+import { Colors } from '../../styles'
+import { MediumText } from './text'
+import { ImageDataView } from './ImageDataView'
+import { ImageData, BundledImage } from '../../models/ImageData'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 interface Props {
-    title: string;
-    onPress: (event: GestureResponderEvent) => void;
-    image: ImageData;
-    imageStyle?: StyleProp<ImageStyle>;
-    defaultImage?: BundledImage;
-    size: number;
-    isSelected: boolean;
+    title: string
+    onPress: (event: GestureResponderEvent) => void
+    image: ImageData
+    imageStyle?: StyleProp<ImageStyle>
+    defaultImage?: BundledImage
+    size: number
+    isSelected: boolean
 }
 
-export const GRID_SPACING = 10;
-export const GRID_CARD_COUNT_IN_ROW = 3;
+export const GRID_SPACING = 10
+export const GRID_CARD_COUNT_IN_ROW = 3
 
 export const getGridCardSize = () => {
-    const windowWidth = Dimensions.get('window').width;
-    return Math.floor((windowWidth - GRID_SPACING * (GRID_CARD_COUNT_IN_ROW + 1)) / GRID_CARD_COUNT_IN_ROW);
-};
+    const windowWidth = Dimensions.get('window').width
+    return Math.floor((windowWidth - GRID_SPACING * (GRID_CARD_COUNT_IN_ROW + 1)) / GRID_CARD_COUNT_IN_ROW)
+}
 
 export const GridCard = React.memo((props: Props) => (
     <TouchableView style={styles.feedCard} onPress={props.onPress} hitSlop={ZERO_HIT_SLOP}>
@@ -59,7 +59,7 @@ export const GridCard = React.memo((props: Props) => (
             </View>
         }
     </TouchableView>
-));
+))
 
 const styles = StyleSheet.create({
     label: {
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         justifyContent: 'center',
     },
-});
+})

@@ -1,23 +1,23 @@
-import * as React from 'react';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { ScrollView, StyleSheet, Linking, View } from 'react-native';
-import { Colors } from '../../../styles';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { RegularText, BoldText } from '../../misc/text';
-import { TouchableView } from '../../misc/TouchableView';
+import * as React from 'react'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { ScrollView, StyleSheet, Linking, View } from 'react-native'
+import { Colors } from '../../../styles'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { RegularText, BoldText } from '../../misc/text'
+import { TouchableView } from '../../misc/TouchableView'
 
 const WebLink = (props: {url: string}) => (
     <TouchableView onPress={() => Linking.openURL(props.url)}>
         <RegularText style={styles.link}>{props.url}</RegularText>
     </TouchableView>
-);
+)
 
 const MailLink = (props: {email: string}) => (
     <TouchableView onPress={() => Linking.openURL('mailto:' + props.email)}>
         <RegularText style={styles.link}>{props.email}</RegularText>
     </TouchableView>
-);
+)
 
 export const PrivacyPolicy = (props: {navigation: TypedNavigation}) => (
     <FragmentSafeAreaView>
@@ -54,17 +54,17 @@ export const PrivacyPolicy = (props: {navigation: TypedNavigation}) => (
 
             <BoldText style={styles.heading}>Contact us</BoldText>
             <RegularText style={styles.paragraph}>
-                If you have questions about our Terms or Privacy Policy please contact us at&nbsp;
+                If you have questions about our Terms or Privacy Policy please contact us at&nbsp
             </RegularText>
             <MailLink email='hello@felfele.org'/>
             <RegularText style={styles.paragraph}>
-                Or visit our website at&nbsp;
+                Or visit our website at&nbsp
             </RegularText><WebLink url='https://felfele.org'/>
 
             <View style={{paddingBottom: 100}}></View>
         </ScrollView>
     </FragmentSafeAreaView>
-);
+)
 
 const styles = StyleSheet.create({
     heading: {
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textDecorationLine: 'underline',
     },
-});
+})

@@ -1,57 +1,57 @@
-import * as React from 'react';
-import { Post } from '../../models/Post';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ActionSheet from 'react-native-actions-sheet';
+import * as React from 'react'
+import { Post } from '../../models/Post'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import ActionSheet from 'react-native-actions-sheet'
 
-import { Colors } from '../../styles';
+import { Colors } from '../../styles'
 import {
     View,
     TouchableOpacity,
     Dimensions,
     StyleSheet,
     Linking,
-} from 'react-native';
-import { TouchableView } from '../misc/TouchableView';
-import { printableElapsedTime } from '../../helpers/dateHelpers';
-import * as urlUtils from '../../helpers/urlUtils';
-import { ImageDataView } from '../misc/ImageDataView';
-import { MediumText, RegularText } from '../misc/text';
-import { Avatar } from '../misc/Avatar';
-import { CardMarkdown } from './CardMarkdown';
-import { Feed } from '../../models/Feed';
-import { DEFAULT_AUTHOR_NAME } from '../../reducers/defaultData';
-import { TypedNavigation } from '../../helpers/navigation';
-import { calculateImageDimensions } from '../../helpers/imageDataHelpers';
-import { RowItem } from '../buttons/RowButton';
-import { shareDialog } from '../../helpers/dialogs';
-import { Debug } from '../../helpers/Debug';
+} from 'react-native'
+import { TouchableView } from '../misc/TouchableView'
+import { printableElapsedTime } from '../../helpers/dateHelpers'
+import * as urlUtils from '../../helpers/urlUtils'
+import { ImageDataView } from '../misc/ImageDataView'
+import { MediumText, RegularText } from '../misc/text'
+import { Avatar } from '../misc/Avatar'
+import { CardMarkdown } from './CardMarkdown'
+import { Feed } from '../../models/Feed'
+import { DEFAULT_AUTHOR_NAME } from '../../reducers/defaultData'
+import { TypedNavigation } from '../../helpers/navigation'
+import { calculateImageDimensions } from '../../helpers/imageDataHelpers'
+import { RowItem } from '../buttons/RowButton'
+import { shareDialog } from '../../helpers/dialogs'
+import { Debug } from '../../helpers/Debug'
 
-export type AuthorFeed = UIFeed;
+export type AuthorFeed = UIFeed
 
 export interface UIFeed extends Feed {
-    isKnownFeed: boolean;
+    isKnownFeed: boolean
 }
 
 export interface StateProps {
-    isSelected: boolean;
-    post: Post;
-    currentTimestamp: number;
-    showActions: boolean;
-    togglePostSelection: (post: Post) => void;
-    navigation: TypedNavigation;
-    authorFeed: AuthorFeed | undefined;
+    isSelected: boolean
+    post: Post
+    currentTimestamp: number
+    showActions: boolean
+    togglePostSelection: (post: Post) => void
+    navigation: TypedNavigation
+    authorFeed: AuthorFeed | undefined
 }
 
 export interface DispatchProps {
-    onRemovePost: (post: Post) => void;
-    onSharePost: (post: Post) => void;
-    onDownloadFeedPosts: (feed: Feed) => void;
+    onRemovePost: (post: Post) => void
+    onSharePost: (post: Post) => void
+    onDownloadFeedPosts: (feed: Feed) => void
 }
 
-type CardProps = StateProps & DispatchProps;
+type CardProps = StateProps & DispatchProps
 
 export const Card = (props: CardProps) => {
-    const width = Dimensions.get('screen').width;
+    const width = Dimensions.get('screen').width
     return (
         <View
             testID={'YourFeed/Post' + props.post._id}
@@ -69,31 +69,31 @@ export const Card = (props: CardProps) => {
                 </TouchableOpacity>
             </View>
         </View>
-    );
-};
+    )
+}
 
 const CardBody = (props: {
     post: Post,
     currentTimestamp: number,
     width: number,
     navigation: TypedNavigation,
-    authorFeed: AuthorFeed | undefined;
+    authorFeed: AuthorFeed | undefined
     showActions: boolean,
     onRemovePost: (post: Post) => void,
-    onDownloadFeedPosts: (feed: Feed) => void;
+    onDownloadFeedPosts: (feed: Feed) => void,
 }) => {
-    const authorFeed = props.authorFeed;
+    const authorFeed = props.authorFeed
     const cardTopOnPress = authorFeed != null
         ? authorFeed.feedUrl !== ''
             ?   () => {
-                props.onDownloadFeedPosts(authorFeed);
+                props.onDownloadFeedPosts(authorFeed)
                 props.navigation.navigate('NewsSourceFeed', {
                     feed: authorFeed,
-                });
+                })
             }
             : undefined
         : undefined
-    ;
+
     return (
         <View>
             <CardTop
@@ -113,21 +113,21 @@ const CardBody = (props: {
                 }
             </View>
         </View>
-    );
-};
+    )
+}
 
 const DisplayImage = (props: {
     post: Post,
     width: number,
 }) => {
     if (props.post.images.length === 0) {
-        return null;
+        return null
     } else {
-        const image = props.post.images[0];
-        const defaultImageWidth = props.width;
-        const defaultImageHeight = Math.floor(defaultImageWidth * 0.66);
+        const image = props.post.images[0]
+        const defaultImageWidth = props.width
+        const defaultImageHeight = Math.floor(defaultImageWidth * 0.66)
 
-        const { width, height } = calculateImageDimensions(image, defaultImageWidth, defaultImageHeight);
+        const { width, height } = calculateImageDimensions(image, defaultImageWidth, defaultImageHeight)
         return (
             <ImageDataView
                 testID={(image.uri || '')}
@@ -138,41 +138,41 @@ const DisplayImage = (props: {
                     height: height,
                 }}
             />
-        );
+        )
     }
-};
+}
 
-export const MemoizedCard = React.memo(Card);
+export const MemoizedCard = React.memo(Card)
 
 const ActionIcon = (props: { name: string, color: string, iconSize?: number }) => {
-    const iconSize = props.iconSize ||  20;
-    return <Icon name={props.name} size={iconSize} color={props.color}/>;
-};
+    const iconSize = props.iconSize ||  20
+    return <Icon name={props.name} size={iconSize} color={props.color}/>
+}
 
 const CardTopIcon = (props: { post: Post }) => {
     if (props.post.author) {
         return (
             <Avatar image={props.post.author.image} size='large'/>
-        );
+        )
     } else {
-        return <View/>;
+        return <View/>
     }
-};
+}
 
 const CardTop = (props: {
     post: Post,
     currentTimestamp: number,
     showActions: boolean,
     onRemovePost: (post: Post) => void,
-    onPress?: () => void;
+    onPress?: () => void,
 }) => {
-    const postUpdateTime = props.post.updatedAt || props.post.createdAt;
-    const printableTime = printableElapsedTime(postUpdateTime, props.currentTimestamp) + ' ago';
-    const authorName = props.post.author ? props.post.author.name : DEFAULT_AUTHOR_NAME;
-    const url = props.post.link || '';
-    const hostnameText = url === '' ? '' : urlUtils.getHumanHostname(url);
-    const timeHostSeparator = printableTime !== '' && hostnameText !== '' ? ' - ' : '';
-    let actionSheet: any;
+    const postUpdateTime = props.post.updatedAt || props.post.createdAt
+    const printableTime = printableElapsedTime(postUpdateTime, props.currentTimestamp) + ' ago'
+    const authorName = props.post.author ? props.post.author.name : DEFAULT_AUTHOR_NAME
+    const url = props.post.link || ''
+    const hostnameText = url === '' ? '' : urlUtils.getHumanHostname(url)
+    const timeHostSeparator = printableTime !== '' && hostnameText !== '' ? ' - ' : ''
+    let actionSheet: any
     return (
         <TouchableOpacity
             testID={'CardTop'}
@@ -215,8 +215,8 @@ const CardTop = (props: {
                                     borderBottomWidth: 0,
                                 }}
                                 onPress={async () => {
-                                    await shareDialog('Share link', props.post.link || '');
-                                    actionSheet?.setModalVisible();
+                                    await shareDialog('Share link', props.post.link || '')
+                                    actionSheet?.setModalVisible()
                                 }}
                             />
                             <RowItem
@@ -226,8 +226,8 @@ const CardTop = (props: {
                                     borderBottomWidth: 0,
                                 }}
                                 onPress={() => {
-                                    Linking.openURL(props.post.link || '');
-                                    actionSheet?.setModalVisible();
+                                    Linking.openURL(props.post.link || '')
+                                    actionSheet?.setModalVisible()
                                 }}
                             />
                             <RowItem
@@ -238,7 +238,7 @@ const CardTop = (props: {
                                 }}
                                 onPress={() => {
                                     // removing the post automatically removes the action sheet
-                                    props.onRemovePost(props.post);
+                                    props.onRemovePost(props.post)
                                 }}
                             />
                             <RowItem
@@ -264,14 +264,14 @@ const CardTop = (props: {
             </TouchableView>
             }
         </TouchableOpacity>
-    );
-};
+    )
+}
 
 const openPost = async (post: Post) => {
     if (post.link) {
-        await Linking.openURL(post.link);
+        await Linking.openURL(post.link)
     }
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -339,4 +339,4 @@ const styles = StyleSheet.create({
         borderColor: Colors.LIGHT_GRAY,
         flexDirection: 'column',
     },
-});
+})

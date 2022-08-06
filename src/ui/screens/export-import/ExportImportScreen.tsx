@@ -1,23 +1,23 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     View,
     StyleSheet,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { TwoButton } from '../../buttons/TwoButton';
-import { Colors, ComponentColors } from '../../../styles';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { TwoButton } from '../../buttons/TwoButton'
+import { Colors, ComponentColors } from '../../../styles'
 
 export interface StateProps {
-    navigation: TypedNavigation;
+    navigation: TypedNavigation
 }
 
 export interface DispatchProps {
 }
 
-export type Props = StateProps & DispatchProps;
+export type Props = StateProps & DispatchProps
 
 export interface State {
 }
@@ -43,7 +43,7 @@ export const ExportImportScreen = (props: Props) => (
             />
         </View>
     </FragmentSafeAreaView>
-);
+)
 
 const styles = StyleSheet.create({
     buttonContainer: {
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: ComponentColors.BACKGROUND_COLOR,
     },
-});
+})

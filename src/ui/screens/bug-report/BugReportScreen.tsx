@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { Colors, ComponentColors } from '../../../styles';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as React from 'react'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { Colors, ComponentColors } from '../../../styles'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {
     View,
     StyleSheet,
@@ -10,57 +10,57 @@ import {
     Text,
     ScrollView,
     KeyboardAvoidingView,
-} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import { restartApp } from '../../../helpers/restart';
-import { BoldText } from '../../misc/text';
-import { filteredLog } from '../../../helpers/log';
-import { Version, BuildNumber } from '../../../Version';
+} from 'react-native'
+import DeviceInfo from 'react-native-device-info'
+import { restartApp } from '../../../helpers/restart'
+import { BoldText } from '../../misc/text'
+import { filteredLog } from '../../../helpers/log'
+import { Version, BuildNumber } from '../../../Version'
 
-import { Debug } from '../../../helpers/Debug';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { SimpleTextInput } from '../../misc/SimpleTextInput';
-import { WideButton } from '../../buttons/WideButton';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
-import { TwoButton } from '../../buttons/TwoButton';
+import { Debug } from '../../../helpers/Debug'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { SimpleTextInput } from '../../misc/SimpleTextInput'
+import { WideButton } from '../../buttons/WideButton'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder'
+import { TwoButton } from '../../buttons/TwoButton'
 
 const deviceInfo = () => {
-    const brand = DeviceInfo.getBrand();
-    const deviceID = DeviceInfo.getDeviceId();
-    const systemName = DeviceInfo.getSystemName();
-    const systemVersion = DeviceInfo.getSystemVersion();
+    const brand = DeviceInfo.getBrand()
+    const deviceID = DeviceInfo.getDeviceId()
+    const systemName = DeviceInfo.getSystemName()
+    const systemVersion = DeviceInfo.getSystemVersion()
 
     return `
 System: ${systemName} ${systemVersion} (${brand} ${deviceID})
 Version: ${Version}, build ${BuildNumber}
-`;
-};
+`
+}
 
 interface Props {
-    navigation?: TypedNavigation;
-    errorView: boolean;
+    navigation?: TypedNavigation
+    errorView: boolean
 }
 
 interface State {
-    isSending: boolean;
-    feedbackText: string;
+    isSending: boolean
+    feedbackText: string
 }
 
 export const BugReportScren = (props: Props) => (
     <FragmentSafeAreaView>
         <BugReportView {...props}/>
     </FragmentSafeAreaView>
-);
+)
 
 class BugReportView extends React.Component<Props, State> {
     public state: State = {
         isSending: false,
         feedbackText: '',
-    };
+    }
 
     public render() {
-        const logText = 'By sending a bug report, you will share some information (shown below) with us.\n\n' + this.getDeviceInfoAndLogs();
+        const logText = 'By sending a bug report, you will share some information (shown below) with us.\n\n' + this.getDeviceInfoAndLogs()
         return (
             <KeyboardAvoidingView style={styles.keyboardAvoidingContainer}>
                 <NavigationHeader
@@ -126,7 +126,7 @@ class BugReportView extends React.Component<Props, State> {
                     <TabBarPlaceholder/>
                 </ScrollView>
             </KeyboardAvoidingView>
-        );
+        )
     }
 
     private SendBugReportButton = () => (
@@ -146,25 +146,25 @@ class BugReportView extends React.Component<Props, State> {
     )
 
     private onChangeText = (feedbackText: string) => {
-        this.setState({ feedbackText });
+        this.setState({ feedbackText })
     }
 
     private onPressSend = async () => {
         this.setState({
             isSending: true,
-        });
+        })
 
-        await this.sendBugReport();
+        await this.sendBugReport()
 
         this.setState({
             isSending: false,
             feedbackText: '',
-        });
+        })
 
         if (this.props.navigation != null) {
-            this.props.navigation.goBack();
+            this.props.navigation.goBack()
         } else if (this.props.errorView) {
-            restartApp();
+            restartApp()
         }
     }
 
@@ -173,7 +173,7 @@ class BugReportView extends React.Component<Props, State> {
 
 ${this.state.feedbackText}
 ${this.getDeviceInfoAndLogs()}
-`;
+`
     }
 
     private getDeviceInfoAndLogs = (): string => {
@@ -182,8 +182,8 @@ ${this.getDeviceInfoAndLogs()}
 ${deviceInfo()}
 Logs:
 
-${filteredLog()}`;
-        return bugReportBody;
+${filteredLog()}`
+        return bugReportBody
     }
 
     private sendBugReport = async () => {
@@ -194,15 +194,15 @@ ${filteredLog()}`;
                 },
                 method: 'POST',
                 body: this.getBugReportBody(),
-            });
-            Debug.log('success sending bugreport', response.status);
+            })
+            Debug.log('success sending bugreport', response.status)
         } catch (e) {
-            Debug.log('error sending bugreport', e);
+            Debug.log('error sending bugreport', e)
         }
     }
 }
 
-const fontFamily = Platform.OS === 'ios' ? 'Courier' : 'monospace';
+const fontFamily = Platform.OS === 'ios' ? 'Courier' : 'monospace'
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -261,4 +261,4 @@ const styles = StyleSheet.create({
         width: '100%',
         textAlignVertical: 'top',
     },
-});
+})

@@ -1,30 +1,30 @@
-import * as React from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import SplashScreen from 'react-native-splash-screen';
+import * as React from 'react'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import SplashScreen from 'react-native-splash-screen'
 
-import { RefreshableFeed } from '../../misc/RefreshableFeed';
-import { Feed } from '../../../models/Feed';
-import { Post } from '../../../models/Post';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { ComponentColors } from '../../../styles';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { View } from 'react-native';
+import { RefreshableFeed } from '../../misc/RefreshableFeed'
+import { Feed } from '../../../models/Feed'
+import { Post } from '../../../models/Post'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { ComponentColors } from '../../../styles'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { View } from 'react-native'
 
 export interface DispatchProps {
-    onRefreshPosts: (feeds: Feed[]) => void;
+    onRefreshPosts: (feeds: Feed[]) => void
 }
 
 export interface StateProps {
-    navigation: TypedNavigation;
-    posts: Post[];
-    feeds: Feed[];
-    gatewayAddress: string;
+    navigation: TypedNavigation
+    posts: Post[]
+    feeds: Feed[]
+    gatewayAddress: string
 }
 
-type Props = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps
 
 export class PublicChannelsScreen extends React.Component<Props> {
-    private ref?: RefreshableFeed = undefined;
+    private ref?: RefreshableFeed = undefined
     public render() {
         return (
             <RefreshableFeed
@@ -58,10 +58,10 @@ export class PublicChannelsScreen extends React.Component<Props> {
                     listHeader: <View style={{paddingTop: 10}}/>,
                 }}
             </RefreshableFeed>
-        );
+        )
     }
 
     public componentDidMount() {
-        SplashScreen.hide();
+        SplashScreen.hide()
     }
 }

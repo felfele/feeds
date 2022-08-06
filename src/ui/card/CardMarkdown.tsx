@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { StyleSheet, View, Linking } from 'react-native';
+import * as React from 'react'
+import { StyleSheet, View, Linking } from 'react-native'
 
-import Markdown from 'react-native-markdown-display';
-import { ErrorBoundary } from '../misc/ErrorBoundary';
+import Markdown from 'react-native-markdown-display'
+import { ErrorBoundary } from '../misc/ErrorBoundary'
 
 export const CardMarkdown = (props: { text: string }) => (
     <ErrorBoundary>
@@ -10,11 +10,11 @@ export const CardMarkdown = (props: { text: string }) => (
             <Markdown>{props.text}</Markdown>
         </View>
     </ErrorBoundary>
-);
+)
 
 const styles = StyleSheet.create({
     markdownStyle: {
         marginBottom: 10,
         marginHorizontal: 10,
     },
-});
+})

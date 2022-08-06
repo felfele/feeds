@@ -1,36 +1,36 @@
-import * as React from 'react';
-import { RefreshableFeed } from '../../misc/RefreshableFeed';
-import { Feed } from '../../../models/Feed';
-import { Post } from '../../../models/Post';
-import { NavigationHeader, HeaderDefaultLeftButtonIcon } from '../../misc/NavigationHeader';
-import { ComponentColors } from '../../../styles';
+import * as React from 'react'
+import { RefreshableFeed } from '../../misc/RefreshableFeed'
+import { Feed } from '../../../models/Feed'
+import { Post } from '../../../models/Post'
+import { NavigationHeader, HeaderDefaultLeftButtonIcon } from '../../misc/NavigationHeader'
+import { ComponentColors } from '../../../styles'
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as Dialogs from '../../../helpers/dialogs';
-import { FEEDS_ASSISTANT_URL } from '../../../reducers/defaultData';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { WideButton } from '../../buttons/WideButton';
-import { View, GestureResponderEvent, ActivityIndicator, Linking } from 'react-native';
-import { LoadingView } from '../../misc/LoadingView';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import * as Dialogs from '../../../helpers/dialogs'
+import { FEEDS_ASSISTANT_URL } from '../../../reducers/defaultData'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { WideButton } from '../../buttons/WideButton'
+import { View, GestureResponderEvent, ActivityIndicator, Linking } from 'react-native'
+import { LoadingView } from '../../misc/LoadingView'
 
 export interface DispatchProps {
-    onRefreshPosts: (feeds: Feed[]) => void;
-    onFollowFeed: (feed: Feed) => void;
-    onUnfollowFeed: (feed: Feed) => void;
-    onToggleFavorite: (feedUrl: string) => void;
-    onRemoveFeed: (feed: Feed) => void;
+    onRefreshPosts: (feeds: Feed[]) => void
+    onFollowFeed: (feed: Feed) => void
+    onUnfollowFeed: (feed: Feed) => void
+    onToggleFavorite: (feedUrl: string) => void
+    onRemoveFeed: (feed: Feed) => void
 }
 
 export interface StateProps {
-    navigation: TypedNavigation;
-    onBack: () => void;
-    feed: Feed;
-    posts: Post[];
+    navigation: TypedNavigation
+    onBack: () => void
+    feed: Feed
+    posts: Post[]
 }
 
-type Props = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps
 
-const icon = (name: string, color: string) => <Icon name={name} size={20} color={color} />;
+const icon = (name: string, color: string) => <Icon name={name} size={20} color={color} />
 
 const ListHeader = (props: {
     isFollowed: boolean,
@@ -49,7 +49,7 @@ const ListHeader = (props: {
             <LoadingView text='Loading posts...' />
         }
     </View>
-);
+)
 
 const ListFooter = (props: {
     link: string,
@@ -62,27 +62,27 @@ const ListFooter = (props: {
             onPress={() => Linking.openURL(props.link)}
         />
         : null
-);
+)
 
 export const FeedView = (props: Props) => {
-    const isOnboardingFeed = props.feed.feedUrl === FEEDS_ASSISTANT_URL;
+    const isOnboardingFeed = props.feed.feedUrl === FEEDS_ASSISTANT_URL
 
     const button = (iconName: string, color: string, onPress: () => void) => ({
         label: icon(iconName, color),
         onPress,
-    });
+    })
     const navigateToFeedInfo = () => props.navigation.navigate('RSSFeedInfo', {
             feed: props.feed,
         }
-    );
+    )
     const rightButton1 = isOnboardingFeed
         ? undefined
         : button('information', ComponentColors.NAVIGATION_BUTTON_COLOR, navigateToFeedInfo)
-    ;
+
     const refreshableFeedProps = {
         ...props,
         feeds: [props.feed],
-    };
+    }
     return (
         <RefreshableFeed {...refreshableFeedProps}>
             {{
@@ -106,12 +106,12 @@ export const FeedView = (props: Props) => {
                 />,
             }}
         </RefreshableFeed>
-    );
-};
+    )
+}
 
 export const unfollowFeed = async (feed: Feed, onUnfollowFeed: (feed: Feed) => void) => {
-    const confirmUnfollow = await Dialogs.areYouSureDialog('Are you sure you want to unfollow?');
+    const confirmUnfollow = await Dialogs.areYouSureDialog('Are you sure you want to unfollow?')
     if (confirmUnfollow) {
-        onUnfollowFeed(feed);
+        onUnfollowFeed(feed)
     }
-};
+}

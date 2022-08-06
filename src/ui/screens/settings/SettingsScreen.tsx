@@ -1,40 +1,40 @@
-import * as React from 'react';
-import { StyleSheet, ScrollView, Vibration, View, Linking } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import * as React from 'react'
+import { StyleSheet, ScrollView, Vibration, View, Linking } from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import { Settings } from '../../../models/Settings';
-import { Version, BuildNumber } from '../../../Version';
-import { Colors, ComponentColors } from '../../../styles';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { RowItem } from '../../buttons/RowButton';
-import { RegularText } from '../../misc/text';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { TouchableView } from '../../misc/TouchableView';
-import { getBuildEnvironment } from '../../../BuildEnvironment';
+import { Settings } from '../../../models/Settings'
+import { Version, BuildNumber } from '../../../Version'
+import { Colors, ComponentColors } from '../../../styles'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { RowItem } from '../../buttons/RowButton'
+import { RegularText } from '../../misc/text'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { TouchableView } from '../../misc/TouchableView'
+import { getBuildEnvironment } from '../../../BuildEnvironment'
 
 export interface StateProps {
-    navigation: TypedNavigation;
-    settings: Settings;
+    navigation: TypedNavigation
+    settings: Settings
 }
 
 export interface DispatchProps {
-    onShowSquareImagesValueChange: (value: boolean) => void;
-    onShowDebugMenuValueChange: (value: boolean) => void;
+    onShowSquareImagesValueChange: (value: boolean) => void
+    onShowDebugMenuValueChange: (value: boolean) => void
 }
 
-type Props = StateProps & DispatchProps;
+type Props = StateProps & DispatchProps
 
 export const SettingsScreen = (props: Props) => {
-    const spacePrefix = (s: string) => s !== '' ? ' ' + s : '';
-    const buildEnvironment = spacePrefix(getBuildEnvironment());
-    const buildNumber = ` (Build number ${BuildNumber})`;
+    const spacePrefix = (s: string) => s !== '' ? ' ' + s : ''
+    const buildEnvironment = spacePrefix(getBuildEnvironment())
+    const buildNumber = ` (Build number ${BuildNumber})`
     const buildInfo = props.settings.showDebugMenu
         ? buildNumber
         : ''
-    ;
-    const appName = 'Feeds – RSS reader by Felfele';
-    const versionLabel = appName + ', Version: ' + Version + buildEnvironment + buildInfo;
+
+    const appName = 'Feeds – RSS reader by Felfele'
+    const versionLabel = appName + ', Version: ' + Version + buildEnvironment + buildInfo
     return (
         <FragmentSafeAreaView>
             <NavigationHeader
@@ -90,8 +90,8 @@ export const SettingsScreen = (props: Props) => {
 
                 <TouchableView
                     onLongPress={() => {
-                        Vibration.vibrate(500, false);
-                        props.onShowDebugMenuValueChange(!props.settings.showDebugMenu);
+                        Vibration.vibrate(500, false)
+                        props.onShowDebugMenuValueChange(!props.settings.showDebugMenu)
                     }}
                     style={styles.copyrightContainer}
                 >
@@ -99,8 +99,8 @@ export const SettingsScreen = (props: Props) => {
                 </TouchableView>
             </ScrollView>
         </FragmentSafeAreaView>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     label: {
@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
     copyrightContainer: {
         paddingTop: 15,
     },
-});
+})

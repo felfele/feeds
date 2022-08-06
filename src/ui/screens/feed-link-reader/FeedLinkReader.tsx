@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     StyleSheet,
     View,
@@ -7,34 +7,34 @@ import {
     ViewStyle,
     Clipboard,
     Keyboard,
-} from 'react-native';
-import QRCodeScanner from 'react-native-qrcode-scanner';
+} from 'react-native'
+import QRCodeScanner from 'react-native-qrcode-scanner'
 
-import { SimpleTextInput } from '../../misc/SimpleTextInput';
-import { ComponentColors, Colors, defaultMediumFont } from '../../../styles';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { getHttpLinkFromText } from '../../../helpers/urlUtils';
-import { FEEDS_LINK_MESSAGE } from '../../../helpers/linkHelpers';
-import { RegularText } from '../../misc/text';
-import { WideButton } from '../../buttons/WideButton';
+import { SimpleTextInput } from '../../misc/SimpleTextInput'
+import { ComponentColors, Colors, defaultMediumFont } from '../../../styles'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { getHttpLinkFromText } from '../../../helpers/urlUtils'
+import { FEEDS_LINK_MESSAGE } from '../../../helpers/linkHelpers'
+import { RegularText } from '../../misc/text'
+import { WideButton } from '../../buttons/WideButton'
 
-const QRCameraWidth = Dimensions.get('window').width;
-const QRCameraHeight = QRCameraWidth;
+const QRCameraWidth = Dimensions.get('window').width
+const QRCameraHeight = QRCameraWidth
 
 interface State {
-    showCode: boolean;
+    showCode: boolean
 }
 
 export interface DispatchProps { }
 
 export interface StateProps {
-    navigation: TypedNavigation;
+    navigation: TypedNavigation
 }
 
-type Props = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps
 
 const QRCodeButton = (props: {navigation: TypedNavigation, showCode: boolean, setShowCode: (showCode: boolean) => void}) => {
     return props.showCode
@@ -51,21 +51,21 @@ const QRCodeButton = (props: {navigation: TypedNavigation, showCode: boolean, se
                 label='SCAN QR CODE'
                 icon={<Icon name='qrcode' size={24} color={Colors.BRAND_PURPLE}/>}
                 onPress={() => {
-                    props.setShowCode(true);
-                    Keyboard.dismiss();
+                    props.setShowCode(true)
+                    Keyboard.dismiss()
                 }}
             />
-    ;
-};
+
+}
 
 export class FeedLinkReader extends React.Component<Props, State> {
     public state = {
         showCode: false,
-    };
+    }
 
     public render() {
         const icon = (name: string, size: number = 20) =>
-            <Icon name={name} size={size} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />;
+            <Icon name={name} size={size} color={ComponentColors.NAVIGATION_BUTTON_COLOR} />
 
         return (
             <FragmentSafeAreaView>
@@ -105,26 +105,26 @@ export class FeedLinkReader extends React.Component<Props, State> {
                     </View>
                 </View>
             </FragmentSafeAreaView>
-        );
+        )
     }
 
     public async componentDidMount() {
-        const clipboardText = await Clipboard.getString();
+        const clipboardText = await Clipboard.getString()
         if (clipboardText.startsWith(FEEDS_LINK_MESSAGE)) {
-            const link = getHttpLinkFromText(clipboardText);
+            const link = getHttpLinkFromText(clipboardText)
             if (link != null) {
-                this.props.navigation.replace('RSSFeedLoader', { feedUrl: link });
+                this.props.navigation.replace('RSSFeedLoader', { feedUrl: link })
             }
         }
     }
 
     private handleLink(text: string) {
         if (text === '') {
-            this.props.navigation.goBack(null);
-            return;
+            this.props.navigation.goBack(null)
+            return
         }
-        const feedUrl = text;
-        this.props.navigation.replace('RSSFeedLoader', { feedUrl });
+        const feedUrl = text
+        this.props.navigation.replace('RSSFeedLoader', { feedUrl })
     }
 }
 
@@ -162,4 +162,4 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         fontSize: 14,
     },
-});
+})

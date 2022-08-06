@@ -1,7 +1,7 @@
-import { ImageData } from './ImageData';
+import { ImageData } from './ImageData'
 
 export interface Author {
-    name: string;
-    uri: string;
-    image: ImageData;
+    name: string
+    uri: string
+    image: ImageData
 }

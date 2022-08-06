@@ -1,20 +1,20 @@
-import * as React from 'react';
-import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native';
-import { Colors, ComponentColors } from '../../../styles';
-import { RegularText } from '../../misc/text';
-import { CategoryMap, SubCategoryMap } from '../../../models/recommendation/NewsSource';
-import { NavigationHeader } from '../../misc/NavigationHeader';
-import { RowItem } from '../../buttons/RowButton';
-import { TypedNavigation } from '../../../helpers/navigation';
-import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView';
-import { Feed } from '../../../models/Feed';
-import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder';
+import * as React from 'react'
+import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native'
+import { Colors, ComponentColors } from '../../../styles'
+import { RegularText } from '../../misc/text'
+import { CategoryMap, SubCategoryMap } from '../../../models/recommendation/NewsSource'
+import { NavigationHeader } from '../../misc/NavigationHeader'
+import { RowItem } from '../../buttons/RowButton'
+import { TypedNavigation } from '../../../helpers/navigation'
+import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { Feed } from '../../../models/Feed'
+import { TabBarPlaceholder } from '../../misc/TabBarPlaceholder'
 
-const CATEGORIES_LABEL = 'CATEGORIES';
+const CATEGORIES_LABEL = 'CATEGORIES'
 
 export interface StateProps {
-    categories: string[];
-    navigation: TypedNavigation;
+    categories: string[]
+    navigation: TypedNavigation
 }
 
 export interface DispatchProps { }
@@ -30,16 +30,16 @@ export const CategoriesScreen = (props: StateProps & DispatchProps) => {
                     // props.navigation.navigate('SubCategoriesContainer', {
                     //     title: categoryName,
                     //     subCategories: props.categories[categoryName],
-                    // });
+                    // })
                         props.navigation.navigate('NewsSourceGridContainer', {
                             // feeds: props.categories[categoryName],
                             // subCategoryName: categoryName,
                             categoryName,
-                        });
+                        })
                 }}
             />
-        );
-    });
+        )
+    })
     return (
         <FragmentSafeAreaView>
             <View style={{flex: 1}}>
@@ -50,8 +50,8 @@ export const CategoriesScreen = (props: StateProps & DispatchProps) => {
                 </ScrollView>
             </View>
         </FragmentSafeAreaView>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     label: {
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
         paddingBottom: 7,
         color: Colors.GRAY,
     },
-});
+})

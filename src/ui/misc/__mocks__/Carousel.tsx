@@ -1,1 +1,1 @@
-export const Carousel = () => null;
+export const Carousel = () => null
