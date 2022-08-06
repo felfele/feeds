@@ -1,6 +1,6 @@
 {
   "name": "feeds",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": true,
   "devDependencies": {
     "@babel/core": "7.5.0",
