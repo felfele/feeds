@@ -127,7 +127,6 @@ export class RSSFeedInfo extends React.Component<Props, State> {
                         : <WideButton
                             {...followToggleButton}
                         />
-
                     }
                 </View>
             </FragmentSafeAreaView>
