@@ -22,60 +22,63 @@ export interface DispatchProps {
 
 }
 
-export class FilterListScreen extends React.Component<StateProps & DispatchProps, any> {
-    public render() {
-        return (
-            <FragmentSafeAreaView>
-                <NavigationHeader
-                    title='Muted words'
-                    navigation={this.props.navigation}
-                    rightButton1={{
-                        onPress: this.onAddFilter,
-                        label: <AddWordIcon color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
-                    }}
-                />
-                <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR }}>
-                    {this.props.filters.length === 0 &&
-                        <View style={styles.emptyContainer}>
-                            <BoldText style={styles.emptyListTitle}>You aren't muting any words.</BoldText>
-                            <RegularText style={styles.emptyListText}>When you mute words, you won't see new posts that include them for the specified time.</RegularText>
-                            <WideButton
-                                label='Add word'
-                                icon={<AddWordIcon color={ComponentColors.BUTTON_COLOR} />}
-                                onPress={this.onAddFilter}
-                            />
-                        </View>
-                    }
-                    {this.props.filters.map(filter => (
-                        <RowItem
-                            title={filter.text}
-                            description={
-                                'Expires in ' +
-                                printableElapsedTime(Date.now(), filter.createdAt + filter.validUntil)}
-                            key={filter.text}
-                            buttonStyle='navigate'
-                            onPress={() => {
-                                this.editFilter(filter);
-                            }}
-                        />
-                    ))}
-                </ScrollView>
-            </FragmentSafeAreaView>
-        );
-    }
+export function FilterListScreen(props: StateProps & DispatchProps) {
+    const editFilter = (filter: ContentFilter) => {
+        props.navigation.navigate('EditFilter', { filter: filter });
+    };
 
-    private editFilter = (filter: ContentFilter) => {
-        this.props.navigation.navigate('EditFilter', { filter: filter });
-    }
-
-    private onAddFilter = () => {
+    const onAddFilter = () => {
         const filter: ContentFilter = {
             text: '',
             createdAt: 0,
             validUntil: 0,
         };
-        this.props.navigation.navigate('EditFilter', { filter: filter });
-    }
+        props.navigation.navigate('EditFilter', { filter: filter });
+    };
+
+    const filterDescription = (filter: ContentFilter) => {
+        if (filter.validUntil === 0) {
+            return undefined;
+        }
+        return 'Expires in ' + printableElapsedTime(Date.now(), Math.floor(filter.createdAt + (filter.validUntil * 1.05)));
+    };
+
+    return (
+        <FragmentSafeAreaView>
+            <NavigationHeader
+                title='Muted words'
+                navigation={props.navigation}
+                rightButton1={{
+                    onPress: onAddFilter,
+                    label: <AddWordIcon color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
+                }}
+            />
+            <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR }}>
+                {props.filters.length === 0 &&
+                    <View style={styles.emptyContainer}>
+                        <BoldText style={styles.emptyListTitle}>You aren't muting any words.</BoldText>
+                        <RegularText style={styles.emptyListText}>When you mute words, you won't see new posts that include them for the specified time.</RegularText>
+                        <WideButton
+                            label='Add word'
+                            icon={<AddWordIcon color={ComponentColors.BUTTON_COLOR} />}
+                            onPress={onAddFilter}
+                        />
+                    </View>
+                }
+                {props.filters.map(filter => (
+                    <RowItem
+                        title={filter.text}
+                        description={filterDescription(filter)}
+                        key={filter.text}
+                        buttonStyle='navigate'
+                        onPress={() => {
+                            editFilter(filter);
+                        }}
+                    />
+                ))}
+            </ScrollView>
+        </FragmentSafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({

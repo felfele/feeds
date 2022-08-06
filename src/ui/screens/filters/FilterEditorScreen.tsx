@@ -1,19 +1,17 @@
 import * as React from 'react';
+import { useState } from 'react';
 import {
     Alert,
     StyleSheet,
     View,
     Text,
-    Slider,
-    KeyboardAvoidingView,
-    Picker,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import RNPickerSelect from 'react-native-picker-select';
 
-import { ContentFilter, filterValidUntilToText } from '../../../models/ContentFilter';
-import { ComponentColors, defaultFont, defaultTextProps, Colors } from '../../../styles';
-import { DAY, MONTH31, WEEK, YEAR } from '../../../helpers/dateHelpers';
+import { ContentFilter } from '../../../models/ContentFilter';
+import { ComponentColors, defaultTextProps, Colors } from '../../../styles';
+import { DAY, MONTH31, WEEK } from '../../../helpers/dateHelpers';
 import { SimpleTextInput } from '../../misc/SimpleTextInput';
 import { Debug } from '../../../helpers/Debug';
 import { NavigationHeader } from '../../misc/NavigationHeader';
@@ -35,125 +33,34 @@ export interface StateProps {
 
 type Props = DispatchProps & StateProps;
 
-interface EditFilterState {
-    filterText: string;
-    filterValue: number;
-}
+export function FilterEditorScreen(props: Props) {
+    const [filterText, setFilterText] = useState(props.filter.text);
+    const [filterValue, setFilterValue] = useState( 2 * WEEK);
 
-export class FilterEditorScreen extends React.Component<DispatchProps & StateProps, EditFilterState> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            filterText: this.props.filter.text,
-            filterValue: 2 * WEEK,
-        };
-    }
-    public render() {
-        const isDelete = this.props.filter.text.length > 0;
-        const addOrEditFilter = isDelete
-            ? () => {
-                this.props.onRemoveFilter(this.props.filter);
-                this.onAddFilter();
-            }
-            : this.onAddFilter
-        ;
-        const button = isDelete
-            ? <TwoButton
-                leftButton={{
-                    label: 'Edit word',
-                    icon: <Icon
-                        name='edit'
-                        size={20}
-                        color={ComponentColors.BUTTON_COLOR}
-                    />,
-                    onPress: addOrEditFilter,
-                }}
-                rightButton={{
-                    label: 'Delete',
-                    icon: <Icon
-                        name='delete'
-                        size={20}
-                        color={ComponentColors.WARNING_BUTTON_COLOR}
-                    />,
-                    onPress: this.onDeleteFilter,
-                    fontStyle: { color: ComponentColors.WARNING_BUTTON_COLOR},
-                }}
-            />
-            : <WideButton
-                label='Add word'
-                icon={<Icon
-                    name='add-box'
-                    size={20}
-                    color={ComponentColors.BUTTON_COLOR}
-                />}
-                onPress={addOrEditFilter}
-            />
-        ;
-        return (
-            <FragmentSafeAreaView>
-                <NavigationHeader
-                    title='Mute word'
-                    navigation={this.props.navigation}
-                />
-                <View style={styles.mainContainer}>
-                    <SimpleTextInput
-                        defaultValue={this.state.filterText}
-                        style={styles.linkInput}
-                        onChangeText={(text) => this.setState({ filterText: text })}
-                        placeholder='Words to be muted'
-                        autoCapitalize='none'
-                        returnKeyType='done'
-                        onSubmitEditing={addOrEditFilter}
-                        onEndEditing={() => {}}
-                        autoFocus={true}
-                        autoCorrect={false}
-                    />
-                    <View style={styles.sliderContainer}>
-                        <Text style={styles.sliderText}>Mute until</Text>
-                        <RNPickerSelect
-                            onValueChange={(value) => this.setState({filterValue: value})}
-                            value={this.state.filterValue}
-                            style={{
-                                inputIOS: styles.pickerInput,
-                                inputAndroid: styles.pickerInput,
-                            }}
-                            items={[
-                                { label: 'One day', value: DAY },
-                                { label: 'One week', value: WEEK },
-                                { label: 'Two weeks', value: 2 * WEEK },
-                                { label: 'One month', value: MONTH31 },
-                                { label: 'Three months', value: 3 * MONTH31 },
-                                { label: 'Six months', value: 6 * MONTH31 },
-                            ]}
-                        />
-                    </View>
-                    {button}
-                </View>
-            </FragmentSafeAreaView>
-        );
-    }
+    const goBack = () => {
+        props.navigation.goBack();
+    };
 
-    private onAddFilter = async () => {
-        if (this.state.filterText.match(/^ ?$/) != null) {
+    const onAddFilter = async () => {
+        if (filterText.match(/^ ?$/) != null) {
             await errorDialog('Keyword is empty!', 'Please enter a keyword');
             return;
         }
         const filter: ContentFilter = {
-            text: this.state.filterText,
-            validUntil: this.state.filterValue,
+            text: filterText,
+            validUntil: filterValue,
             createdAt: Date.now(),
         };
-        this.props.onAddFilter(filter);
-        this.goBack();
-    }
-
-    private goBack = () => {
-        this.props.navigation.goBack();
-    }
-
-    private onDeleteFilter = () => {
+        props.onAddFilter(filter);
+        goBack();
+    };
+    const deleteFilterAndGoBack = () => {
+        props.onRemoveFilter(props.filter);
+        goBack();
+    };
+    const onDeleteFilter = () => {
         const options: any[] = [
-            { text: 'Yes', onPress: async () => this.deleteFilterAndGoBack() },
+            { text: 'Yes', onPress: async () => deleteFilterAndGoBack() },
             { text: 'Cancel', onPress: () => Debug.log('Cancel Pressed'), style: 'cancel' },
         ];
 
@@ -162,12 +69,92 @@ export class FilterEditorScreen extends React.Component<DispatchProps & StatePro
             options,
             { cancelable: true },
         );
-    }
+    };
 
-    private deleteFilterAndGoBack = () => {
-        this.props.onRemoveFilter(this.props.filter);
-        this.goBack();
-    }
+    const isDelete = props.filter.text.length > 0;
+    const addOrEditFilter = isDelete
+        ? () => {
+            props.onRemoveFilter(props.filter);
+            onAddFilter();
+        }
+        : onAddFilter
+    ;
+
+    const button = isDelete
+        ? <TwoButton
+            leftButton={{
+                label: 'Delete',
+                icon: <Icon
+                    name='delete'
+                    size={20}
+                    color={ComponentColors.WARNING_BUTTON_COLOR}
+                />,
+                onPress: onDeleteFilter,
+                fontStyle: { color: ComponentColors.WARNING_BUTTON_COLOR},
+            }}
+            rightButton={{
+                label: 'Save',
+                icon: <Icon
+                    name='done'
+                    size={20}
+                    color={ComponentColors.BUTTON_COLOR}
+                />,
+                onPress: addOrEditFilter,
+            }}
+        />
+        : <WideButton
+            label='Add word'
+            icon={<Icon
+                name='add-box'
+                size={20}
+                color={ComponentColors.BUTTON_COLOR}
+            />}
+            onPress={addOrEditFilter}
+        />
+    ;
+    return (
+        <FragmentSafeAreaView>
+            <NavigationHeader
+                title='Mute word'
+                navigation={props.navigation}
+            />
+            <View style={styles.mainContainer}>
+                <SimpleTextInput
+                    defaultValue={filterText}
+                    style={styles.linkInput}
+                    onChangeText={(text) => setFilterText(text)}
+                    placeholder='Words to be muted'
+                    autoCapitalize='none'
+                    returnKeyType='done'
+                    onSubmitEditing={addOrEditFilter}
+                    onEndEditing={() => {}}
+                    autoFocus={true}
+                    autoCorrect={false}
+                />
+                <View style={styles.sliderContainer}>
+                    <Text style={styles.sliderText}>Mute until</Text>
+                    <RNPickerSelect
+                        onValueChange={(value) => setFilterValue(value)}
+                        value={filterValue}
+                        style={{
+                            inputIOS: styles.pickerInput,
+                            inputAndroid: styles.pickerInput,
+                        }}
+                        items={[
+                            { label: 'One day', value: DAY },
+                            { label: 'One week', value: WEEK },
+                            { label: 'Two weeks', value: 2 * WEEK },
+                            { label: 'One month', value: MONTH31 },
+                            { label: 'Three months', value: 3 * MONTH31 },
+                            { label: 'Six months', value: 6 * MONTH31 },
+                            { label: 'Forever', value: 0 },
+                        ]}
+                    />
+                </View>
+                {button}
+            </View>
+        </FragmentSafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
