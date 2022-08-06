@@ -4,8 +4,7 @@ import { Feed } from '../models/Feed';
 import { Debug } from './Debug';
 import { fetchFaviconUrl } from './favicon';
 import { safeFetch } from './safeFetch';
-import { asyncTryExpr } from './tryExpr';
-import { isError } from 'util';
+import { asyncTryExpr, isError } from './tryExpr';
 
 interface RedditImageData {
     url: string;

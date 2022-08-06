@@ -396,7 +396,7 @@ export const parseArguments = (
             context = readArgAndExecute(context, printer);
         }
     } catch (e) {
-        errorHandler(e.message);
+        errorHandler((e as Error).message);
         return;
     }
 };

@@ -2,7 +2,7 @@ export const tryExpr = <T>(expr: () => T | never): T | Error => {
     try {
         return expr();
     } catch (e) {
-        return e;
+        return e as Error;
     }
 };
 
@@ -11,7 +11,7 @@ export const asyncTryExpr = async <T>(expr: () => Promise<T> | never): Promise<T
         const result = await expr();
         return result;
     } catch (e) {
-        return e;
+        return e as Error;
     }
 };
 
