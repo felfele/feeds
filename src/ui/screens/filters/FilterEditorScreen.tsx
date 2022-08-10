@@ -79,7 +79,6 @@ export function FilterEditorScreen(props: Props) {
         }
         : onAddFilter
 
-
     const button = isDelete
         ? <TwoButton
             leftButton={{

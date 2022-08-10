@@ -21,14 +21,10 @@ import { getHttpLinkFromText } from '../../../helpers/urlUtils'
 import { FEEDS_LINK_MESSAGE } from '../../../helpers/linkHelpers'
 import { RegularText } from '../../misc/text'
 import { TwoButton } from '../../buttons/TwoButton'
-import { TouchableView } from '../../misc/TouchableView'
+import { WideButton } from '../../buttons/WideButton'
 
 const QRCameraWidth = Dimensions.get('window').width
 const QRCameraHeight = QRCameraWidth
-
-interface State {
-    showCode: boolean
-}
 
 export interface DispatchProps { }
 
@@ -38,47 +34,31 @@ export interface StateProps {
 
 type Props = DispatchProps & StateProps
 
-const ButtonContainer = (props: {
+const QRCodeScannerContainer = (props: {
     navigation: TypedNavigation,
-    showCode: boolean,
-    setShowCode: (showCode: boolean) => void,
-    onAddLink: () => void,
     onClose: () => void,
 }) => {
-    return props.showCode
-        ?
-            <View style={{...styles.container, paddingTop: 10}}>
-                <TouchableView onPress={props.onClose}>
-                    <Icon name='close' size={24} color={Colors.GRAY}/>
-                </TouchableView>
-                <QRCodeScanner
-                            onRead={(event) => props.navigation.replace('RSSFeedLoader', { feedUrl: event.data })}
-                            containerStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
-                            cameraStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
-                            fadeIn={false}
-                            cameraProps={{ratio: '1:1'}}
-                />
-            </View>
-        :
-            <TwoButton
-                leftButton={{
-                    label: 'Scan QR code',
-                    icon: <Icon name='qrcode' size={24} color={Colors.BRAND_PURPLE}/>,
-                    onPress: () => {
-                        props.setShowCode(true)
-                        Keyboard.dismiss()
-                    },
-                }}
-                rightButton={{
-                    label: 'Add link',
-                    icon: <Icon name='link' size={24} color={Colors.BRAND_PURPLE}/>,
-                    onPress: props.onAddLink,
-                }}
+    return (
+        <View style={{...styles.container}}>
+            <WideButton
+                label='Done'
+                icon={<Icon name='check' size={24} color={Colors.BRAND_PURPLE}/>}
+                onPress={props.onClose}
+                style={{ padding: 0 }}
             />
+            <QRCodeScanner
+                onRead={(event) => props.navigation.replace('RSSFeedLoader', { feedUrl: event.data })}
+                containerStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
+                cameraStyle={styles.qrCameraStyle as any as RegisteredStyle<ViewStyle>}
+                fadeIn={false}
+                cameraProps={{ratio: '1:1'}}
+            />
+        </View>
+    )
 }
 
 export function FeedLinkReader(props: Props) {
-    const [showCode, setShowCode] = useState(false)
+    const [showQRScanner, setShowQRScanner] = useState(false)
     const [linkText, setLinkText] = useState('')
     const [textRef, setTextRef] = useState<SimpleTextInput | null>(null)
 
@@ -121,40 +101,57 @@ export function FeedLinkReader(props: Props) {
                 }}
                 navigation={props.navigation}
             />
-            <View style={styles.container}>
-                <RegularText style={styles.hintLabel}>Enter a link of a website or a blog you want to follow. </RegularText>
-                <RegularText style={styles.hintLabel}>You can also import Feeds or OPML links or scan QR codes from other people.</RegularText>
-                <View style={{
-                    flexDirection: 'row',
-                }}>
-                    <SimpleTextInput
-                        style={styles.linkInput}
-                        placeholder='Paste link here'
-                        placeholderTextColor={Colors.MEDIUM_GRAY}
-                        autoCapitalize='none'
-                        autoFocus={true}
-                        autoCorrect={false}
-                        returnKeyType='done'
-                        onSubmitEditing={(text) => handleLink(text)}
-                        onEndEditing={() => {}}
-                        onFocus={() => setShowCode(false)}
-                        onChangeText={text => setLinkText(text)}
-                        ref={value => setTextRef(value)}
-                    />
-                </View>
-                <View style={styles.qrCameraContainer}>
-                    <ButtonContainer
+            {
+                showQRScanner
+                ?
+                    <QRCodeScannerContainer
                         navigation={props.navigation}
-                        showCode={showCode}
-                        setShowCode={sc => setShowCode(sc)}
-                        onAddLink={() => handleLink(linkText)}
                         onClose={() => {
-                            setShowCode(false)
+                            setShowQRScanner(false)
                             focusLinkText()
                         }}
                     />
+                :
+                <View style={styles.container}>
+                    <RegularText style={styles.hintLabel}>Enter a link of a website or a blog you want to follow. </RegularText>
+                    <RegularText style={styles.hintLabel}>You can also import Feeds or OPML links or scan QR codes from other people.</RegularText>
+                    <View style={{
+                        flexDirection: 'row',
+                    }}>
+                        <SimpleTextInput
+                            style={styles.linkInput}
+                            placeholder='Paste link here'
+                            placeholderTextColor={Colors.MEDIUM_GRAY}
+                            autoCapitalize='none'
+                            autoFocus={true}
+                            autoCorrect={false}
+                            returnKeyType='done'
+                            onSubmitEditing={(text) => handleLink(text)}
+                            onEndEditing={() => {}}
+                            onFocus={() => setShowQRScanner(false)}
+                            onChangeText={text => setLinkText(text)}
+                            ref={value => setTextRef(value)}
+                        />
+                    </View>
+                    <View style={styles.qrCameraContainer}>
+                        <TwoButton
+                            leftButton={{
+                                label: 'Scan QR code',
+                                icon: <Icon name='qrcode' size={24} color={Colors.BRAND_PURPLE}/>,
+                                onPress: () => {
+                                    setShowQRScanner(true)
+                                    Keyboard.dismiss()
+                                },
+                            }}
+                            rightButton={{
+                                label: 'Add link',
+                                icon: <Icon name='link' size={24} color={Colors.BRAND_PURPLE}/>,
+                                onPress: () => handleLink(linkText),
+                            }}
+                        />
+                    </View>
                 </View>
-            </View>
+            }
         </FragmentSafeAreaView>
     )
 }
@@ -162,8 +159,8 @@ export function FeedLinkReader(props: Props) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: ComponentColors.BACKGROUND_COLOR,
-        flex: 1,
         flexDirection: 'column',
+        justifyContent: 'flex-start',
     },
     linkInput: {
         width: '100%',
@@ -179,13 +176,11 @@ const styles = StyleSheet.create({
         width: QRCameraWidth,
         height: QRCameraHeight,
         padding: 0,
-        alignSelf: 'center',
-        flexDirection: 'column',
     },
     qrCameraStyle: {
         width: QRCameraWidth,
         height: QRCameraHeight,
-        paddingTop: 10,
+        paddingTop: 0,
     },
     hintLabel: {
         color: ComponentColors.HINT_TEXT_COLOR,
