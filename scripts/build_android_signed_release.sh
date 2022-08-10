@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 [ "$FELFELE_KEYSTORE_STOREPASS" = "" ] && (echo 'No FELFELE_KEYSTORE_STOREPASS set, exiting' && exit 1)
 [ "$FELFELE_KEYSTORE_KEYPASS" = "" ] && (echo 'No FELFELE_KEYSTORE_KEYPASS set, exiting' && exit 1)
@@ -30,5 +30,5 @@ echo " $android_release_dir/$debug_signed_apk_name"
 echo
 echo "You can upload the apk to the device with the following command:"
 echo
-echo " adb -d push $android_release_dir/$debug_signed_apk_name /storage/self/primary/Download"
+echo " adb -d push $android_release_dir/$debug_signed_apk_name /storage/self/primary/Download/feeds.apk"
 echo
