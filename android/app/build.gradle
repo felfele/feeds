@@ -129,7 +129,7 @@ android {
 
     defaultConfig {
         applicationId "org.felfele.feeds"
-        versionCode 37
+        versionCode 38
         versionName "1.0.9"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
