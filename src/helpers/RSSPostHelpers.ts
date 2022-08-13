@@ -118,6 +118,12 @@ export const fetchContentResult = async (url: string): Promise<ContentResult | n
         }
 }
 
+export const parseMimeType = (contentType: string): string => {
+    const parts = contentType.split(';', 2)
+    const mimeType = parts.length > 1 ? parts[0] : contentType
+    return mimeType
+}
+
 export const fetchContentWithMimeType = async (url: string): Promise<ContentWithMimeType | null> => {
     const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM
 
@@ -127,13 +133,12 @@ export const fetchContentWithMimeType = async (url: string): Promise<ContentWith
         })
 
         const contentType = response.headers.get('Content-Type')
+        Debug.log({ contentType, response })
         if (!contentType) {
             return null
         }
 
-        const parts = contentType.split('', 2)
-        const mimeType = parts.length > 1 ? parts[0] : contentType
-
+        const mimeType = parseMimeType(contentType)
         const content = await response.text()
 
         return {

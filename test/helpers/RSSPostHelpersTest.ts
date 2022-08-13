@@ -1,4 +1,4 @@
-import { htmlToMarkdown, extractTextAndImagesFromMarkdown, getFeedFromHtml, isTitleSameAsText } from '../../src/helpers/RSSPostHelpers'
+import { htmlToMarkdown, extractTextAndImagesFromMarkdown, getFeedFromHtml, isTitleSameAsText, parseMimeType } from '../../src/helpers/RSSPostHelpers'
 
 test('Parse CDATA descriptions from RSS', async () => {
     const text = 'text'
@@ -112,4 +112,11 @@ test('Compare text with title with links removed', () => {
     const result = isTitleSameAsText(title, text)
 
     expect(result).toBeTruthy()
+})
+
+test('Parse mime type', () => {
+    const contentType = 'text/xml; charset=UTF-8'
+    const result = parseMimeType(contentType)
+
+    expect(result).toBe('text/xml')
 })
