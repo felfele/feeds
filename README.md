@@ -4,11 +4,11 @@ Feeds – RSS reader by Felfele  [![Build Status](https://travis-ci.org/felfele/
 
 [<img src="screenshot-mobile.png" width=400>](screenshot-mobile.png)
 
-Feeds is a completely free and independent mobile RSS reader with no algorithmic timeline – just like in the good ol' days.
+Feeds is a completely free and independent mobile RSS reader with chronological timeline – just like in the good ol' days.
 
 ### Features
-- Follow news sites and blogs (e.g. Wordpress) with RSS
-- You can also follow Reddit subs, Youtube channels, Tumblr and Mastodon
+- Follow news sites and blogs (e.g. Wordpress, Ghost, Blogger) with RSS
+- You can also follow Reddit subs, Youtube channels, Tumblr, Twitter and Mastodon
 - No signup, registration or tracking: everything happens and stays on your phone
 - Export and import feeds between your devices or with your friends
 - No ads or algorithmic timeline: what you see is what you follow
