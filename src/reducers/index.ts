@@ -213,7 +213,7 @@ export const appStateReducer = (state: AppState = defaultState, action: Actions)
                 if (action.type !== 'TIME-TICK') {
                     const elapsed = Date.now() - startTime
                     // tslint:disable-next-line:no-console
-                    console.log('appStateReducer', 'elapsed', elapsed, 'action', action, 'newState', newState)
+                    console.log('appStateReducer', 'elapsed', elapsed, 'action', action)
                 }
                 return newState
             } catch (e) {

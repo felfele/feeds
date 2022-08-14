@@ -5,9 +5,6 @@ import { AsyncActions } from '../actions/asyncActions'
 import { Debug } from '../helpers/Debug'
 
 export const felfeleInitAppActions = (store: Store<AppState, Actions>) => {
-    // tslint:disable-next-line:no-console
-    console.log('initStore: ', store.getState())
-
     // @ts-ignore
     store.dispatch(AsyncActions.cleanupContentFilters())
     store.dispatch(Actions.timeTick())
