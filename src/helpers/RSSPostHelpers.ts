@@ -211,10 +211,10 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
 }
 
 export const augmentFeedWithMetadata = async (url: string, rssFeed: RSSFeedWithMetrics, html?: string): Promise<Feed | null> => {
-    Debug.log('RSSFeedManager.augmentFeedWithMetadata', {url, rssFeed})
+    Debug.log('RSSPostHelpers.augmentFeedWithMetadata', {url, rssFeed})
     const feedUrl = (rssFeed.feed && rssFeed.feed.url) || undefined
     const baseUrl = urlUtils.getBaseUrl(feedUrl || url).replace('http://', 'https://')
-    Debug.log('RSSFeedManager.augmentFeedWithMetadata', {url, baseUrl})
+    Debug.log('RSSPostHelpers.augmentFeedWithMetadata', {url, baseUrl})
     const name = rssFeed.feed.title.split(' - ')?.[0] ?? rssFeed.feed.title
     const feed: Feed = {
         url: urlUtils.getCanonicalUrl(baseUrl),
@@ -257,13 +257,13 @@ export const fetchFeedFromUrl = async (url: string): Promise<Feed | null> => {
 }
 
 export const fetchFeedByContentWithMimeType = async (url: string, contentWithMimeType: ContentWithMimeType): Promise<Feed | null> => {
-    Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, mimeType: contentWithMimeType.mimeType})
+    Debug.log('RSSPostHelpers.fetchFeedByContentWithMimeType', {url, mimeType: contentWithMimeType.mimeType})
 
     if (contentWithMimeType.mimeType === 'text/html') {
         const baseUrl = urlUtils.getBaseUrl(url).replace('http://', 'https://')
-        Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, baseUrl})
+        Debug.log('RSSPostHelpers.fetchFeedByContentWithMimeType', {url, baseUrl})
         const feed = getFeedFromHtml(baseUrl, contentWithMimeType.content)
-        Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {url, feed})
+        Debug.log('RSSPostHelpers.fetchFeedByContentWithMimeType', {url, feed})
         if (feed.feedUrl !== '') {
             const rssFeed = await fetchFeed(feed.feedUrl)
             const augmentedFeed = await augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content)
@@ -285,7 +285,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
     // It looks like there is a valid feed on the url
     if (isRssMimeType(contentWithMimeType.mimeType)) {
         const rssFeed = await loadRSSFeed(url, contentWithMimeType.content)
-        Debug.log('RSSFeedManager.fetchFeedByContentWithMimeType', {rssFeed})
+        Debug.log('RSSPostHelpers.fetchFeedByContentWithMimeType', {rssFeed})
         const augmentedFeed = await augmentFeedWithMetadata(url, rssFeed)
         if (augmentedFeed != null) {
             return augmentedFeed
