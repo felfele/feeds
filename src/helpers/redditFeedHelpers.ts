@@ -28,6 +28,7 @@ interface RedditPostData {
         images: RedditImage[]
         enabled: boolean,
     }
+    url_overridden_by_dest?: string
 }
 
 interface RedditPost {
@@ -78,14 +79,16 @@ const redditPostDataImages = (postData: RedditPostData): RSSThumbnail[] => {
         ? findBestResolutionRedditImage(postData.preview.images[0])
         : undefined
 
-    return image != null
+    const width = image?.width ? image?.width : 640
+    const height = image?.height ? image?.height : 422
+    return (postData.url_overridden_by_dest != null &&
+        (postData.url_overridden_by_dest.endsWith('.jpg') || postData.url_overridden_by_dest.endsWith('.png')))
         ? [{
-            url: [image.url.replace(/&amp/gi, '&')],
-            width: [image.width],
-            height: [image.height],
+            url: [postData.url_overridden_by_dest],
+            width: [width],
+            height: [height],
         }]
         : []
-
 }
 
 const redditPostDataToRSSItem = (postData: RedditPostData): RSSItem => {
