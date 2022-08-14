@@ -71,7 +71,6 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
         // To prevent FlatList scrolls to top automatically,
         // we have to delay scroll to the original position
         setTimeout(() => {
-            console.debug('componentDidMount - setTimeout', { flatList, offset })
             flatList?.scrollToOffset({ offset, animated: false })
         }, 50)
     }
@@ -79,7 +78,6 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
     public onScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
         if (this.props.onChangeScrollOffset) {
             const scrollOffset = event.nativeEvent.contentOffset.y
-            console.debug(scrollOffset)
             this.props.onChangeScrollOffset(scrollOffset)
         }
     }

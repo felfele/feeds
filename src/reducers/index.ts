@@ -193,7 +193,6 @@ const rssPostsReducer = (rssPosts: Post[] = [], action: Actions): Post[] => {
 const scrollOffsetReducer = (scrollOffset: number | undefined = 0, action: Actions): number | undefined => {
     switch (action.type) {
         case 'CHANGE-SCROLL-OFFSET': {
-            console.debug({ action })
             return action.payload.value
         }
     }
