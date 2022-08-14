@@ -53,7 +53,7 @@ export function FilterListScreen(props: StateProps & DispatchProps) {
                     label: <AddWordIcon color={ComponentColors.NAVIGATION_BUTTON_COLOR} />,
                 }}
             />
-            <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR }}>
+            <ScrollView style={{ backgroundColor: ComponentColors.BACKGROUND_COLOR, paddingTop: 10 }}>
                 {props.filters.length === 0 &&
                     <View style={styles.emptyContainer}>
                         <BoldText style={styles.emptyListTitle}>You aren't muting any words.</BoldText>

@@ -1,7 +1,7 @@
 import { ContentFilter } from '../models/ContentFilter'
 import { Feed } from '../models/Feed'
 import { SubCategoryMap } from '../models/recommendation/NewsSource'
-import { NavigationNavigateAction } from 'react-navigation'
+import { NavigationNavigateAction, NavigationEventCallback } from 'react-navigation'
 
 export interface Routes {
     App: {}
@@ -66,4 +66,5 @@ export interface TypedNavigation {
     popToTop: () => void
     getParam: <K extends keyof Routes, P extends keyof Routes[K]>(param: P) => Routes[K][P]
     setParams: <K extends keyof Routes>(newParams: Routes[K]) => boolean
+    addListener: (eventName: 'willBlur' | 'willFocus' | 'didFocus' | 'didBlur', callback: NavigationEventCallback) => void
 }

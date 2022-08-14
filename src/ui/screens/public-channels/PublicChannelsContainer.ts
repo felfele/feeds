@@ -5,6 +5,7 @@ import { StateProps, DispatchProps, PublicChannelsScreen } from './PublicChannel
 import { getAllFeeds, getAllPostsSorted } from '../../../selectors/selectors'
 import { TypedNavigation } from '../../../helpers/navigation'
 import { AsyncActions } from '../../../actions/asyncActions'
+import { Actions } from '../../../actions/Actions'
 
 const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigation }): StateProps => {
     const followedFeeds = getAllFeeds(state)
@@ -15,6 +16,7 @@ const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNavigatio
         posts: filteredPosts,
         feeds: followedFeeds,
         gatewayAddress: state.settings.swarmGatewayAddress,
+        initialScrollOffset: state.scrollOffset || 0,
     }
 }
 
@@ -22,6 +24,9 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
     return {
         onRefreshPosts: (feeds: Feed[]) => {
             dispatch(AsyncActions.downloadPostsFromFeeds(feeds))
+        },
+        onChangeScrollOffset: (scrollOffset: number) => {
+            dispatch(Actions.updateScrollOffset(scrollOffset))
         },
     }
 }

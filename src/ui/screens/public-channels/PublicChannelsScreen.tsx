@@ -12,6 +12,7 @@ import { View } from 'react-native'
 
 export interface DispatchProps {
     onRefreshPosts: (feeds: Feed[]) => void
+    onChangeScrollOffset: (offset: number) => void
 }
 
 export interface StateProps {
@@ -19,6 +20,7 @@ export interface StateProps {
     posts: Post[]
     feeds: Feed[]
     gatewayAddress: string
+    initialScrollOffset: number
 }
 
 type Props = StateProps & DispatchProps

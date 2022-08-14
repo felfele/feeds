@@ -190,6 +190,16 @@ const rssPostsReducer = (rssPosts: Post[] = [], action: Actions): Post[] => {
     return rssPosts
 }
 
+const scrollOffsetReducer = (scrollOffset: number | undefined = 0, action: Actions): number | undefined => {
+    switch (action.type) {
+        case 'CHANGE-SCROLL-OFFSET': {
+            console.debug({ action })
+            return action.payload.value
+        }
+    }
+    return scrollOffset
+}
+
 let ignoreActionsAfterReset = false
 
 export const appStateReducer = (state: AppState = defaultState, action: Actions): AppState => {
@@ -230,4 +240,5 @@ export const combinedReducers = combineReducers<AppState>({
     settings: settingsReducer,
     currentTimestamp: currentTimestampReducer,
     rssPosts: rssPostsReducer,
+    scrollOffset: scrollOffsetReducer,
 })
