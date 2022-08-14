@@ -11,6 +11,7 @@ export interface AppStateV0 extends PersistedState {
     settings: Settings
     currentTimestamp: number
     rssPosts: Post[]
+    scrollOffset?: number
 }
 
 export const migrateUnversionedToVersion0 = (state: PersistedState): AppStateV0 => {

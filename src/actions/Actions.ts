@@ -57,6 +57,9 @@ export const Actions = {
     changeSettingSwarmGatewayAddress: (value: string) =>
         createAction(ActionTypes.CHANGE_SETTING_SWARM_GATEWAY_ADDRESS, { value }),
 
+    updateScrollOffset: (value: number) =>
+        createAction(ActionTypes.CHANGE_SCROLL_OFFSET, { value }),
+
     appStateReset: () =>
         createAction(ActionTypes.APP_STATE_RESET),
 }

@@ -4,6 +4,8 @@ import {
     FlatList,
     RefreshControl,
     LayoutAnimation,
+    NativeSyntheticEvent,
+    NativeScrollEvent,
 } from 'react-native'
 import { Post } from '../../models/Post'
 import { ComponentColors, Colors } from '../../styles'
@@ -13,8 +15,11 @@ import { Props as NavHeaderProps } from './NavigationHeader'
 import { TypedNavigation } from '../../helpers/navigation'
 import { FragmentSafeAreaView } from './FragmentSafeAreaView'
 
+const HeaderOffset = 20
+
 export interface DispatchProps {
     onRefreshPosts: (feeds: Array<Feed>) => void
+    onChangeScrollOffset?: (value: number) => void
 }
 
 export interface StateProps {
@@ -28,6 +33,7 @@ export interface StateProps {
         navigationHeader?: React.ReactElement<NavHeaderProps>
         placeholder?: React.ReactElement<any>
     }
+    initialScrollOffset?: number
 }
 
 type Props = DispatchProps & StateProps
@@ -56,6 +62,23 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
             this.setState({
                 isRefreshing: false,
             })
+        }
+    }
+
+    public componentDidMount() {
+        const offset = this.props.initialScrollOffset ?? 0
+        const flatList = this.flatList
+        // To prevent FlatList scrolls to top automatically,
+        // we have to delay scroll to the original position
+        setTimeout(() => {
+            flatList?.scrollToOffset({ offset, animated: false })
+        }, 50)
+    }
+
+    public onScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
+        if (this.props.onChangeScrollOffset) {
+            const scrollOffset = event.nativeEvent.contentOffset.y
+            this.props.onChangeScrollOffset(scrollOffset)
         }
     }
 
@@ -91,6 +114,8 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                         backgroundColor: ComponentColors.BACKGROUND_COLOR,
                     }}
                     ref={value => this.flatList = value || undefined}
+                    onScroll={e => this.onScroll(e)}
+                    initialNumToRender={50}
                 />
             </FragmentSafeAreaView>
         )
@@ -129,4 +154,3 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
     }
 }
 
-const HeaderOffset = 20

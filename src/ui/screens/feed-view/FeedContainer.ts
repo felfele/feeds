@@ -25,6 +25,7 @@ export const mapStateToProps = (state: AppState, ownProps: { navigation: TypedNa
         navigation: ownProps.navigation,
         posts,
         feed: selectedFeed,
+        initialScrollOffset: state.scrollOffset ?? 0,
     }
 }
 
@@ -44,6 +45,9 @@ export const mapDispatchToProps = (dispatch: any): DispatchProps => {
         },
         onRemoveFeed: (feed: Feed) => {
             dispatch(Actions.removeFeed(feed))
+        },
+        onChangeScrollOffset: (offset: number) => {
+            dispatch(Actions.updateScrollOffset(offset))
         },
     }
 }

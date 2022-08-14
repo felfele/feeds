@@ -19,6 +19,7 @@ export interface DispatchProps {
     onUnfollowFeed: (feed: Feed) => void
     onToggleFavorite: (feedUrl: string) => void
     onRemoveFeed: (feed: Feed) => void
+    onChangeScrollOffset: (offset: number) => void
 }
 
 export interface StateProps {
@@ -26,6 +27,7 @@ export interface StateProps {
     onBack: () => void
     feed: Feed
     posts: Post[]
+    initialScrollOffset?: number
 }
 
 type Props = StateProps & DispatchProps

@@ -28,7 +28,7 @@ type Props = StateProps & DispatchProps
 export const SettingsScreen = (props: Props) => {
     const spacePrefix = (s: string) => s !== '' ? ' ' + s : ''
     const buildEnvironment = spacePrefix(getBuildEnvironment())
-    const buildNumber = ` (Build number ${BuildNumber})`
+    const buildNumber = `, build ${BuildNumber}`
     const buildInfo = props.settings.showDebugMenu
         ? buildNumber
         : ''
