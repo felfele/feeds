@@ -36,10 +36,10 @@ const findBestLink = (entry: any): string => {
 
     const htmlLinks = []
     for (const link of entry.link) {
-        if (link.rel[0] === 'alternate') {
+        if (link.rel && link.rel[0] === 'alternate') {
             return link.href[0]
         }
-        if (link.type[0] === 'text/html') {
+        if (link.type && link.type[0] === 'text/html') {
             htmlLinks.push(link)
         }
     }

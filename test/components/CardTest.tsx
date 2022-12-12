@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { NavigationEventCallback } from 'react-navigation'
+
 import { Card } from '../../src/ui/card/Card'
 import { Post } from '../../src/models/Post'
 import { Author } from '../../src/models/Author'
@@ -17,6 +19,7 @@ const mockNavigation: TypedNavigation = {
     popToTop: () => {},
     getParam: (param: any) => param.name,
     setParams: (newParams: any) => true,
+    addListener: (eventName: 'willBlur' | 'willFocus' | 'didFocus' | 'didBlur', callback: NavigationEventCallback) => void 0,
 }
 
 describe('card test', () => {
