@@ -119,7 +119,12 @@ export const loadRSSFeed = async (url: string, xml: string, startTime = 0, downl
                 return
             }
             const parseTime = Date.now()
+            console.debug({ result })
             const rss = parseFeed(result)
+            if (!rss) {
+                reject(err)
+                return
+            }
             const feedWithMetrics: RSSFeedWithMetrics = {
                 feed: rss,
                 url: url,
@@ -131,23 +136,45 @@ export const loadRSSFeed = async (url: string, xml: string, startTime = 0, downl
             resolve(feedWithMetrics)
         })
     })
+
+    console.debug({ rssFeed })
     return rssFeed
 }
 
-const parseFeed = (json: any) => {
+const parseFeed = (json: any): RSSFeed | undefined => {
     if (json.feed) {
         return parseAtomFeed(json)
     } else if (json.rss) {
         return parseRSSFeed(json)
+    } else if (json['rdf:RDF']) {
+        return parseRDFFeed(json)
     }
+    return undefined
 }
 
 const parseRSSFeed = (json: any) => {
-    let channel = json.rss.channel
-    const rss: any = { items: [] }
-    if (util.isArray(json.rss.channel)) {
-        channel = json.rss.channel[0]
+    const channel = util.isArray(json.rss.channel) ? json.rss.channel[0] : json.rss.channel 
+    return parseRSSChannel(channel)
+}
+
+function parseRDFFeed(json: any) {
+    const channel = util.isArray(json['rdf:RDF'].channel) ? json['rdf:RDF'].channel[0] : json['rdf:RDF'].channel
+    const items = json['rdf:RDF'].item
+    return parseRSSChannel(channel, items)
+}
+
+function getItems(channel: any, items?: [] | undefined) {
+    if (items) {
+        return items
     }
+    if (!util.isArray(channel.item)) {
+        return [channel.item]
+    }
+    return channel.item
+}
+
+function parseRSSChannel(channel: any, items?: [] | undefined) {
+    const rss: any = { items: [] }
     if (channel.title) {
         rss.title = channel.title[0]
     }
@@ -157,11 +184,9 @@ const parseRSSFeed = (json: any) => {
     if (channel.link) {
         rss.url = channel.link[0]
     }
-    if (channel.item) {
-        if (!util.isArray(channel.item)) {
-            channel.item = [channel.item]
-        }
-        channel.item.forEach((val: any) => {
+    const channelItems = getItems(channel, items)
+    if (channelItems) {
+        channelItems.forEach((val: any) => {
             const obj: any = {}
             obj.title = !util.isNullOrUndefined(val.title) ? val.title[0] : ''
             obj.description = !util.isNullOrUndefined(val.description) ? val.description[0] : ''

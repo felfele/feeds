@@ -4,9 +4,6 @@ const Url = require('url')
 export const REDDIT_COM = 'reddit.com'
 
 const HTTP_URL_MATCHER = /(http.?:\/\/.*?)( |$)/
-const BZZ_FEED_MATCHER = /(bzz-feed:\/\?user=0x[a-f0-9]{40})( |$)/
-const BZZ_RESOURCE_MATCHER = /(bzz:\/\/[a-f0-9]{64})( |$)/
-const FELFELE_DEEP_LINK_MATCHER = /(http.?:\/\/app.felfele.org\/.*?)( |$)/
 
 export const getHumanHostname = (url: string): string => {
     if (url.startsWith('//')) {

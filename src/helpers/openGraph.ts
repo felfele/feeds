@@ -42,6 +42,9 @@ export const getHtmlOpenGraphData = (document: HTMLElement, baseUrl: string): Op
 }
 
 const normalizeOpenGraphData = (ogData: OpenGraphData, baseUrl: string): OpenGraphData => {
+    if (!ogData.image) {
+        return ogData
+    }
     return {
         ...ogData,
         image: createUrlFromUrn(ogData.image, baseUrl),

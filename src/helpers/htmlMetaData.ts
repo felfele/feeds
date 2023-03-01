@@ -1,9 +1,10 @@
 import { OpenGraphData, getHtmlOpenGraphData } from './openGraph'
 import { fetchFeedFromUrl } from './RSSPostHelpers'
-import { fetchSiteFaviconUrl } from './favicon'
+import { DEFAULT_FAVICON, parseFaviconFromHtml } from './favicon'
 import { HtmlUtils } from './HtmlUtils'
 import { Feed } from '../models/Feed'
 import { Debug } from './Debug'
+import { createUrlFromUrn } from './urlUtils'
 
 export interface HtmlMetaData extends OpenGraphData {
     icon: string
@@ -17,12 +18,17 @@ export const fetchHtmlMetaData = async (url: string): Promise<HtmlMetaData> => {
     const response = await fetch(url)
     const html = await response.text()
     const feed = await tryFetchFeedFromUrl(url)
+    return parseHtmlMetaData(url, html, feed)
+}
+
+export function parseHtmlMetaData(url: string, html: string, feed: Feed | null) {
     const document = HtmlUtils.parse(html)
     const openGraphData = getHtmlOpenGraphData(document, url)
     const feedName = feed != null ? feed.name : ''
     const name = getFirstNonEmpty([getMetaName(document), openGraphData.name, feedName])
     const title = getHtmlTitle(document, openGraphData.title)
-    const icon = await fetchSiteFaviconUrl(url)
+    const favicon = parseFaviconFromHtml(html) || DEFAULT_FAVICON
+    const icon = createUrlFromUrn(favicon, url)
     const createdAt = getPublishedTime(document)
     const updatedAt = getModifiedTime(document, createdAt)
     return {

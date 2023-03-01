@@ -1,7 +1,7 @@
 import { Post, PublicPost } from '../models/Post'
 import { ImageData } from '../models/ImageData'
 import { Feed } from '../models/Feed'
-import { findBestIconFromLinks, fetchSiteFaviconUrl, parseFaviconFromHtml } from './favicon'
+import { findBestIconFromLinks, parseFaviconFromHtml, DEFAULT_FAVICON } from './favicon'
 import * as urlUtils from './urlUtils'
 import { HtmlUtils } from './HtmlUtils'
 import { Debug } from './Debug'
@@ -17,6 +17,7 @@ import {
 } from './RSSFeedHelpers'
 import { safeFetch } from './safeFetch'
 import { MINUTE } from './dateHelpers'
+import { parseHtmlMetaData } from './htmlMetaData'
 // tslint:disable-next-line:no-var-requires
 const he = require('he')
 
@@ -64,6 +65,20 @@ const parseFeedFromHtml = (html: any): Feed => {
                 feed.feedUrl = feedUrl
             }
         }
+    }
+
+    if (!feed.feedUrl) {
+        const bodyLinks = HtmlUtils.findPath(document, ['html', 'body', 'link'])
+
+        for (const link of bodyLinks) {
+            if (feed.feedUrl === '' && HtmlUtils.matchAttributes(link, [{name: 'rel', value: 'alternate'}])) {
+                const feedUrl = getFeedUrlFromHtmlLink(link)
+                if (feedUrl !== '') {
+                    feed.feedUrl = feedUrl
+                }
+            }
+        }
+    
     }
 
     feed.favicon = findBestIconFromLinks(links) || ''
@@ -201,6 +216,7 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
         if (rssContentWithMimeType != null && isRssMimeType(rssContentWithMimeType.mimeType)) {
             feed.feedUrl = altUrl
             const rssFeed = await loadRSSFeed(altUrl, rssContentWithMimeType.content)
+            console.debug({ rssFeed })
             return {
                 ...feed,
                 name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
@@ -210,12 +226,20 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
     return null
 }
 
-export const augmentFeedWithMetadata = async (url: string, rssFeed: RSSFeedWithMetrics, html?: string): Promise<Feed | null> => {
+function normalizeName(name: string): string {
+    const separator = ' - '
+    if (name.includes(separator)) {
+        return name.split(separator)[0]
+    }
+    return name
+}
+
+export const augmentFeedWithMetadata = async (url: string, feedName: string, rssFeed: RSSFeedWithMetrics, html?: string): Promise<Feed | null> => {
     Debug.log('RSSPostHelpers.augmentFeedWithMetadata', {url, rssFeed})
     const feedUrl = (rssFeed.feed && rssFeed.feed.url) || undefined
     const baseUrl = urlUtils.getBaseUrl(feedUrl || url).replace('http://', 'https://')
     Debug.log('RSSPostHelpers.augmentFeedWithMetadata', {url, baseUrl})
-    const name = rssFeed.feed.title.split(' - ')?.[0] ?? rssFeed.feed.title
+    const name = normalizeName(feedName || rssFeed.feed.title)
     const feed: Feed = {
         url: urlUtils.getCanonicalUrl(baseUrl),
         feedUrl: url,
@@ -236,12 +260,16 @@ export const augmentFeedWithMetadata = async (url: string, rssFeed: RSSFeedWithM
     }
     feed.favicon = feedFromHtml.favicon || rssFeed.feed.icon || ''
     if (feed.favicon === '') {
-        const baseHtmlResult = await fetchContentResult(baseUrl)
-        if (baseHtmlResult != null) {
-            const feedFavicon = parseFaviconFromHtml(baseHtmlResult.content)
-            if (feedFavicon != null) {
-                feed.favicon = urlUtils.createUrlFromUrn(feedFavicon, url)
-            }
+        const feedFavicon = parseFaviconFromHtml(html)
+        if (feedFavicon != null) {
+            feed.favicon = urlUtils.createUrlFromUrn(feedFavicon, baseUrl)
+        } else  {
+            const metadata = parseHtmlMetaData(baseUrl, html, feed)
+            feed.favicon = metadata.image
+        }
+
+        if (feed.favicon === '') {
+            feed.favicon = urlUtils.createUrlFromUrn(DEFAULT_FAVICON, baseUrl)
         }
     }
     return feed
@@ -266,7 +294,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
         Debug.log('RSSPostHelpers.fetchFeedByContentWithMimeType', {url, feed})
         if (feed.feedUrl !== '') {
             const rssFeed = await fetchFeed(feed.feedUrl)
-            const augmentedFeed = await augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content)
+            const augmentedFeed = await augmentFeedWithMetadata(feed.feedUrl, feed.name, rssFeed, contentWithMimeType.content)
             if (augmentedFeed != null) {
                 return augmentedFeed
             }
@@ -275,7 +303,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
         const altFeed = await tryFetchFeedFromAltLocations(baseUrl, feed)
         if (altFeed != null && altFeed.feedUrl !== '') {
             const rssFeed = await fetchFeed(altFeed.feedUrl)
-            const augmentedFeed = await augmentFeedWithMetadata(feed.feedUrl, rssFeed, contentWithMimeType.content)
+            const augmentedFeed = await augmentFeedWithMetadata(feed.feedUrl, feed.name, rssFeed, contentWithMimeType.content)
             if (augmentedFeed != null) {
                 return augmentedFeed
             }
@@ -286,7 +314,7 @@ export const fetchFeedByContentWithMimeType = async (url: string, contentWithMim
     if (isRssMimeType(contentWithMimeType.mimeType)) {
         const rssFeed = await loadRSSFeed(url, contentWithMimeType.content)
         Debug.log('RSSPostHelpers.fetchFeedByContentWithMimeType', {rssFeed})
-        const augmentedFeed = await augmentFeedWithMetadata(url, rssFeed)
+        const augmentedFeed = await augmentFeedWithMetadata(url, '', rssFeed)
         if (augmentedFeed != null) {
             return augmentedFeed
         }

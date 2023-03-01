@@ -8,12 +8,14 @@ interface Icon {
     size: number
 }
 
+export const DEFAULT_FAVICON = 'favicon.ico'
+
 export const fetchSiteFaviconUrl = async (url: string): Promise<string> => {
     const baseUrl = urlUtils.getBaseUrl(url)
     try {
         const favicon = await downloadIndexAndParseFavicon(baseUrl)
         if (favicon == null) {
-            return urlUtils.createUrlFromUrn('favicon.ico', url)
+            return urlUtils.createUrlFromUrn(DEFAULT_FAVICON, url)
         }
         return favicon
     } catch (e) {

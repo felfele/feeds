@@ -2,7 +2,7 @@ import { Feed } from '../models/Feed'
 import { ImageData } from '../models/ImageData'
 import { isBundledImage } from './imageDataHelpers'
 import * as urlUtils from '../helpers/urlUtils'
-import { fetchContentResult, fetchFeedByContentWithMimeType, ContentResult } from './RSSPostHelpers'
+import { fetchContentResult, fetchFeedByContentWithMimeType, ContentResult, ContentWithMimeType } from './RSSPostHelpers'
 import { parseOPML } from './opmlImport'
 import { isRedditLink, fetchRedditFeed } from './redditFeedHelpers'
 import { exploreData } from '../models/recommendation/NewsSource'
@@ -37,7 +37,7 @@ const tryFetchFelfeleFeeds = (result: ContentResult): Feed[] | undefined => {
     }
 }
 
-const tryFetchFeedByContentWithMimeType = async (inputUrl: string, contentResult: ContentResult, fetchConfiguration = defaultFetchConfiguration): Promise<Feed | Feed[] | undefined> => {
+export async function tryFetchFeedByContentWithMimeType(inputUrl: string, contentResult: ContentResult, fetchConfiguration = defaultFetchConfiguration): Promise<Feed | Feed[] | undefined> {
     if (contentResult.mimeType === FELFELE_FEEDS_MIME_TYPE) {
         return tryFetchFelfeleFeeds(contentResult)
     }
@@ -80,7 +80,13 @@ const tryFindFeedInExploreData = (inputUrl: string, canonicalUrl: string): Feed 
 
 }
 
-const defaultFetchConfiguration = {
+export interface FetchConfiguration {
+    fetchFeedByContentWithMimeType: (url: string, contentWithMimeType: ContentWithMimeType) => Promise<Feed | null>
+    fetchContentResult: (url: string) => Promise<ContentResult | null>
+    parseOPML: (xml: string) => Promise<Feed[] | undefined> 
+}
+
+const defaultFetchConfiguration: FetchConfiguration = {
     fetchFeedByContentWithMimeType,
     fetchContentResult,
     parseOPML,
@@ -98,31 +104,33 @@ export const fetchFeedsFromUrl = async (inputUrl: string, fetchConfiguration = d
         url += '.com'
     }
 
-    // special cases
+    // special cases for certain websites
     if (isRedditLink(url)) {
         return fetchRedditFeed(url)
     }
 
     if (isYoutubeLink(url)) {
-        return fetchYoutubeFeed(url)
+        return fetchYoutubeFeed(url, fetchConfiguration)
     }
 
     if (isTwitterLink(url)) {
         return fetchTwitterFeed(url)
     }
 
+    // first try with the url the user entered
     const originalContentResult = await fetchConfiguration.fetchContentResult(url)
     if (originalContentResult != null) {
-        const originalUrlFeed = tryFetchFeedByContentWithMimeType(inputUrl, originalContentResult, fetchConfiguration)
+        const originalUrlFeed = await tryFetchFeedByContentWithMimeType(inputUrl, originalContentResult, fetchConfiguration)
         if (originalUrlFeed != null) {
             return originalUrlFeed
         }
     }
 
+    // if the url the user entered did not work, form a canonical url and try with that
     const canonicalUrl = urlUtils.getCanonicalUrl(url)
     const result = await fetchConfiguration.fetchContentResult(canonicalUrl)
     if (result != null) {
-        const feed = tryFetchFeedByContentWithMimeType(inputUrl, result, fetchConfiguration)
+        const feed = await tryFetchFeedByContentWithMimeType(inputUrl, result, fetchConfiguration)
         if (feed != null) {
             return feed
         }
