@@ -83,7 +83,7 @@ const tryFindFeedInExploreData = (inputUrl: string, canonicalUrl: string): Feed 
 export interface FetchConfiguration {
     fetchFeedByContentWithMimeType: (url: string, contentWithMimeType: ContentWithMimeType) => Promise<Feed | null>
     fetchContentResult: (url: string) => Promise<ContentResult | null>
-    parseOPML: (xml: string) => Promise<Feed[] | undefined> 
+    parseOPML: (xml: string) => Promise<Feed[] | undefined>
 }
 
 const defaultFetchConfiguration: FetchConfiguration = {

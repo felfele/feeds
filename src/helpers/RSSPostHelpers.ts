@@ -78,7 +78,6 @@ const parseFeedFromHtml = (html: any): Feed => {
                 }
             }
         }
-    
     }
 
     feed.favicon = findBestIconFromLinks(links) || ''
@@ -216,7 +215,6 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
         if (rssContentWithMimeType != null && isRssMimeType(rssContentWithMimeType.mimeType)) {
             feed.feedUrl = altUrl
             const rssFeed = await loadRSSFeed(altUrl, rssContentWithMimeType.content)
-            console.debug({ rssFeed })
             return {
                 ...feed,
                 name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,

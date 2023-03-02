@@ -119,7 +119,6 @@ export const loadRSSFeed = async (url: string, xml: string, startTime = 0, downl
                 return
             }
             const parseTime = Date.now()
-            console.debug({ result })
             const rss = parseFeed(result)
             if (!rss) {
                 reject(err)
@@ -137,7 +136,6 @@ export const loadRSSFeed = async (url: string, xml: string, startTime = 0, downl
         })
     })
 
-    console.debug({ rssFeed })
     return rssFeed
 }
 
@@ -153,7 +151,7 @@ const parseFeed = (json: any): RSSFeed | undefined => {
 }
 
 const parseRSSFeed = (json: any) => {
-    const channel = util.isArray(json.rss.channel) ? json.rss.channel[0] : json.rss.channel 
+    const channel = util.isArray(json.rss.channel) ? json.rss.channel[0] : json.rss.channel
     return parseRSSChannel(channel)
 }
 
