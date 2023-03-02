@@ -7,7 +7,11 @@ import { fetchOpenGraphData } from '../helpers/openGraph'
 import { fetchHtmlMetaData } from '../helpers/htmlMetaData'
 import { tryFetchOPML } from '../helpers/opmlImport'
 import { fetchFeedsFromUrl } from '../helpers/feedHelpers'
-import { fetchFeedFromUrl } from '../helpers/RSSPostHelpers'
+import { fetchFeedFromUrl, loadPosts } from '../helpers/RSSPostHelpers'
+import { Feed } from '../models/Feed'
+import { mergeUpdatedPosts } from '../helpers/postHelpers'
+import { Post } from '../models/Post'
+import { isError, tryExpr } from '../helpers/tryExpr'
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch')
@@ -123,7 +127,7 @@ const definitions =
         checkVersions(packageJSON.devDependencies)
     })
     .
-    addCommand('opml <url>', 'Download and conver OPML data', async (url: string) => {
+    addCommand('opml <url>', 'Download and convert OPML data', async (url: string) => {
         const data = await tryFetchOPML(url)
         output({data})
     })
@@ -131,6 +135,18 @@ const definitions =
     addCommand('addFeed <url>', 'Test add feed input', async (url: string) => {
         const feeds = await fetchFeedsFromUrl(url)
         output(JSON.stringify(feeds, undefined, 4))
+    })
+    .
+    addCommand('fetchFeeds <feeds-file> [max-posts]', 'Fetch feeds from file', async (feedsFile: string, maxPostsValue: string) => {
+        const feedsData = fs.readFileSync(feedsFile)
+        const feeds = JSON.parse(feedsData).feeds as Feed[]
+        const allPosts = await loadPosts(feeds)
+        const previousPosts: Post[] = []
+        const posts = mergeUpdatedPosts(allPosts, previousPosts)
+        const maxPostsOrError = tryExpr(() => parseInt(maxPostsValue, 10))
+        const maxPosts = isError(maxPostsOrError) ? undefined : maxPostsOrError
+        const topPosts = posts.slice(0, maxPosts)
+        output(JSON.stringify(topPosts, undefined, 4))
     })
 
 const checkVersions = (deps: {[pack: string]: string}) => {
