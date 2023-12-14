@@ -24,12 +24,30 @@ export const tryFetchOPML = async (url: string): Promise<Feed[] | undefined> => 
     }
 }
 
+export const readOPML = async (xml: string): Promise<OPMLFeed[]> => {
+    return new Promise<OPMLFeed[]>((resolve, reject) => {
+        try {
+            parseOpml(xml, (err: any, items: OPMLFeed[]) => {
+                if (err) {
+                    console.error(err)
+                    reject(err)
+                    return
+                }
+                resolve(items)
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 export const parseOPML = async (xml: string): Promise<Feed[] | undefined> => {
     try {
         const opmlFeeds = await new Promise<OPMLFeed[]>((resolve, reject) => {
             try {
                 parseOpml(xml, (err: any, items: OPMLFeed[]) => {
                     if (err) {
+                        console.error(err)
                         reject(err)
                         return
                     }
@@ -58,12 +76,12 @@ const findBestAlternative = (alternatives: (string | undefined)[]) => {
     return ''
 }
 
-const convertOPMLFeed = async (opmlFeed: OPMLFeed): Promise<Feed | undefined> => {
+export const convertOPMLFeed = async (opmlFeed: OPMLFeed): Promise<Feed | undefined> => {
     Debug.log('convertOPMLFeed', {opmlFeed})
     const feedUrl = getHttpsUrl(opmlFeed.feedUrl)
     Debug.log('convertOPMLFeed', {feedUrl})
     try {
-        const feed = await timeout(15000, fetchFeedFromUrl(feedUrl))
+        const feed = await timeout(120_000, fetchFeedFromUrl(feedUrl))
         Debug.log('convertOPMLFeed', 'after timeout', {feed})
         if (feed == null) {
             return undefined
@@ -82,7 +100,7 @@ const convertOPMLFeed = async (opmlFeed: OPMLFeed): Promise<Feed | undefined> =>
     }
 }
 
-const convertOPMLFeeds = async (opmlFeeds: OPMLFeed[]): Promise<(Feed | undefined)[]> => {
+export const convertOPMLFeeds = async (opmlFeeds: OPMLFeed[]): Promise<(Feed | undefined)[]> => {
     return Promise.all(
         opmlFeeds
             .map(opmlFeed => convertOPMLFeed(opmlFeed))

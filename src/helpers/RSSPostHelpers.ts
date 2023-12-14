@@ -14,6 +14,7 @@ import {
     RSSEnclosure,
     loadRSSFeed,
     fetchFeed,
+    HEADERS_WITH_CURL,
 } from './RSSFeedHelpers'
 import { safeFetch } from './safeFetch'
 import { MINUTE } from './dateHelpers'
@@ -63,6 +64,7 @@ const parseFeedFromHtml = (html: any): Feed => {
             const feedUrl = getFeedUrlFromHtmlLink(link)
             if (feedUrl !== '') {
                 feed.feedUrl = feedUrl
+                break
             }
         }
     }
@@ -75,6 +77,7 @@ const parseFeedFromHtml = (html: any): Feed => {
                 const feedUrl = getFeedUrlFromHtmlLink(link)
                 if (feedUrl !== '') {
                     feed.feedUrl = feedUrl
+                    break
                 }
             }
         }
@@ -143,7 +146,11 @@ export const fetchContentWithMimeType = async (url: string): Promise<ContentWith
 
     try {
         const response = await safeFetch(url, {
-            headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI,
+            headers: {
+                ...isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
+            },
+            cache: 'no-cache',
+            keepalive: false,
         })
 
         const contentType = response.headers.get('Content-Type')
@@ -214,10 +221,14 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
         const rssContentWithMimeType = await fetchRSSFeedUrlFromUrl(altUrl)
         if (rssContentWithMimeType != null && isRssMimeType(rssContentWithMimeType.mimeType)) {
             feed.feedUrl = altUrl
-            const rssFeed = await loadRSSFeed(altUrl, rssContentWithMimeType.content)
-            return {
-                ...feed,
-                name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
+            try {
+                const rssFeed = await loadRSSFeed(altUrl, rssContentWithMimeType.content)
+                return {
+                    ...feed,
+                    name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
+                }    
+            } catch (e) {
+                continue
             }
         }
     }
@@ -325,7 +336,7 @@ const feedFaviconString = (favicon: string | number): string => {
     return typeof favicon === 'string' ? favicon : ''
 }
 
-export const loadPosts = async (storedFeeds: Feed[]): Promise<PublicPost[]> => {
+export const loadPosts = async (storedFeeds: Feed[]): Promise<Post[]> => {
     const posts: Post[] = []
     const metrics: RSSFeedWithMetrics[] = []
 
@@ -347,7 +358,7 @@ export const loadPosts = async (storedFeeds: Feed[]): Promise<PublicPost[]> => {
                 posts.push.apply(posts, convertedPosts)
                 metrics.push(feedWithMetrics)
             } catch (e) {
-                Debug.log('RSSPostManager.loadPosts', 'error while parsing feed', {e, feedWithMetrics})
+                Debug.log('loadPosts', 'error while parsing feed', {e, feedWithMetrics})
             }
         }
     }
@@ -464,6 +475,7 @@ const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: stri
                         uri: strippedFavicon,
                     },
                 },
+                rssItem: item,
             }
             return post
         } catch (e) {

@@ -23,6 +23,11 @@ export const HEADERS_WITH_FELFELE = {
     'Accept': '*/*',
 }
 
+export const HEADERS_WITH_CURL = {
+    'user-agent': 'curl/7.81.0',
+    'accept': '*/*',
+}
+
 export interface RSSEnclosure {
     url: string
     length: string
@@ -91,12 +96,14 @@ export const fetchFeed = async (url: string): Promise<RSSFeedWithMetrics> => {
     const startTime = Date.now()
     const downloadTime = Date.now()
     const isRedditUrl = urlUtils.getHumanHostname(url) === urlUtils.REDDIT_COM
-    Debug.log('rssFeedHelper.fetchResponse', {url, isRedditUrl})
-    const headers = isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI
+    Debug.log('fetchFeed', {url, isRedditUrl})
+    const headers = isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL
     const fetchUrl = isRedditUrl ? redditJsonFeedUrl(url) : url
     const {response, feedUrl} = await fetchResponse(fetchUrl, { headers })
-    Debug.log('rssFeedHelper.fetchResponse', {feedUrl})
+    Debug.log('fetchFeed', {feedUrl, response})
     const text = await response.text()
+
+    Debug.log('fetchFeed', { text })
     const feedLoader = isRedditUrl
         // in case of a reddit feed we want to use the original url, not the .json one
         ? Promise.resolve(loadRedditFeed(url, text, startTime, downloadTime))
@@ -116,6 +123,10 @@ export const loadRSSFeed = async (url: string, xml: string, startTime = 0, downl
         parser.parseString(xml, (err: string, result: any) => {
             if (err) {
                 reject(err)
+                return
+            }
+            if (!result) {
+                reject()
                 return
             }
             const parseTime = Date.now()

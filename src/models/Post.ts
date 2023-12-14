@@ -2,6 +2,7 @@ import { Model } from './Model'
 import { ImageData } from './ImageData'
 import { Author } from './Author'
 import { HexString } from '../helpers/opaqueTypes'
+import { RSSItem } from '../helpers/RSSFeedHelpers'
 
 export interface PublicPost extends Model {
     images: ImageData[]
@@ -15,4 +16,5 @@ export interface Post extends PublicPost {
     updatedAt?: number
     isUploading?: boolean
     topic?: HexString
+    rssItem?: RSSItem
 }
