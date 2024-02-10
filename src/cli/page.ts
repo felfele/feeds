@@ -2,15 +2,17 @@ import {OpenGraphData} from '../helpers/openGraph';
 import {Post} from '../models/Post';
 import {logoDataUrl} from './logo-data-url';
 
-// export type PostWithOpenGraphData = Post & { og: OpenGraphData }
 export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
+
+const THEME_COLOR = '#6200EA'
+const APP_NAME = 'Feeds'
 
 function thumbnailImageSrc(post: PostWithOpenGraphData) {
   return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image;
 }
 
 function postTitle(post: PostWithOpenGraphData) {
-  return post.rssItem?.title ?? post.og?.title ?? post.og?.name;
+  return post.rssItem?.title || post.author?.name;
 }
 
 function postLink(post: PostWithOpenGraphData) {
@@ -45,7 +47,7 @@ function card(post: PostWithOpenGraphData) {
     ${thumbnailImage ? `<img class="thumbnail" src="${thumbnailImage}" />` : ''}
     <div class="card">
         <div class="left">
-            <img src="${post.author?.image.uri}" width="36" height="36" />
+            <img src="${post.author?.image.uri}" />
         </div>
         <div class="right">
             <div class="title">${postTitle(post)}</div>
@@ -105,23 +107,33 @@ const scripts = {
     document.getElementById('grid-mode')!.innerText = mode === 'three-column' ? '1x' : '3x'
     listElement.className = mode
     sessionStorage.setItem('grid-mode', mode)
+    document.documentElement.style.setProperty('--column-mode', `var(--${mode}-mode)`)
   },
   reload() {
     fetch(window.location.href)
     .then(response => response.text())
     .then(html => {
-      // const backgroundColor = document.documentElement.style.getPropertyValue('--background-color')
-      // const color = document.documentElement.style.getPropertyValue('--color')
-      // html = html.replace('--' + 'stored-background-color', backgroundColor).replace('--' + 'stored-color', color)
+      const backgroundColor = document.documentElement.style.getPropertyValue('--background-color')
+      const color = document.documentElement.style.getPropertyValue('--color')
+      const columnMode = sessionStorage.getItem('grid-mode')
+      html = html.replace(':' + 'root {', ':' +`root {--stored-background-color: ${backgroundColor};--stored-color: ${color};--stored-column-mode: var(--${columnMode}-mode);`)
       document.write(html)
       document.close()
     })
   },
   init() {
     document.addEventListener('DOMContentLoaded', () => { 
-      console.debug('onDOMContentLoaded', { sessionStorage })
-      window.scripts.setGridMode(sessionStorage.getItem('grid-mode') || 'three-column')
-      window.scripts.setLightMode(sessionStorage.getItem('light-mode') || 'dark')
+      const columnMode = sessionStorage.getItem('grid-mode')
+      if (columnMode) {
+        scripts.setGridMode(columnMode)
+      }
+
+      const lightMode = sessionStorage.getItem('light-mode')
+      if (lightMode) {
+        scripts.setLightMode(lightMode)
+      }
+
+      console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })      
     })
   },
 }
@@ -183,31 +195,30 @@ const spinnerStyle = `
         width: 40px;
         height: 20px;
         margin-left: calc(50% - (80px / 2));
-        margin-top: 3.5em;
+        margin-top: 1em;
       }
       .lds-ellipsis div {
         position: absolute;
-        top: 23px;
-        width: 10px;
-        height: 10px;
+        width: var(--loader-size);
+        height: var(--loader-size);
         border-radius: 50%;
         background: #88888888;
         animation-timing-function: cubic-bezier(0, 1, 1, 0);
       }
       .lds-ellipsis div:nth-child(1) {
-        left: 8px;
+        left: var(--loader-offset);
         animation: lds-ellipsis1 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(2) {
-        left: 8px;
+        left: var(--loader-offset);
         animation: lds-ellipsis2 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(3) {
-        left: 32px;
+        left: calc(var(--loader-offset) * 4);
         animation: lds-ellipsis2 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(4) {
-        left: 56px;
+        left: calc(var(--loader-offset) * 6);
         animation: lds-ellipsis3 0.6s infinite;
       }
       @keyframes lds-ellipsis1 {
@@ -242,6 +253,12 @@ function style() {
 :root {
   --background-color: var(--stored-background-color, black);
   --color: var(--stored-color, white);
+  --three-column-mode: repeat(3, 1fr);
+  --one-column-mode: min(100vw, 66vh);
+  --column-mode: var(--stored-column-mode, var(--one-column-mode));
+  --header-height: max(3em, 6vh);
+  --loader-offset: 8px;
+  --loader-size: 10px;
 }
 body {
     width: 100vw;
@@ -255,19 +272,22 @@ header {
     display: flex;
     flex-direction: row-reverse;
     width: 100vw;
-    height: 3em;
+    height: var(--header-height);
     position: fixed;
     z-index: 1;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #6200EA;
     top: 0;
     backdrop-filter: blur(15px);
 }
+.header-placeholder {
+    height: calc(var(--header-height) + .1em);
+}
 ul {
     display: grid;
-    gap: 1em;
+    gap: max(1em, 1.5vh);
     padding: 0;
-    margin: 0.5vw;
-    margin-top: 3.5em;
+    margin: 0;
+    margin-top: 1em;
     justify-content: center;
     list-style-type: none;
 }
@@ -284,7 +304,8 @@ button {
     margin: 0.5em;
     padding-left: 0.4em;
     padding-right: 0.4em;
-    min-width: 4em;
+    min-width: max(4em, 5vh);
+    font-size: max(1em, 1.1vh);
 }
 .dark {
     background-color: black;
@@ -295,10 +316,10 @@ button {
     color: black;
 }
 .three-column {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: var(--column-mode);
 }
 .one-column {
-    grid-template-columns: min(66vw, 66vh);
+    grid-template-columns: var(--column-mode);
 }
 .thumbnail {
     width: 100%;
@@ -309,8 +330,6 @@ button {
     flex-direction: column;
     flex-grow: 1;
     background-color: #88888822;
-    border-radius: 6px;
-    border: 0.1px solid #8881;
 }
 .card-parent:hover {
     background-color: #88888888;
@@ -323,15 +342,19 @@ button {
     margin: 0.8em;
 }
 .left {
-    width: 36px;
-    margin-top: 4px;
-    margin-right: 4px;
+    margin-left: 0.5vh;
+    margin-top: 0.5vh;
+    margin-right: 0.5vh;
+}
+.left img { 
+    width: max(1.8em, 4vh);
+    height: max(1.8em, 4vh);
 }
 .right {
     padding-left: 0.4em;
 }
 .title {
-    font-size: 1em;
+    font-size: max(1em, 1.8vh);
     font-weight: bold;
     display: -webkit-box;
     overflow: hidden;
@@ -339,7 +362,7 @@ button {
     -webkit-line-clamp: 2;
 }
 .author {
-    font-size: 0.8em;
+    font-size: max(0.8em, 1.1vh);
     color: gray;
 }
 .text {
@@ -348,6 +371,7 @@ button {
     overflow: hidden;
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
+    font-size: max(1em, 1.8vh);
 }
 .text-link:hover {
   text-decoration: underline;
@@ -370,6 +394,16 @@ function serializeScripts(obj: object) {
 }
 
 function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
+  const manifest = JSON.stringify({
+    name: APP_NAME,
+    short_name: APP_NAME,
+    background_color: THEME_COLOR,
+    theme_color: THEME_COLOR,
+    display: "standalone",
+    start_url: 'https://test.felfele.org/feeds',
+    
+  });
+  const manifestDataUrl = `data:application/manifest+json,${encodeURIComponent(manifest)}`
   return `
     <!DOCTYPE html>
     ${elem(
@@ -381,10 +415,21 @@ function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
           {},
           `
             ${elem('meta', {charset: 'UTF-8'})}
+            ${elem('meta', {name: 'theme-color', content: THEME_COLOR})}
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="viewport" content="viewport-fit=cover">
+            <meta name="mobile-web-app-capable" content="yes">
+            <meta name="apple-mobile-web-app-capable" content="yes"> 
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-transparent">
+            <meta name="apple-mobile-web-app-title" content="${APP_NAME}">
+            <link rel="apple-touch-icon" href="${logoDataUrl}">
+            <meta name="apple-mobile-web-app-capable" content="yes">
+            <meta name="apple-touch-fullscreen" content="yes">
             ${title(meta?.title || '')}
-
+            ${elem('link', {rel: 'shortcut icon', href: logoDataUrl})}
             ${elem('script', {}, `scripts = {${serializeScripts(scripts)}}`)}
             ${style()}
+            ${elem('link', {rel: 'manifest', href: manifestDataUrl})}
         `,
         )}
         ${elem(
@@ -393,6 +438,7 @@ function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
           },
           `
             ${topbar()}
+            ${elem('div', {class: 'header-placeholder'})}
             ${spinner}
             ${list(posts)}
         `,
