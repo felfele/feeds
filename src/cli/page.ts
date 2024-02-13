@@ -1,32 +1,37 @@
+import { printableElapsedTime } from '../helpers/dateHelpers';
 import {OpenGraphData} from '../helpers/openGraph';
+import { getHumanHostname } from '../helpers/urlUtils';
 import {Post} from '../models/Post';
 import {logoDataUrl} from './logo-data-url';
 
 export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
 
-const THEME_COLOR = '#6200EA'
+const FIREFOX_PRIVATE_COLOR = '#291e4f'
+const FEEDS_THEME_COLOR = '#6200EA'
+const THEME_COLOR = FIREFOX_PRIVATE_COLOR
 const APP_NAME = 'Feeds'
+const PADDING = '1.6vh'
 
 function thumbnailImageSrc(post: PostWithOpenGraphData) {
-  return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image;
+  return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
 }
 
 function postTitle(post: PostWithOpenGraphData) {
-  return post.rssItem?.title || post.author?.name;
+  return post.rssItem?.title
 }
 
 function postLink(post: PostWithOpenGraphData) {
-  return post.link ? post.link : post.og?.url ?? '';
+  return post.link ? post.link : post.og?.url ?? ''
 }
 
 function postText(post: PostWithOpenGraphData) {
   if (!post.text) {
-    return;
+    return
   }
 
   return post.text
     .replace(/^\*\*.*\*\*/m, '')
-    .replace(/\[(.*?)\]\((.*?)\)/gm, `</a><a class="text-link" target="_blank" rel="noopener noreferrer" href="$2">$1</a><a href="${postLink(post)}">`);
+    .replace(/\[(.*?)\]\((.*?)\)/gm, `$1`)
 }
 
 function fixYoutubeThumbnail(image: string | undefined) {
@@ -39,23 +44,31 @@ function link(href: string, content: string) {
 }
 
 function card(post: PostWithOpenGraphData) {
+  const now = Date.now()
+  const postUpdateTime = post.updatedAt || post.createdAt
+  const printableTime = printableElapsedTime(postUpdateTime, now) + ' ago'
+  const url = post.link || ''
+  const hostnameText = url === '' ? '' : getHumanHostname(url)
+  const timeHostSeparator = printableTime !== '' && hostnameText !== '' ? ' - ' : ''
+  const title = postTitle(post)
   const thumbnailImage = fixYoutubeThumbnail(thumbnailImageSrc(post));
   const text = postText(post);
   return `
 <div class="card-parent">
     <a href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
-    ${thumbnailImage ? `<img class="thumbnail" src="${thumbnailImage}" />` : ''}
     <div class="card">
         <div class="left">
             <img src="${post.author?.image.uri}" />
         </div>
         <div class="right">
-            <div class="title">${postTitle(post)}</div>
-            <div class="author">${post.author?.name}</div>
+            <div class="title">${post.author?.name}</div>
+            <div class="author">${printableTime}${timeHostSeparator}${hostnameText}</div>
         </div>
     </div>
+    ${thumbnailImage ? `<img class="thumbnail" src="${thumbnailImage}" />` : ''}
     </a>
-    ${text ? `<span class="text">${link(postLink(post), text)}</span>` : ''}
+    ${title ? `<div class="text b">${link(postLink(post), title)}</div>` : ''}
+    ${text ? `<div class="text">${link(postLink(post), text)}</div>` : ''}
 </div>
 `;
 }
@@ -193,16 +206,16 @@ const spinnerStyle = `
         display: none;
         position: relative;
         width: 40px;
-        height: 20px;
-        margin-left: calc(50% - (80px / 2));
-        margin-top: 1em;
+        height: calc(2 * ${PADDING});
+        margin-left: calc(50% - (${PADDING} * 4));
+        margin-top: calc(2 * ${PADDING});
       }
       .lds-ellipsis div {
         position: absolute;
         width: var(--loader-size);
         height: var(--loader-size);
         border-radius: 50%;
-        background: #88888888;
+        background: #88888888;calc(2 * ${PADDING})
         animation-timing-function: cubic-bezier(0, 1, 1, 0);
       }
       .lds-ellipsis div:nth-child(1) {
@@ -210,7 +223,7 @@ const spinnerStyle = `
         animation: lds-ellipsis1 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(2) {
-        left: var(--loader-offset);
+        left: calc(var(--loader-offset));
         animation: lds-ellipsis2 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(3) {
@@ -242,7 +255,7 @@ const spinnerStyle = `
           transform: translate(0, 0);
         }
         100% {
-          transform: translate(24px, 0);
+          transform: translate(4.5vh, 0);
         }
       }     
 `
@@ -257,16 +270,18 @@ function style() {
   --one-column-mode: min(100vw, 66vh);
   --column-mode: var(--stored-column-mode, var(--one-column-mode));
   --header-height: max(3em, 6vh);
-  --loader-offset: 8px;
-  --loader-size: 10px;
+  --loader-offset: ${PADDING};
+  --loader-size: ${PADDING};
 }
 body {
     width: 100vw;
-    font-family: sans-serif;
+    // font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--background-color);
     color: var(--color);
     margin: 0;
     padding: 0;
+    font-size: 14px;
 }
 header {
     display: flex;
@@ -275,7 +290,7 @@ header {
     height: var(--header-height);
     position: fixed;
     z-index: 1;
-    background-color: #6200EA;
+    background-color: ${THEME_COLOR};
     top: 0;
     backdrop-filter: blur(15px);
 }
@@ -299,13 +314,16 @@ li {
 a {
     text-decoration: none;
     color: inherit;
+    font-size: inherit;
 }
 button {
     margin: 0.5em;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
+    margin-left: 0.4em;
+    margin-right: 0.4em;
     min-width: max(4em, 5vh);
-    font-size: max(1em, 1.1vh);
+    font-size: max(12px, 1.1vh);
+    max-height: calc(var(--header-height) / 2);
+    margin-top: calc(var(--header-height) / 4);
 }
 .dark {
     background-color: black;
@@ -339,12 +357,12 @@ button {
 .card {
     display: flex;
     flex-direction: row;
-    margin: 0.8em;
+    margin: ${PADDING};
 }
 .left {
-    margin-left: 0.5vh;
-    margin-top: 0.5vh;
     margin-right: 0.5vh;
+    align-items: center;
+    display: flex;
 }
 .left img { 
     width: max(1.8em, 4vh);
@@ -352,11 +370,11 @@ button {
 }
 .right {
     padding-left: 0.4em;
+    display: flex;
+    flex-direction: column;
 }
 .title {
-    font-size: max(1em, 1.8vh);
     font-weight: bold;
-    display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
@@ -366,15 +384,16 @@ button {
     color: gray;
 }
 .text {
-    margin: 0.8em;
-    display: -webkit-box;
+    margin: ${PADDING};
     overflow: hidden;
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
-    font-size: max(1em, 1.8vh);
 }
 .text-link:hover {
   text-decoration: underline;
+}
+.b {
+    font-weight: bold;
 }
 .logo-container {
     display: flex;
@@ -401,7 +420,13 @@ function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
     theme_color: THEME_COLOR,
     display: "standalone",
     start_url: 'https://test.felfele.org/feeds',
-    
+    icons: [
+      {
+        src: logoDataUrl,
+        type: 'image/png',
+        sizes: '128x128',
+      }
+    ]
   });
   const manifestDataUrl = `data:application/manifest+json,${encodeURIComponent(manifest)}`
   return `
@@ -417,7 +442,7 @@ function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
             ${elem('meta', {charset: 'UTF-8'})}
             ${elem('meta', {name: 'theme-color', content: THEME_COLOR})}
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <meta name="viewport" content="viewport-fit=cover">
+            <!-- <meta name="viewport" content="viewport-fit=cover"> -->
             <meta name="mobile-web-app-capable" content="yes">
             <meta name="apple-mobile-web-app-capable" content="yes"> 
             <meta name="apple-mobile-web-app-status-bar-style" content="black-transparent">
