@@ -450,12 +450,15 @@ const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: stri
     const posts = rssFeed.items.map(item => {
         try {
             const markdown = htmlToMarkdown(item.description)
+            const contentMarkdown = item.content && htmlToMarkdown(item.content)
             const [text, markdownImages] = extractTextAndImagesFromMarkdown(markdown, '')
             const mediaImages = extractImagesFromMedia(item.media)
             const enclosureImages = extractImagesFromEnclosures(item.enclosures)
+            const [contentText, contentImages] = contentMarkdown ? extractTextAndImagesFromMarkdown(contentMarkdown, '') : [undefined, undefined]
             const images = markdownImages
                             .concat(mediaImages)
                             .concat(markdownImages.length === 0 ? enclosureImages : [])
+                            .concat(contentImages ? contentImages : [])
             const title = isTitleSameAsText(item.title, text)
                 ? ''
                 : item.title === '(Untitled)'

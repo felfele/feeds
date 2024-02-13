@@ -52,6 +52,7 @@ export interface RSSItem {
     created: number
     enclosures?: RSSEnclosure[]
     media?: RSSMedia
+    content?: string
 }
 
 export interface RSSFeed {
@@ -226,7 +227,9 @@ function parseRSSChannel(channel: any, items?: [] | undefined) {
                     }
                     obj.enclosures.push(enc)
                 })
-
+            }
+            if (val['content:encoded']) {
+                obj.content = val['content:encoded'][0]
             }
             rss.items.push(obj)
         })
