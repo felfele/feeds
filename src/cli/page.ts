@@ -62,7 +62,7 @@ function card(post: PostWithOpenGraphData) {
         </div>
         <div class="right">
             <div class="title">${post.author?.name}</div>
-            <div class="author">${printableTime}${timeHostSeparator}${hostnameText}</div>
+            <div class="author">${hostnameText}</div>
         </div>
     </div>
     ${thumbnailImage ? `<img class="thumbnail" src="${thumbnailImage}" />` : ''}
@@ -176,28 +176,28 @@ function topbar() {
   return elem(
     'header',
     {class: 'topbar'},
+    elem('img', {src: logoDataUrl, class: 'logo', onclick: logoOnClick})
+    +
+    elem('div', {class: 'logo-spacer' })
+    +
+    elem(
+      'button',
+      {
+        id: 'grid-mode',
+        onclick: gridModeOnClick,
+      },
+      '1x',
+    )
+    +
     elem(
       'button',
       {
         id: 'light-mode',
         onclick: lightModeOnClick,
       },
-      'light',
-    ) +
-      elem(
-        'button',
-        {
-          id: 'grid-mode',
-          onclick: gridModeOnClick,
-        },
-        '1x',
-      ) +
-      elem(
-        'div',
-        {class: 'logo-container'},
-        elem('img', {src: logoDataUrl, class: 'logo', onclick: logoOnClick}),
-      ),
-  );
+      'light',      
+    )
+  )
 }
 const spinner = `<div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>`
 
@@ -270,6 +270,8 @@ function style() {
   --one-column-mode: min(100vw, 66vh);
   --column-mode: var(--stored-column-mode, var(--one-column-mode));
   --header-height: max(3em, 6vh);
+  --padding: ${PADDING};
+  --half-padding: calc(var(--padding) / 2);
   --loader-offset: ${PADDING};
   --loader-size: ${PADDING};
 }
@@ -281,11 +283,11 @@ body {
     color: var(--color);
     margin: 0;
     padding: 0;
-    font-size: 14px;
+    font-size: 15px;
 }
 header {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     width: 100vw;
     height: var(--header-height);
     position: fixed;
@@ -348,6 +350,7 @@ button {
     flex-direction: column;
     flex-grow: 1;
     background-color: #88888822;
+    padding-bottom: var(--half-padding);
 }
 .card-parent:hover {
     background-color: #88888888;
@@ -357,7 +360,7 @@ button {
 .card {
     display: flex;
     flex-direction: row;
-    margin: ${PADDING};
+    margin: var(--padding);
 }
 .left {
     margin-right: 0.5vh;
@@ -374,20 +377,22 @@ button {
     flex-direction: column;
 }
 .title {
-    font-weight: bold;
+    font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
+    font-size: 14px;
 }
 .author {
     font-size: max(0.8em, 1.1vh);
     color: gray;
 }
 .text {
-    margin: ${PADDING};
+    margin: var(--padding);
     overflow: hidden;
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
+    display: -webkit-box;
 }
 .text-link:hover {
   text-decoration: underline;
@@ -399,6 +404,9 @@ button {
     display: flex;
     flex-grow: 1;
     justify-content: flex-start;
+}
+.logo-spacer {
+  flex-grow: 1;
 }
 .logo {
   cursor: pointer;
