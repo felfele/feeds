@@ -7,10 +7,11 @@ import {logoDataUrl} from './logo-data-url';
 export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
 
 const FIREFOX_PRIVATE_COLOR = '#291e4f'
+const FIREFOX_LIGHT_COLOR = '#f9f9fb'
 const FEEDS_THEME_COLOR = '#6200EA'
 const THEME_COLOR = FIREFOX_PRIVATE_COLOR
 const APP_NAME = 'Feeds'
-const PADDING = '1.6vh'
+const PADDING = '10px'
 
 function thumbnailImageSrc(post: PostWithOpenGraphData) {
   return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
@@ -43,6 +44,15 @@ function link(href: string, content: string) {
   return `<a href="${href}" target="_blank" rel="noopener noreferrer">${content}</a>`
 }
 
+function commentLink(post: Post): string | undefined {
+  const match = post.text.match(/\[(Comments)\]\((.*?)\)/gm)
+  if (!match) {
+    return
+  }
+
+  return match[1]
+}
+
 function card(post: PostWithOpenGraphData) {
   const now = Date.now()
   const postUpdateTime = post.updatedAt || post.createdAt
@@ -53,6 +63,7 @@ function card(post: PostWithOpenGraphData) {
   const title = postTitle(post)
   const thumbnailImage = fixYoutubeThumbnail(thumbnailImageSrc(post));
   const text = postText(post);
+  const comment = commentLink(post);
   return `
 <div class="card-parent">
     <a href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
@@ -69,6 +80,7 @@ function card(post: PostWithOpenGraphData) {
     </a>
     ${title ? `<div class="text b">${link(postLink(post), title)}</div>` : ''}
     ${text ? `<div class="text">${link(postLink(post), text)}</div>` : ''}
+    ${comment ? `<div class="text"><a class="link" href="${comment}">Comments</a></div>` : ''}
 </div>
 `;
 }
@@ -93,7 +105,7 @@ function listItem(content: string) {
 
 function list(posts: PostWithOpenGraphData[]) {
   return `
-<ul id="list" class="three-column">
+<ul id="list" class="one-column">
     ${posts.map((post) => listItem(card(post))).join('')}
 </ul>
 `;
@@ -186,7 +198,7 @@ function topbar() {
         id: 'grid-mode',
         onclick: gridModeOnClick,
       },
-      '1x',
+      '3x',
     )
     +
     elem(
@@ -195,7 +207,7 @@ function topbar() {
         id: 'light-mode',
         onclick: lightModeOnClick,
       },
-      'light',      
+      'dark',
     )
   )
 }
@@ -264,8 +276,8 @@ function style() {
   return `
 <style>
 :root {
-  --background-color: var(--stored-background-color, black);
-  --color: var(--stored-color, white);
+  --background-color: var(--stored-background-color, white);
+  --color: var(--stored-color, black);
   --three-column-mode: repeat(3, 1fr);
   --one-column-mode: min(100vw, 66vh);
   --column-mode: var(--stored-column-mode, var(--one-column-mode));
@@ -277,7 +289,7 @@ function style() {
 }
 body {
     width: 100vw;
-    // font-family: sans-serif;
+    font-family: sans-serif;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--background-color);
     color: var(--color);
@@ -394,7 +406,7 @@ button {
     -webkit-box-orient: vertical;
     display: -webkit-box;
 }
-.text-link:hover {
+.link {
   text-decoration: underline;
 }
 .b {
