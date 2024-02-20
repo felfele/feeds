@@ -32,7 +32,7 @@ function postText(post: PostWithOpenGraphData) {
 
   return post.text
     .replace(/^\*\*.*\*\*/m, '')
-    .replace(/\[(.*?)\]\((.*?)\)/gm, `$1`)
+    .replace(/\[(.*?)\]\((.*?)\)/gm, link('$2', '$1'))
 }
 
 function fixYoutubeThumbnail(image: string | undefined) {
@@ -66,7 +66,7 @@ function card(post: PostWithOpenGraphData) {
   const comment = commentLink(post);
   return `
 <div class="card-parent">
-    <a href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
+    <a class="main-link" href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
     <div class="card">
         <div class="left">
             <img src="${post.author?.image.uri}" />
@@ -78,9 +78,9 @@ function card(post: PostWithOpenGraphData) {
     </div>
     ${thumbnailImage ? `<img class="thumbnail" src="${thumbnailImage}" />` : ''}
     </a>
-    ${title ? `<div class="text b">${link(postLink(post), title)}</div>` : ''}
-    ${text ? `<div class="text">${link(postLink(post), text)}</div>` : ''}
-    ${comment ? `<div class="text"><a class="link" href="${comment}">Comments</a></div>` : ''}
+    ${title ? `<div class="text b">${title}</div>` : ''}
+    ${text ? `<div class="text">${text}</div>` : ''}
+    ${comment ? `<div class="text"><a class="link" href="${comment}" target="_blank" rel="noopener noreferrer">Comments</a></div>` : ''}
 </div>
 `;
 }
@@ -363,11 +363,20 @@ button {
     flex-grow: 1;
     background-color: #88888822;
     padding-bottom: var(--half-padding);
+    position: relative;
 }
 .card-parent:hover {
     background-color: #88888888;
 }
 .card-link {
+}
+.main-link::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .card {
     display: flex;
