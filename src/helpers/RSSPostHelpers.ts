@@ -180,9 +180,10 @@ export const getFeedFromHtml = (baseUrl: string, html: string): Feed => {
     if (typeof feed.favicon === 'string' && feed.favicon !== '') {
         feed.favicon = urlUtils.createUrlFromUrn(feed.favicon, baseUrl)
     }
-    if (feed.name.search(' - ') >= 0) {
-        feed.name = feed.name.replace(/ - .*/, '')
-    }
+    
+    const regex = new RegExp(/ - .*/g)
+    feed.name = feed.name.replace(regex, '').replaceAll('\n', '').trim()
+
     feed.url = baseUrl
     return feed
 }

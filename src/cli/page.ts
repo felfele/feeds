@@ -32,7 +32,8 @@ function postText(post: PostWithOpenGraphData) {
 
   return post.text
     .replace(/^\*\*.*\*\*/m, '')
-    .replace(/\[(.*?)\]\((.*?)\)/gm, link('$2', '$1'))
+    .replace(/\[Comments\]\((.*?)\)/gm, '')
+    .replace(/\[(.*?)\]\((.*?)\)/gm, '$1')
 }
 
 function fixYoutubeThumbnail(image: string | undefined) {
@@ -45,7 +46,8 @@ function link(href: string, content: string) {
 }
 
 function commentLink(post: Post): string | undefined {
-  const match = post.text.match(/\[(Comments)\]\((.*?)\)/gm)
+  const match = post.text.match(/\[Comments\]\((.*?)\)/m)
+
   if (!match) {
     return
   }
@@ -80,7 +82,7 @@ function card(post: PostWithOpenGraphData) {
     </a>
     ${title ? `<div class="text b">${title}</div>` : ''}
     ${text ? `<div class="text">${text}</div>` : ''}
-    ${comment ? `<div class="text"><a class="link" href="${comment}" target="_blank" rel="noopener noreferrer">Comments</a></div>` : ''}
+    ${comment ? `<div class="text"><a class="link comment" href="${comment}" target="_blank" rel="noopener noreferrer">Comments</a></div>` : ''}
 </div>
 `;
 }
@@ -134,6 +136,26 @@ const scripts = {
     sessionStorage.setItem('grid-mode', mode)
     document.documentElement.style.setProperty('--column-mode', `var(--${mode}-mode)`)
   },
+  makeLinksClickable() {
+    const cards = Array.from(document.querySelectorAll('div.card-parent'))
+    cards.forEach(card => {
+      const clickableLinks = Array.from(card.querySelectorAll('div.text a'))
+      const mainLink = card.querySelector(".main-link");
+      clickableLinks.forEach((ele) =>
+        ele.addEventListener("click", (e) => e.stopPropagation())
+      )
+
+      function handleClick() {
+        const noTextSelected = !window.getSelection()?.toString();
+
+        if (noTextSelected && mainLink) {
+          (mainLink as HTMLLinkElement).click();
+        }
+      }
+
+      card.addEventListener("click", handleClick)
+    })
+  },
   reload() {
     fetch(window.location.href)
     .then(response => response.text())
@@ -158,6 +180,7 @@ const scripts = {
         scripts.setLightMode(lightMode)
       }
 
+      scripts.makeLinksClickable()
       console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })      
     })
   },
@@ -364,19 +387,12 @@ button {
     background-color: #88888822;
     padding-bottom: var(--half-padding);
     position: relative;
+    cursor: pointer;
 }
 .card-parent:hover {
     background-color: #88888888;
 }
 .card-link {
-}
-.main-link::before {
-    content: " ";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
 }
 .card {
     display: flex;
@@ -414,6 +430,10 @@ button {
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
     display: -webkit-box;
+}
+.comment {
+    margin-top: var(--padding);
+    margin-bottom: var(--padding);
 }
 .link {
   text-decoration: underline;
