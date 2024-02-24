@@ -55,7 +55,7 @@ function commentLink(post: Post): string | undefined {
   return match[1]
 }
 
-function card(post: PostWithOpenGraphData) {
+export function card(post: PostWithOpenGraphData) {
   const now = Date.now()
   const postUpdateTime = post.updatedAt || post.createdAt
   const printableTime = printableElapsedTime(postUpdateTime, now) + ' ago'
@@ -101,7 +101,7 @@ function elem(name: string, attrs = {}, content: string = '') {
   return `<${name}${serializeAttrs(attrs)}>${content}</${name}>`;
 }
 
-function listItem(content: string) {
+export function listItem(content: string) {
   return `<li>${content}</li>`;
 }
 
@@ -116,6 +116,17 @@ function list(posts: PostWithOpenGraphData[]) {
 function title(content: string) {
   return elem('title', {}, content);
 }
+
+interface WindowProps {
+  scripts: typeof scripts
+  posts: PostWithOpenGraphData[]
+  feeds: {
+    makeFeedPageHtml: typeof makeFeedPageHtml,
+    listItem: typeof listItem,
+    card: typeof card,
+  }
+}
+declare var window: Window & WindowProps
 
 const scripts = {
   setLightMode(mode: 'light' | 'dark' | string) {
@@ -145,16 +156,56 @@ const scripts = {
         ele.addEventListener("click", (e) => e.stopPropagation())
       )
 
-      function handleClick() {
+      // avoid triggering again
+      mainLink?.addEventListener("click", (e) => e.stopPropagation())
+
+      function handleClick(e: Event) {
         const noTextSelected = !window.getSelection()?.toString();
 
         if (noTextSelected && mainLink) {
-          (mainLink as HTMLLinkElement).click();
+          (mainLink as HTMLLinkElement).click()
         }
       }
 
       card.addEventListener("click", handleClick)
     })
+  },
+  rerenderList(posts: PostWithOpenGraphData[]) {
+    const list = document.getElementById('list')
+    if (!list) {
+      return
+    }
+    list.innerHTML = posts.map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+  },
+  searchPosts(expr: string) {
+    function normalize(s: string | undefined): string {
+      if (!s) {
+        return ''
+      }
+      return s && s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+    }
+    expr = normalize(expr)
+    const posts = 
+      expr === '' 
+      ? window.posts 
+      : window.posts.filter(post => normalize(post.author?.name).includes(expr) || normalize(post.author?.uri).includes(expr) || normalize(post.text).includes(expr))
+
+    console.debug({ posts })
+
+    scripts.rerenderList(posts)
+  },
+  initSearchBar() {
+    const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
+    console.debug('initSearchBar', { searchBar })
+    if (!searchBar) {
+      return
+    }
+
+    searchBar.addEventListener('keyup', handleKeyUp);
+
+    function handleKeyUp(e: KeyboardEvent) {
+      scripts.searchPosts(searchBar.value)
+    }
   },
   reload() {
     fetch(window.location.href)
@@ -181,16 +232,16 @@ const scripts = {
       }
 
       scripts.makeLinksClickable()
+      scripts.initSearchBar()
       console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })      
     })
   },
 }
 
-declare var window: Window & {scripts: typeof scripts}
-
 function topbar() {
   const logoOnClick = () => {
     document.getElementById('loader')!.style.display = 'block'
+    document.getElementById('searchbar')!.style.display = 'none'
     window.scrollTo({top: 0, behavior: 'smooth'});
     window.scripts.reload();
   };
@@ -295,6 +346,10 @@ const spinnerStyle = `
       }     
 `
 
+function searchBar() {
+  return `<input type="text" id="searchbar" class="searchbar" placeholder="Search or filter..."></input>`
+}
+
 function style() {
   return `
 <style>
@@ -302,7 +357,7 @@ function style() {
   --background-color: var(--stored-background-color, white);
   --color: var(--stored-color, black);
   --three-column-mode: repeat(3, 1fr);
-  --one-column-mode: min(100vw, 66vh);
+  --one-column-mode: min(100vw, 66lvh);
   --column-mode: var(--stored-column-mode, var(--one-column-mode));
   --header-height: max(3em, 6vh);
   --padding: ${PADDING};
@@ -330,6 +385,9 @@ header {
     background-color: ${THEME_COLOR};
     top: 0;
     backdrop-filter: blur(15px);
+}
+input:focus {
+    outline: none;
 }
 .header-placeholder {
     height: calc(var(--header-height) + .1em);
@@ -380,6 +438,20 @@ button {
     width: 100%;
     height: auto;
 }
+.searchbar {
+  display: flex;
+  width: 50vw;
+  margin-top: var(--padding);
+  margin-left: 24vw;
+  font-size: 15px;
+  border-color: #88888888;
+  border-width: 1px;
+  padding: var(--padding);
+  border-radius: 4px;
+  background-color: var(--background-color);
+  color: var(--color);
+}
+
 .card-parent {
     color: inherit;
     flex-direction: column;
@@ -391,6 +463,9 @@ button {
 }
 .card-parent:hover {
     background-color: #88888888;
+}
+.card-parent:active {
+    background-color: #88888822;
 }
 .card-link {
 }
@@ -457,11 +532,12 @@ ${spinnerStyle}
 `;
 }
 
-function serializeScripts(obj: object) {
+export function serializeScripts(obj: object) {
   return Object.entries(obj).map(fun => `${fun[1]}`).join(',')
 }
 
-function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
+function page(posts: PostWithOpenGraphData[], script?: string) {
+  const sanitizedPosts = posts.map(post => ({ ...post, rssItem: { ...post.rssItem, content: undefined }}))
   const manifest = JSON.stringify({
     name: APP_NAME,
     short_name: APP_NAME,
@@ -499,7 +575,6 @@ function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
             <link rel="apple-touch-icon" href="${logoDataUrl}">
             <meta name="apple-mobile-web-app-capable" content="yes">
             <meta name="apple-touch-fullscreen" content="yes">
-            ${title(meta?.title || '')}
             ${elem('link', {rel: 'shortcut icon', href: logoDataUrl})}
             ${elem('script', {}, `scripts = {${serializeScripts(scripts)}}`)}
             ${style()}
@@ -514,21 +589,25 @@ function page(posts: PostWithOpenGraphData[], meta: Partial<OpenGraphData>) {
             ${topbar()}
             ${elem('div', {class: 'header-placeholder'})}
             ${spinner}
+            ${searchBar()}
             ${list(posts)}
-        `,
+          `,
         )}
+        <script>
+          scripts.init()
+        </script>
+        <!-- TODO escaping issue with posts -->
+        ${elem('script', {}, `posts = ${JSON.stringify(sanitizedPosts, undefined, 4)};`)}
+        ${script ? elem('script', {id: 'feeds.js'}, script) : ''}
     `,
     )}
-    </html>
-    <script>
-        scripts.init()
-    </script>
+
 `;
 }
 
 export function makeFeedPageHtml(
   posts: PostWithOpenGraphData[],
-  meta: Partial<OpenGraphData> = {},
+  script?: string,
 ) {
-  return page(posts, meta);
+  return page(posts, script);
 }

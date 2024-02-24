@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import { addCommand } from "./cliParser"
 import { output } from './cliHelpers'
-import { PostWithOpenGraphData, makeFeedPageHtml } from './page'
+import { PostWithOpenGraphData, makeFeedPageHtml } from './html'
 import { loadPosts } from '../helpers/RSSPostHelpers'
 import { fetchOpenGraphData } from '../helpers/openGraph'
 import { mergeUpdatedPosts } from '../helpers/postHelpers'
@@ -21,7 +21,16 @@ async function fetchPostsWithOpenGraph(feeds: Feed[], maxPostsValue: string = '2
 }
 
 export const publishCommand =
-    addCommand('json <feeds-file> [max-posts=20]', 'Save fetched feed previews', async (feedsFile: string, maxPostsValue = '20') => {
+    addCommand('json <feeds-file> [max-posts=20]', 'Render posts as JSON', async (feedsFile: string, maxPostsValue = '20') => {
+        const feedsData = fs.readFileSync(feedsFile, { encoding: 'utf-8' })
+        const feedsObj = JSON.parse(feedsData)
+        const feeds = feedsObj.feeds as Feed[]
+        const previews = await fetchPostsWithOpenGraph(feeds, maxPostsValue)
+        const previewsJSON = JSON.stringify(previews, undefined, 4)
+        output(previewsJSON)
+    })
+    .
+    addCommand('save-json <feeds-file> [max-posts=20]', 'Save fetched feed previews', async (feedsFile: string, maxPostsValue = '20') => {
         const feedsData = fs.readFileSync(feedsFile, { encoding: 'utf-8' })
         const feedsObj = JSON.parse(feedsData)
         const feeds = feedsObj.feeds as Feed[]
@@ -46,7 +55,16 @@ export const publishCommand =
         const feedsData = fs.readFileSync(feedsFile, { encoding: 'utf-8' })
         const feedsObj = JSON.parse(feedsData)
         const feeds = feedsObj.feeds as Feed[]
-        const previews = await fetchPostsWithOpenGraph(feeds, maxPostsValue)
-        const feedPageHtml = makeFeedPageHtml(previews)
+        const posts = await fetchPostsWithOpenGraph(feeds, maxPostsValue)
+        const script = fs.readFileSync('dist/feeds.js', { encoding: 'utf-8' })
+        const feedPageHtml = makeFeedPageHtml(posts, script)
         output(feedPageHtml)
+    })
+    .
+    addCommand('rss <feeds-file> [max-posts=20]', 'Render fetched feed as RSS', async (feedsFile: string, maxPostsValue = '20') => {
+        const feedsData = fs.readFileSync(feedsFile, { encoding: 'utf-8' })
+        const feedsObj = JSON.parse(feedsData)
+        const feeds = feedsObj.feeds as Feed[]
+        const posts = await fetchPostsWithOpenGraph(feeds, maxPostsValue)
+        const rssFile = makeRssFile(posts)
     })
