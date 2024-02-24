@@ -7,6 +7,7 @@ import { loadPosts } from '../helpers/RSSPostHelpers'
 import { fetchOpenGraphData } from '../helpers/openGraph'
 import { mergeUpdatedPosts } from '../helpers/postHelpers'
 import { Feed } from '../models/Feed'
+import { makeRssFile } from './rss'
 
 async function fetchPostsWithOpenGraph(feeds: Feed[], maxPostsValue: string = '20') {
     const allPosts = await loadPosts(feeds)
@@ -67,4 +68,5 @@ export const publishCommand =
         const feeds = feedsObj.feeds as Feed[]
         const posts = await fetchPostsWithOpenGraph(feeds, maxPostsValue)
         const rssFile = makeRssFile(posts)
+        output(rssFile)
     })

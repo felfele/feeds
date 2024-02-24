@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { printableElapsedTime } from '../helpers/dateHelpers';
 import {OpenGraphData} from '../helpers/openGraph';
 import { getHumanHostname } from '../helpers/urlUtils';
@@ -58,7 +59,7 @@ function commentLink(post: Post): string | undefined {
 export function card(post: PostWithOpenGraphData) {
   const now = Date.now()
   const postUpdateTime = post.updatedAt || post.createdAt
-  const printableTime = printableElapsedTime(postUpdateTime, now) + ' ago'
+  const printableTime = new Date(postUpdateTime).toLocaleString()
   const url = post.link || ''
   const hostnameText = url === '' ? '' : getHumanHostname(url)
   const timeHostSeparator = printableTime !== '' && hostnameText !== '' ? ' - ' : ''
@@ -71,11 +72,19 @@ export function card(post: PostWithOpenGraphData) {
     <a class="main-link" href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
     <div class="card">
         <div class="left">
-            <img src="${post.author?.image.uri}" />
+            <img src="${post.author?.image.uri}" onclick="${(e: Event) => {
+              e.stopPropagation()
+              const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
+              if (searchBar) {
+                const searchValue = post.author?.name || ''
+                searchBar.value = searchValue
+                scripts.searchPosts(searchValue)
+              }
+            }}" />
         </div>
         <div class="right">
             <div class="title">${post.author?.name}</div>
-            <div class="author">${hostnameText}</div>
+            <div class="author"><span title="${printableTime}" class="tooltip?">${hostnameText}</span></div>
         </div>
     </div>
     ${thumbnailImage ? `<img class="thumbnail" src="${thumbnailImage}" />` : ''}
@@ -190,8 +199,6 @@ const scripts = {
       ? window.posts 
       : window.posts.filter(post => normalize(post.author?.name).includes(expr) || normalize(post.author?.uri).includes(expr) || normalize(post.text).includes(expr))
 
-    console.debug({ posts })
-
     scripts.rerenderList(posts)
   },
   initSearchBar() {
@@ -201,9 +208,9 @@ const scripts = {
       return
     }
 
-    searchBar.addEventListener('keyup', handleKeyUp);
+    searchBar.addEventListener('input', handleInput);
 
-    function handleKeyUp(e: KeyboardEvent) {
+    function handleInput(e: Event) {
       scripts.searchPosts(searchBar.value)
     }
   },
@@ -499,6 +506,8 @@ button {
     font-size: max(0.8em, 1.1vh);
     color: gray;
 }
+.tooltip { border-bottom: 1px dotted #333; position: relative; cursor: pointer; }
+.tooltip:hover:after { content: attr(title); position: absolute; white-space: nowrap; background: rgba(0, 0, 0, 0.85); padding: 3px 7px; color: #FFF; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; margin-left: 7px; margin-top: -3px; }
 .text {
     margin: var(--padding);
     overflow: hidden;

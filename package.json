@@ -70,7 +70,7 @@
     "postversion": "react-native-version --never-amend && scripts/patch_version_ts.sh",
     "postinstall": "npm run fix-androidx && npm run fix-xcode",
     "increment-build": "react-native-version --never-amend --increment-build && scripts/patch_version_ts.sh",
-    "site-build": "./scripts/cli.sh && npx esbuild src/cli/page.ts --bundle --outfile=dist/feeds.js --global-name=feeds"
+    "site-build": "./scripts/cli.sh && npx esbuild src/cli/html.ts --bundle --outfile=dist/feeds.js --global-name=feeds"
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.5.0",
