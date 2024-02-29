@@ -213,6 +213,12 @@ function parseRSSChannel(channel: any, items?: [] | undefined) {
                 obj.media = val.media || {}
                 obj.media.thumbnail = val['media:thumbnail']
             }
+            if (val['thumb_large'] || val['thumb']) {
+                obj.media = {}
+                obj.media.thumbnail = [{
+                  url: val['thumb_large'] || val['thumb']
+                }]
+            }
             if (val.enclosure) {
                 obj.enclosures = []
                 if (!util.isArray(val.enclosure)) {

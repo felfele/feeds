@@ -8,6 +8,12 @@ function postDescription(post: PostWithOpenGraphData) {
     return post.rssItem?.content ? post.rssItem.content : post.text
 }
 
+function postEnclosure(post: PostWithOpenGraphData) {
+    return post.images.length > 0
+        ? `<enclosure url="${post.images[0].uri}" />`
+        : ''
+}
+
 function postToItem(post: PostWithOpenGraphData) {
     return `
 <item>
@@ -15,6 +21,7 @@ function postToItem(post: PostWithOpenGraphData) {
     <link>${postLink(post)}</link>
     <description>${postDescription(post)}</description>
     <pubDate>${new Date(post.createdAt).toUTCString()}</pubDate>
+    ${postEnclosure(post)}
 </item>
 `
 }

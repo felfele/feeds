@@ -57,12 +57,10 @@ function commentLink(post: Post): string | undefined {
 }
 
 export function card(post: PostWithOpenGraphData) {
-  const now = Date.now()
   const postUpdateTime = post.updatedAt || post.createdAt
-  const printableTime = new Date(postUpdateTime).toLocaleString()
+  const printableTime = postUpdateTime ? new Date(postUpdateTime).toLocaleString() : ''
   const url = post.link || ''
   const hostnameText = url === '' ? '' : getHumanHostname(url)
-  const timeHostSeparator = printableTime !== '' && hostnameText !== '' ? ' - ' : ''
   const title = postTitle(post)
   const thumbnailImage = fixYoutubeThumbnail(thumbnailImageSrc(post));
   const text = postText(post);
@@ -201,9 +199,11 @@ const scripts = {
 
     scripts.rerenderList(posts)
   },
+  scrollToTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'})
+  },
   initSearchBar() {
     const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
-    console.debug('initSearchBar', { searchBar })
     if (!searchBar) {
       return
     }
@@ -292,6 +292,13 @@ function topbar() {
     )
   )
 }
+
+const backToTopButton = `
+<div class="back-to-top" onclick="window.scripts.scrollToTop()">⇪
+</div>
+`
+
+
 const spinner = `<div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>`
 
 const spinnerStyle = `
@@ -400,6 +407,7 @@ input:focus {
     height: calc(var(--header-height) + .1em);
 }
 ul {
+    scroll-margin-top: var(--header-height);
     display: grid;
     gap: max(1em, 1.5vh);
     padding: 0;
@@ -419,14 +427,24 @@ a {
     font-size: inherit;
 }
 button {
-    margin: 0.5em;
-    margin-left: 0.4em;
-    margin-right: 0.4em;
-    min-width: max(4em, 5vh);
-    font-size: max(12px, 1.1vh);
-    max-height: calc(var(--header-height) / 2);
-    margin-top: calc(var(--header-height) / 4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: calc(var(--padding) * 3.5);
+    height: calc(var(--padding) * 3.5);
+    background-color: inherit;
+    border-radius: 4px;
+    color: #fff8;
+    font-size: 16px;
+    cursor: pointer;  
+    margin: var(--half-padding);
+    padding: var(--padding);
+    border: 1px solid #fff8;
+    align-self: center;
+    box-shadow: 0.5px 0.5px 1px #fff8;
+
 }
+b
 .dark {
     background-color: black;
     color: white;
@@ -536,6 +554,22 @@ button {
 .logo {
   cursor: pointer;
 }
+.back-to-top {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: calc(var(--padding) * 4);
+  right: calc(var(--padding) * 4);
+  width: calc(var(--padding) * 4);
+  height: calc(var(--padding) * 4);
+  background-color: #88888844;
+  border-radius: 4px;
+  color: var(--color);
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
 ${spinnerStyle}
 </style>
 `;
@@ -600,6 +634,7 @@ function page(posts: PostWithOpenGraphData[], script?: string) {
             ${spinner}
             ${searchBar()}
             ${list(posts)}
+            ${backToTopButton}
           `,
         )}
         <script>
