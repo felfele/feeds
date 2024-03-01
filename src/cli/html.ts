@@ -1,5 +1,3 @@
-import { ChangeEvent } from 'react';
-import { printableElapsedTime } from '../helpers/dateHelpers';
 import {OpenGraphData} from '../helpers/openGraph';
 import { getHumanHostname } from '../helpers/urlUtils';
 import {Post} from '../models/Post';
@@ -294,7 +292,7 @@ function topbar() {
 }
 
 const backToTopButton = `
-<div class="back-to-top" onclick="window.scripts.scrollToTop()">⇪
+<div class="back-to-top" onclick="window.scripts.scrollToTop()">⇧
 </div>
 `
 
@@ -361,7 +359,10 @@ const spinnerStyle = `
 `
 
 function searchBar() {
-  return `<input type="text" id="searchbar" class="searchbar" placeholder="Search or filter..."></input>`
+  return `
+<form>
+  <input type="searcg" id="searchbar" class="searchbar" placeholder="Search or filter..."></input>
+</form>`
 }
 
 function style() {
@@ -388,6 +389,8 @@ body {
     margin: 0;
     padding: 0;
     font-size: 15px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 header {
     display: flex;
@@ -407,7 +410,6 @@ input:focus {
     height: calc(var(--header-height) + .1em);
 }
 ul {
-    scroll-margin-top: var(--header-height);
     display: grid;
     gap: max(1em, 1.5vh);
     padding: 0;
@@ -430,19 +432,18 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: calc(var(--padding) * 3.5);
-    height: calc(var(--padding) * 3.5);
+    min-width: calc(var(--padding) * 3);
+    height: calc(var(--padding) * 3);
     background-color: inherit;
     border-radius: 4px;
     color: #fff8;
-    font-size: 16px;
+    font-size: 12px;
     cursor: pointer;  
     margin: var(--half-padding);
     padding: var(--padding);
     border: 1px solid #fff8;
     align-self: center;
     box-shadow: 0.5px 0.5px 1px #fff8;
-
 }
 b
 .dark {
@@ -468,7 +469,7 @@ b
   width: 50vw;
   margin-top: var(--padding);
   margin-left: 24vw;
-  font-size: 15px;
+  font-size: 14px;
   border-color: #88888888;
   border-width: 1px;
   padding: var(--padding);
