@@ -491,13 +491,14 @@ button {
   color: var(--color);
 }
 .search-reset {
-  color: var(--color);
+  color: #888;
   margin: 0;
   padding: 0;
   min-width: unset;
   height: unset;
   border: 0;
   box-shadow: unset;
+  font-size: 16px;
 }
 .card-parent {
     color: inherit;
