@@ -206,11 +206,11 @@ const scripts = {
       return
     }
 
-    searchBar.addEventListener('input', handleInput);
-
-    function handleInput(e: Event) {
-      scripts.searchPosts(searchBar.value)
+    searchBar.addEventListener('input', () => scripts.searchPosts(searchBar.value))
+    if (!searchBar.form) {
+      return
     }
+    searchBar.form.addEventListener('reset', () => scripts.searchPosts(''))
   },
   reload() {
     fetch(window.location.href)
@@ -246,7 +246,7 @@ const scripts = {
 function topbar() {
   const logoOnClick = () => {
     document.getElementById('loader')!.style.display = 'block'
-    document.getElementById('searchbar')!.style.display = 'none'
+    document.getElementById('search')!.style.display = 'none'
     window.scrollTo({top: 0, behavior: 'smooth'});
     window.scripts.reload();
   };
@@ -304,7 +304,7 @@ const spinnerStyle = `
         display: none;
         position: relative;
         width: 40px;
-        height: calc(2 * ${PADDING});
+        height: calc(2 * ${PADDING} + 3.5px);
         margin-left: calc(50% - (${PADDING} * 4));
         margin-top: calc(2 * ${PADDING});
       }
@@ -313,7 +313,7 @@ const spinnerStyle = `
         width: var(--loader-size);
         height: var(--loader-size);
         border-radius: 50%;
-        background: #88888888;calc(2 * ${PADDING})
+        background: #88888888;
         animation-timing-function: cubic-bezier(0, 1, 1, 0);
       }
       .lds-ellipsis div:nth-child(1) {
@@ -360,8 +360,9 @@ const spinnerStyle = `
 
 function searchBar() {
   return `
-<form>
-  <input type="searcg" id="searchbar" class="searchbar" placeholder="Search or filter..."></input>
+<form class="search-form" id="search">
+  <input type="search" id="searchbar" class="searchbar" placeholder="Search or filter..."></input>
+  <button type="reset" class="search-reset">&times;</button>
 </form>`
 }
 
@@ -371,8 +372,9 @@ function style() {
 :root {
   --background-color: var(--stored-background-color, white);
   --color: var(--stored-color, black);
+  --max-column-width: min(600px, max(100vmin, 320px)); 
   --three-column-mode: repeat(3, 1fr);
-  --one-column-mode: min(100vw, 66lvh);
+  --one-column-mode: var(--max-column-width);
   --column-mode: var(--stored-column-mode, var(--one-column-mode));
   --header-height: max(3em, 6vh);
   --padding: ${PADDING};
@@ -445,7 +447,6 @@ button {
     align-self: center;
     box-shadow: 0.5px 0.5px 1px #fff8;
 }
-b
 .dark {
     background-color: black;
     color: white;
@@ -464,20 +465,40 @@ b
     width: 100%;
     height: auto;
 }
-.searchbar {
+.search-form {
   display: flex;
-  width: 50vw;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: center;
+  margin-left: calc((100vw - var(--max-column-width)) / 2 + var(--padding));
+  margin-right: calc((100vw - var(--max-column-width)) / 2 + var(--padding));
   margin-top: var(--padding);
-  margin-left: 24vw;
-  font-size: 14px;
   border-color: #88888888;
   border-width: 1px;
-  padding: var(--padding);
   border-radius: 4px;
+  border-style: solid;
+  padding: var(--padding);
   background-color: var(--background-color);
   color: var(--color);
 }
-
+.searchbar {
+  display: flex;
+  flex-grow: 1;
+  font-size: 14px;
+  border: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--color);
+}
+.search-reset {
+  color: var(--color);
+  margin: 0;
+  padding: 0;
+  min-width: unset;
+  height: unset;
+  border: 0;
+  box-shadow: unset;
+}
 .card-parent {
     color: inherit;
     flex-direction: column;
