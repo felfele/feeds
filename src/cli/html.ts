@@ -11,6 +11,8 @@ const FEEDS_THEME_COLOR = '#6200EA'
 const THEME_COLOR = FIREFOX_PRIVATE_COLOR
 const APP_NAME = 'Feeds'
 const PADDING = '10px'
+const WHITE = '#fefefe'
+const BLACK = '#191919'
 
 function thumbnailImageSrc(post: PostWithOpenGraphData) {
   return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
@@ -135,19 +137,19 @@ declare var window: Window & WindowProps
 
 const scripts = {
   setLightMode(mode: 'light' | 'dark' | string) {
-    document.getElementById('light-mode')!.innerText = mode === 'light' ? 'dark' : 'light'
+    // document.getElementById('light-mode')!.innerText = mode === 'light' ? 'dark' : 'light'
     sessionStorage.setItem('light-mode', mode)
     if (mode === 'light') {
-      document.documentElement.style.setProperty('--background-color', 'white')
-      document.documentElement.style.setProperty('--color', 'black')
+      document.documentElement.style.setProperty('--background-color', 'var(--white)')
+      document.documentElement.style.setProperty('--color', 'var(--black)')
     } else {
-      document.documentElement.style.setProperty('--background-color', 'black')
-      document.documentElement.style.setProperty('--color', 'white')
+      document.documentElement.style.setProperty('--background-color', 'var(--black)')
+      document.documentElement.style.setProperty('--color', 'var(--white)')
     }
   },
   setGridMode(mode: 'three-column' | 'one-column' | string) {
     const listElement = document.getElementById('list')!
-    document.getElementById('grid-mode')!.innerText = mode === 'three-column' ? '1x' : '3x'
+    document.getElementById('grid-mode')!.innerText = mode === 'three-column' ? '❘' : '❘❘❘'
     listElement.className = mode
     sessionStorage.setItem('grid-mode', mode)
     document.documentElement.style.setProperty('--column-mode', `var(--${mode}-mode)`)
@@ -200,6 +202,14 @@ const scripts = {
   scrollToTop() {
     window.scrollTo({top: 0, behavior: 'smooth'})
   },
+  showLoader() {
+    document.getElementById('loader')!.style.display = 'block'
+    document.getElementById('search')!.style.display = 'none'
+  },
+  showSearchBar() {
+    document.getElementById('loader')!.style.display = 'none'
+    document.getElementById('search')!.style.display = 'flex'
+  },
   initSearchBar() {
     const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
     if (!searchBar) {
@@ -211,6 +221,7 @@ const scripts = {
       return
     }
     searchBar.form.addEventListener('reset', () => scripts.searchPosts(''))
+    searchBar.form.addEventListener('submit', (e) => { e.preventDefault(); searchBar.blur() })
   },
   reload() {
     fetch(window.location.href)
@@ -234,6 +245,8 @@ const scripts = {
       const lightMode = sessionStorage.getItem('light-mode')
       if (lightMode) {
         scripts.setLightMode(lightMode)
+      } else {
+        scripts.setLightMode('light')
       }
 
       scripts.makeLinksClickable()
@@ -245,13 +258,12 @@ const scripts = {
 
 function topbar() {
   const logoOnClick = () => {
-    document.getElementById('loader')!.style.display = 'block'
-    document.getElementById('search')!.style.display = 'none'
+    window.scripts.showLoader()
     window.scrollTo({top: 0, behavior: 'smooth'});
     window.scripts.reload();
   };
   const lightModeOnClick = () => {
-    if (document.getElementById('light-mode')!.innerText === 'light') {
+    if (sessionStorage.getItem('light-mode') === 'dark') {
       window.scripts.setLightMode('light')
     } else {
       window.scripts.setLightMode('dark')
@@ -277,7 +289,7 @@ function topbar() {
         id: 'grid-mode',
         onclick: gridModeOnClick,
       },
-      '3x',
+      '❘❘❘',
     )
     +
     elem(
@@ -286,7 +298,7 @@ function topbar() {
         id: 'light-mode',
         onclick: lightModeOnClick,
       },
-      'dark',
+      '☼',
     )
   )
 }
@@ -304,7 +316,7 @@ const spinnerStyle = `
         display: none;
         position: relative;
         width: 40px;
-        height: calc(2 * ${PADDING} + 3.5px);
+        height: 32px;
         margin-left: calc(50% - (${PADDING} * 4));
         margin-top: calc(2 * ${PADDING});
       }
@@ -370,17 +382,33 @@ function style() {
   return `
 <style>
 :root {
-  --background-color: var(--stored-background-color, white);
-  --color: var(--stored-color, black);
-  --max-column-width: min(600px, max(100vmin, 320px)); 
+  --color-base: #191919;
+  --color-step-10: #272727;
+  --color-step-20: #3f3f3f;
+  --color-step-30: #7c7c7c;
+  --color-step-40: #b3b3b3;
+  --color-step-50: #ededed;
+  --color-accent: #fefefe;
+
+  --white: var(--color-step-50);
+  --black: var(--color-base);
+
+  --background-color: var(--stored-background-color, var(--white));
+  --color: var(--stored-color, var(--color));
+
+  --max-column-width: min(500px, max(100vmin, 320px)); 
   --three-column-mode: repeat(3, 1fr);
   --one-column-mode: var(--max-column-width);
   --column-mode: var(--stored-column-mode, var(--one-column-mode));
+
   --header-height: max(3em, 6vh);
+
   --padding: ${PADDING};
   --half-padding: calc(var(--padding) / 2);
+
   --loader-offset: ${PADDING};
   --loader-size: ${PADDING};
+  
 }
 body {
     width: 100vw;
@@ -434,12 +462,12 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: calc(var(--padding) * 3);
+    min-width: calc(var(--padding) * 5);
     height: calc(var(--padding) * 3);
     background-color: inherit;
     border-radius: 4px;
     color: #fff8;
-    font-size: 12px;
+    font-size: 20px;
     cursor: pointer;  
     margin: var(--half-padding);
     padding: var(--padding);
@@ -448,12 +476,12 @@ button {
     box-shadow: 0.5px 0.5px 1px #fff8;
 }
 .dark {
-    background-color: black;
-    color: white;
+    background-color: ${BLACK};
+    color: ${WHITE};
 }
 .light {
-    background-color: white;
-    color: black;
+    background-color: ${WHITE};
+    color: ${BLACK};
 }
 .three-column {
     grid-template-columns: var(--column-mode);
@@ -480,6 +508,7 @@ button {
   padding: var(--padding);
   background-color: var(--background-color);
   color: var(--color);
+  height: 20px;
 }
 .searchbar {
   display: flex;
