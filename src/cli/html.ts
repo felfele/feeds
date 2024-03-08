@@ -319,7 +319,7 @@ function topbar() {
         id: 'light-mode',
         onclick: lightModeOnClick,
       },
-      '☼',
+      '⁜',
     )
   )
 }
