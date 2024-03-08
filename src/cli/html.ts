@@ -5,14 +5,17 @@ import {logoDataUrl} from './logo-data-url';
 
 export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
 
+const WHITE_COLOR = '#fefefe'
+const BLACK_COLOR = '#191919'
+const COLOR_STEP_10 = '#272727'
+const COLOR_STEP_20 = '#3f3f3f'
+
 const FIREFOX_PRIVATE_COLOR = '#291e4f'
 const FIREFOX_LIGHT_COLOR = '#f9f9fb'
 const FEEDS_THEME_COLOR = '#6200EA'
-const THEME_COLOR = FIREFOX_PRIVATE_COLOR
+const THEME_COLOR = COLOR_STEP_10
 const APP_NAME = 'Feeds'
 const PADDING = '10px'
-const WHITE = '#fefefe'
-const BLACK = '#191919'
 
 function thumbnailImageSrc(post: PostWithOpenGraphData) {
   return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
@@ -32,8 +35,11 @@ function postText(post: PostWithOpenGraphData) {
   }
 
   return post.text
+    // remove bold text
     .replace(/^\*\*.*\*\*/m, '')
+    // remove comment links
     .replace(/\[Comments\]\((.*?)\)/gm, '')
+    // replace links with just the text
     .replace(/\[(.*?)\]\((.*?)\)/gm, '$1')
 }
 
@@ -42,8 +48,8 @@ function fixYoutubeThumbnail(image: string | undefined) {
   return image ? image.replace(/hqdefault.jpg$/, `${replacement}.jpg`) : image;
 }
 
-function link(href: string, content: string) {
-  return `<a href="${href}" target="_blank" rel="noopener noreferrer">${content}</a>`
+function link(href: string, content: string, className = '') {
+  return `<a href="${href}" class="${className}" target="_blank" rel="noopener noreferrer">${content}</a>`
 }
 
 function commentLink(post: Post): string | undefined {
@@ -65,30 +71,25 @@ export function card(post: PostWithOpenGraphData) {
   const thumbnailImage = fixYoutubeThumbnail(thumbnailImageSrc(post));
   const text = postText(post);
   const comment = commentLink(post);
+  const sharePost = `window.scripts.sharePost('${post._id}')`
   return `
 <div class="card-parent">
     <a class="main-link" href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
+    </a>
     <div class="card">
-        <div class="left">
-            <img src="${post.author?.image.uri}" onclick="${(e: Event) => {
-              e.stopPropagation()
-              const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
-              if (searchBar) {
-                const searchValue = post.author?.name || ''
-                searchBar.value = searchValue
-                scripts.searchPosts(searchValue)
-              }
-            }}" />
+        <div class="left" onclick="window.scripts.filterForAuthor('${post.author?.name || ''}')">
+            <img src="${post.author?.image.uri}" />
         </div>
         <div class="right">
             <div class="title">${post.author?.name}</div>
             <div class="author"><span title="${printableTime}" class="tooltip?">${hostnameText}</span></div>
         </div>
+        <div class="spacer"></div>
+        <div class="share" onclick="${sharePost}">↱</div>
     </div>
-    ${thumbnailImage ? `<img class="thumbnail" src="${thumbnailImage}" />` : ''}
-    </a>
-    ${title ? `<div class="text b">${title}</div>` : ''}
-    ${text ? `<div class="text">${text}</div>` : ''}
+    ${thumbnailImage ? link(postLink(post), `<img class="thumbnail" src="${thumbnailImage}" />`, 'image-link') : ''}
+    ${title ? `<div class="text b">${link(postLink(post), title)}</div>` : ''}
+    ${text ? `<div class="text">${link(postLink(post), text)}</div>` : ''}
     ${comment ? `<div class="text"><a class="link comment" href="${comment}" target="_blank" rel="noopener noreferrer">Comments</a></div>` : ''}
 </div>
 `;
@@ -149,7 +150,7 @@ const scripts = {
   },
   setGridMode(mode: 'three-column' | 'one-column' | string) {
     const listElement = document.getElementById('list')!
-    document.getElementById('grid-mode')!.innerText = mode === 'three-column' ? '❘' : '❘❘❘'
+    document.getElementById('grid-mode')!.innerText = mode === 'three-column' ? '⦙' : '⦙⦙⦙'
     listElement.className = mode
     sessionStorage.setItem('grid-mode', mode)
     document.documentElement.style.setProperty('--column-mode', `var(--${mode}-mode)`)
@@ -157,7 +158,7 @@ const scripts = {
   makeLinksClickable() {
     const cards = Array.from(document.querySelectorAll('div.card-parent'))
     cards.forEach(card => {
-      const clickableLinks = Array.from(card.querySelectorAll('div.text a'))
+      const clickableLinks = Array.from(card.querySelectorAll('div.text a, div.share, div.left, a.image-link'))
       const mainLink = card.querySelector(".main-link");
       clickableLinks.forEach((ele) =>
         ele.addEventListener("click", (e) => e.stopPropagation())
@@ -167,6 +168,7 @@ const scripts = {
       mainLink?.addEventListener("click", (e) => e.stopPropagation())
 
       function handleClick(e: Event) {
+        e.stopPropagation()
         const noTextSelected = !window.getSelection()?.toString();
 
         if (noTextSelected && mainLink) {
@@ -183,6 +185,16 @@ const scripts = {
       return
     }
     list.innerHTML = posts.map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+    scripts.makeLinksClickable()
+  },
+  filterForAuthor(author: string) {
+    const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
+    if (searchBar) {
+      searchBar.value = author
+      scripts.searchPosts(author)
+      // scroll can be cancelled when layout changes hence the delay
+      setTimeout(() => scripts.scrollToTop(), 100)
+    }
   },
   searchPosts(expr: string) {
     function normalize(s: string | undefined): string {
@@ -198,6 +210,15 @@ const scripts = {
       : window.posts.filter(post => normalize(post.author?.name).includes(expr) || normalize(post.author?.uri).includes(expr) || normalize(post.text).includes(expr))
 
     scripts.rerenderList(posts)
+  },
+  sharePost(id: string | undefined) {
+    const post = window.posts.find(post => post._id === id)
+    if (!post) {
+      return
+    }
+    const url = `${window.location.origin}/myfeed`
+    console.debug({ url, post })
+    fetch(url, { method: 'PUT', body: JSON.stringify(post) })
   },
   scrollToTop() {
     window.scrollTo({top: 0, behavior: 'smooth'})
@@ -281,7 +302,7 @@ function topbar() {
     {class: 'topbar'},
     elem('img', {src: logoDataUrl, class: 'logo', onclick: logoOnClick})
     +
-    elem('div', {class: 'logo-spacer' })
+    elem('div', {class: 'spacer' })
     +
     elem(
       'button',
@@ -289,7 +310,7 @@ function topbar() {
         id: 'grid-mode',
         onclick: gridModeOnClick,
       },
-      '❘❘❘',
+      '⦙⦙⦙',
     )
     +
     elem(
@@ -407,8 +428,7 @@ function style() {
   --half-padding: calc(var(--padding) / 2);
 
   --loader-offset: ${PADDING};
-  --loader-size: ${PADDING};
-  
+  --loader-size: ${PADDING}; 
 }
 body {
     width: 100vw;
@@ -427,7 +447,6 @@ header {
     flex-direction: row;
     width: 100vw;
     height: var(--header-height);
-    position: fixed;
     z-index: 1;
     background-color: ${THEME_COLOR};
     top: 0;
@@ -437,7 +456,7 @@ input:focus {
     outline: none;
 }
 .header-placeholder {
-    height: calc(var(--header-height) + .1em);
+    height: 0.1em;
 }
 ul {
     display: grid;
@@ -445,6 +464,7 @@ ul {
     padding: 0;
     margin: 0;
     margin-top: 1em;
+    margin-bottom: 1em;
     justify-content: center;
     list-style-type: none;
 }
@@ -476,12 +496,12 @@ button {
     box-shadow: 0.5px 0.5px 1px #fff8;
 }
 .dark {
-    background-color: ${BLACK};
-    color: ${WHITE};
+    background-color: ${BLACK_COLOR};
+    color: ${WHITE_COLOR};
 }
 .light {
-    background-color: ${WHITE};
-    color: ${BLACK};
+    background-color: ${WHITE_COLOR};
+    color: ${BLACK_COLOR};
 }
 .three-column {
     grid-template-columns: var(--column-mode);
@@ -565,6 +585,17 @@ button {
     display: flex;
     flex-direction: column;
 }
+.share {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  cursor: pointer;
+  color: var(--color-step-30);
+}
+.share:hover {
+  background-color: var(--color-step-40);
+}
 .title {
     font-weight: 500;
     overflow: hidden;
@@ -600,7 +631,7 @@ button {
     flex-grow: 1;
     justify-content: flex-start;
 }
-.logo-spacer {
+.spacer {
   flex-grow: 1;
 }
 .logo {
@@ -621,6 +652,7 @@ button {
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
+  user-select: none;
 }
 ${spinnerStyle}
 </style>

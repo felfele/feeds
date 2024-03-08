@@ -48,8 +48,16 @@ export const publishCommand =
     addCommand('json-to-html <previews-file>', 'Render previews file to HTML', async (previewsFile: string) => {
         const previewsJSON = fs.readFileSync(previewsFile, { encoding: 'utf-8' }) 
         const previews = JSON.parse(previewsJSON) as PostWithOpenGraphData[]
-        const feedPageHtml = makeFeedPageHtml(previews)
+        const script = fs.readFileSync('dist/feeds.js', { encoding: 'utf-8' })
+        const feedPageHtml = makeFeedPageHtml(previews, script)
         output(feedPageHtml)
+    })
+    .
+    addCommand('json-to-rss <previews-file>', 'Render previews file as RSS', async (previewsFile: string) => {
+        const previewsJSON = fs.readFileSync(previewsFile, { encoding: 'utf-8' }) 
+        const posts = JSON.parse(previewsJSON) as PostWithOpenGraphData[]
+        const rssFile = makeRssFile(posts)
+        output(rssFile)
     })
     .
     addCommand('html <feeds-file> [max-posts=20]', 'Render fetched feed previews to HTML', async (feedsFile: string, maxPostsValue = '20') => {
