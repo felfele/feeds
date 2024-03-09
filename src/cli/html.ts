@@ -62,6 +62,20 @@ function commentLink(post: Post): string | undefined {
   return match[1]
 }
 
+const verticalDotsIcon = (size = '20') => `
+<svg version="1.1" id="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+  width="${size}" height="${size}" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;}
+</style>
+<title>overflow-menu--vertical</title>
+<circle cx="16" cy="8" r="2"/>
+<circle cx="16" cy="16" r="2"/>
+<circle cx="16" cy="24" r="2"/>
+<rect id="_Transparent_Rectangle_" class="st0" width="32" height="32"/>
+</svg>
+`
+
 export function card(post: PostWithOpenGraphData) {
   const postUpdateTime = post.updatedAt || post.createdAt
   const printableTime = postUpdateTime ? new Date(postUpdateTime).toLocaleString() : ''
@@ -85,7 +99,7 @@ export function card(post: PostWithOpenGraphData) {
             <div class="author"><span title="${printableTime}" class="tooltip?">${hostnameText}</span></div>
         </div>
         <div class="spacer"></div>
-        <div class="share" onclick="${sharePost}">↱</div>
+        <div class="share" onclick="${sharePost}">${verticalDotsIcon()}</div>
     </div>
     ${thumbnailImage ? link(postLink(post), `<img class="thumbnail" src="${thumbnailImage}" />`, 'image-link') : ''}
     ${title ? `<div class="text b">${link(postLink(post), title)}</div>` : ''}
@@ -137,8 +151,33 @@ interface WindowProps {
 declare var window: Window & WindowProps
 
 const scripts = {
+  // icons
+  rotate360Icon(size = 20) {
+    return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><title>rotate--360</title><path d="M25.95,7.65l.0047-.0039c-.0918-.1094-.197-.2061-.2925-.3125-.1841-.2051-.3672-.41-.5635-.603-.1382-.1358-.2856-.2613-.43-.3907-.1831-.1645-.3657-.3286-.5581-.4824-.1592-.1279-.3244-.2466-.4895-.3667-.1921-.14-.3855-.2768-.5854-.4062-.1743-.1128-.3523-.2188-.5322-.3238q-.3081-.1786-.6253-.3408c-.1846-.0942-.37-.1846-.56-.27-.2224-.1-.449-.1914-.678-.2793-.1894-.0723-.3777-.1455-.5713-.209-.2463-.0815-.498-.1494-.7507-.2163-.1848-.0493-.3674-.1025-.5554-.1431-.29-.0634-.5865-.1074-.8833-.1508-.159-.023-.3145-.0552-.4754-.0728A12.9331,12.9331,0,0,0,6,7.7031V4H4v8h8V10H6.8115A10.961,10.961,0,0,1,16,5a11.1114,11.1114,0,0,1,1.189.0669c.1362.0146.268.042.4026.0615.2509.0366.5014.0742.7468.1275.1592.0346.3144.08.4712.1215.2131.0562.4258.1138.6335.1822.1643.0547.325.1167.4859.1782.1926.0742.3835.1509.5705.2349.1611.0727.3193.15.4763.23q.2677.1363.5262.2867c.153.0893.3046.18.4531.2758.1679.1089.3308.2242.4922.3413.1406.1026.2817.2037.417.3125.1616.1294.3156.2676.47.4063.1225.11.2478.2168.3652.332.1668.1636.3223.3379.4785.5117A10.9928,10.9928,0,1,1,5,16H3A13,13,0,1,0,25.95,7.65Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
+  },
+  upArrowIcon(size = 20) {
+    return  `<svg id="icon" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <polygon points="16 4 6 14 7.41 15.41 15 7.83 15 28 17 28 17 7.83 24.59 15.41 26 14 16 4"/>
+  <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
+  </svg>
+  `
+  },
+  threeColumnIcon(size = 20) {
+    return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><defs><style>.cls-1{fill:none;}</style></defs><title>thumbnail--2</title><path d="M8,30H4a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,30ZM4,24v4H8V24Z"/><path d="M18,30H14a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,18,30Zm-4-6v4h4V24Z"/><path d="M28,30H24a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,28,30Zm-4-6v4h4V24Z"/><path d="M8,20H4a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,20ZM4,14v4H8V14Z"/><path d="M18,20H14a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,18,20Zm-4-6v4h4V14Z"/><path d="M28,20H24a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,28,20Zm-4-6v4h4V14Z"/><path d="M8,10H4A2,2,0,0,1,2,8V4A2,2,0,0,1,4,2H8a2,2,0,0,1,2,2V8A2,2,0,0,1,8,10ZM4,4V8H8V4Z"/><path d="M18,10H14a2,2,0,0,1-2-2V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V8A2,2,0,0,1,18,10ZM14,4V8h4V4Z"/><path d="M28,10H24a2,2,0,0,1-2-2V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V8A2,2,0,0,1,28,10ZM24,4V8h4V4Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
+  },
+  brightnessIcon(size = 20) {
+    return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><defs><style>.cls-1{fill:none;}</style></defs><title>brightness-contrast</title><rect x="15" y="2" width="2" height="3"/><rect x="27" y="15" width="3" height="2"/><rect x="15" y="27" width="2" height="3"/><rect x="2" y="15" width="3" height="2"/><rect x="6.22" y="5.73" width="2" height="3" transform="translate(-3 7.23) rotate(-45)"/><rect x="23.27" y="6.23" width="3" height="2" transform="translate(2.14 19.63) rotate(-45)"/><rect x="23.77" y="23.27" width="2" height="3" transform="translate(-10.26 24.77) rotate(-45)"/><polygon points="5.47 25.13 7.59 23 9 24.42 6.88 26.54 5.47 25.13"/><path d="M16,8a8,8,0,1,0,8,8A8,8,0,0,0,16,8Zm0,14a6,6,0,0,1,0-12Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
+  },
+  
+  // functions
   setLightMode(mode: 'light' | 'dark' | string) {
-    // document.getElementById('light-mode')!.innerText = mode === 'light' ? 'dark' : 'light'
     sessionStorage.setItem('light-mode', mode)
     if (mode === 'light') {
       document.documentElement.style.setProperty('--background-color', 'var(--white)')
@@ -150,7 +189,7 @@ const scripts = {
   },
   setGridMode(mode: 'three-column' | 'one-column' | string) {
     const listElement = document.getElementById('list')!
-    document.getElementById('grid-mode')!.innerText = mode === 'three-column' ? '⦙' : '⦙⦙⦙'
+    document.getElementById('grid-mode')!.innerHTML = mode === 'three-column' ? '⦙' : scripts.threeColumnIcon()
     listElement.className = mode
     sessionStorage.setItem('grid-mode', mode)
     document.documentElement.style.setProperty('--column-mode', `var(--${mode}-mode)`)
@@ -250,8 +289,8 @@ const scripts = {
       return
     }
 
-    const reloadText = '↺'
-    const backToTopText = '↥'
+    const reloadText = scripts.rotate360Icon()
+    const backToTopText = scripts.upArrowIcon()
   
     setInterval(() => {
       if (window.scrollY === 0) {
@@ -328,7 +367,7 @@ function topbar() {
         id: 'grid-mode',
         onclick: gridModeOnClick,
       },
-      '⦙⦙⦙',
+      scripts.threeColumnIcon(),
     )
     +
     elem(
@@ -337,13 +376,13 @@ function topbar() {
         id: 'light-mode',
         onclick: lightModeOnClick,
       },
-      '⁜',
+      scripts.brightnessIcon(),
     )
   )
 }
 
 const backToTopButton = () => {
-  const reloadText = '↺'
+  const reloadText = scripts.rotate360Icon()
   const onclick = () => {
     if (window.scrollY === 0) {
       window.scripts.showLoader()
@@ -513,6 +552,7 @@ button {
     background-color: inherit;
     border-radius: 4px;
     color: #fff8;
+    fill: #fff8;
     font-size: 20px;
     cursor: pointer;  
     margin: var(--half-padding);
@@ -617,6 +657,7 @@ button {
   width: 32px;
   cursor: pointer;
   color: var(--color-step-30);
+  fill: var(--color-step-30);
 }
 .share:hover {
   background-color: var(--color-step-40);
@@ -674,6 +715,7 @@ button {
   background-color: #88888844;
   border-radius: 4px;
   color: var(--color);
+  fill: var(--color);
   font-size: 24px;
   cursor: pointer;
   user-select: none;
