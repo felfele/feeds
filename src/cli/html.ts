@@ -380,7 +380,7 @@ const spinnerStyle = `
         animation: lds-ellipsis1 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(2) {
-        left: calc(var(--loader-offset));
+        left: calc(var(--loader-offset) * 2);
         animation: lds-ellipsis2 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(3) {
@@ -388,7 +388,7 @@ const spinnerStyle = `
         animation: lds-ellipsis2 0.6s infinite;
       }
       .lds-ellipsis div:nth-child(4) {
-        left: calc(var(--loader-offset) * 6);
+        left: calc(var(--loader-offset) * 4);
         animation: lds-ellipsis3 0.6s infinite;
       }
       @keyframes lds-ellipsis1 {
@@ -412,7 +412,7 @@ const spinnerStyle = `
           transform: translate(0, 0);
         }
         100% {
-          transform: translate(4.5vh, 0);
+          transform: translate(calc(var(--loader-size) * 2), 0);
         }
       }     
 `
@@ -451,7 +451,7 @@ function style() {
   --padding: ${PADDING};
   --half-padding: calc(var(--padding) / 2);
 
-  --header-height: calc(var(--padding) * 6);
+  --header-height: calc(var(--padding) * 5);
 
   --loader-offset: ${PADDING};
   --loader-size: ${PADDING}; 
@@ -486,7 +486,7 @@ input:focus {
 }
 ul {
     display: grid;
-    gap: max(1em, 1.5vh);
+    gap: var(--padding);
     padding: 0;
     margin: 0;
     margin-top: 1em;
@@ -629,7 +629,7 @@ button {
     font-size: 14px;
 }
 .author {
-    font-size: max(0.8em, 1.1vh);
+    font-size: 12px;
     color: gray;
 }
 .tooltip { border-bottom: 1px dotted #333; position: relative; cursor: pointer; }
