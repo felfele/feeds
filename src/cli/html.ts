@@ -244,6 +244,23 @@ const scripts = {
     searchBar.form.addEventListener('reset', () => scripts.searchPosts(''))
     searchBar.form.addEventListener('submit', (e) => { e.preventDefault(); searchBar.blur() })
   },
+  initScrollReloadButton() {
+    const button = Array.from(document.getElementsByClassName('back-to-top'))[0]
+    if (!button) {
+      return
+    }
+
+    const reloadText = '↺'
+    const backToTopText = '↥'
+  
+    setInterval(() => {
+      if (window.scrollY === 0) {
+        button.innerHTML = reloadText
+      } else {
+        button.innerHTML = backToTopText
+      }
+    }, 1000)
+  },
   reload() {
     fetch(window.location.href)
     .then(response => response.text())
@@ -272,6 +289,7 @@ const scripts = {
 
       scripts.makeLinksClickable()
       scripts.initSearchBar()
+      scripts.initScrollReloadButton()
       console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })      
     })
   },
@@ -324,10 +342,18 @@ function topbar() {
   )
 }
 
-const backToTopButton = `
-<div class="back-to-top" onclick="window.scripts.scrollToTop()">⇧
-</div>
-`
+const backToTopButton = () => {
+  const reloadText = '↺'
+  const onclick = () => {
+    if (window.scrollY === 0) {
+      window.scripts.showLoader()
+      window.scripts.reload()
+    } else {
+      window.scripts.scrollToTop()
+    }
+  }
+  return elem('div', { class: 'back-to-top', onclick }, reloadText)
+}
 
 
 const spinner = `<div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>`
@@ -422,10 +448,10 @@ function style() {
   --one-column-mode: var(--max-column-width);
   --column-mode: var(--stored-column-mode, var(--one-column-mode));
 
-  --header-height: max(3em, 6vh);
-
   --padding: ${PADDING};
   --half-padding: calc(var(--padding) / 2);
+
+  --header-height: calc(var(--padding) * 6);
 
   --loader-offset: ${PADDING};
   --loader-size: ${PADDING}; 
@@ -572,16 +598,15 @@ button {
     margin: var(--padding);
 }
 .left {
-    margin-right: 0.5vh;
     align-items: center;
     display: flex;
 }
 .left img { 
-    width: max(1.8em, 4vh);
-    height: max(1.8em, 4vh);
+    width: calc(3 * var(--padding));
+    height: calc(3 * var(--padding));
 }
 .right {
-    padding-left: 0.4em;
+    padding-left: var(--padding);
     display: flex;
     flex-direction: column;
 }
@@ -650,7 +675,6 @@ button {
   border-radius: 4px;
   color: var(--color);
   font-size: 24px;
-  font-weight: bold;
   cursor: pointer;
   user-select: none;
 }
@@ -718,7 +742,7 @@ function page(posts: PostWithOpenGraphData[], script?: string) {
             ${spinner}
             ${searchBar()}
             ${list(posts)}
-            ${backToTopButton}
+            ${backToTopButton()}
           `,
         )}
         <script>
