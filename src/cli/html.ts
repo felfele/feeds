@@ -292,11 +292,18 @@ const scripts = {
     const reloadText = scripts.rotate360Icon()
     const backToTopText = scripts.upArrowIcon()
   
+    let lastValue: string | undefined = undefined
     setInterval(() => {
       if (window.scrollY === 0) {
-        button.innerHTML = reloadText
+        if (lastValue !== reloadText) {
+          button.innerHTML = reloadText
+          lastValue = reloadText
+        }
       } else {
-        button.innerHTML = backToTopText
+        if (lastValue !== backToTopText) {
+          button.innerHTML = backToTopText
+          lastValue = backToTopText
+        }
       }
     }, 1000)
   },
@@ -515,7 +522,6 @@ header {
     z-index: 1;
     background-color: ${THEME_COLOR};
     top: 0;
-    backdrop-filter: blur(15px);
 }
 input:focus {
     outline: none;
@@ -708,10 +714,10 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: calc(var(--padding) * 4);
-  right: calc(var(--padding) * 4);
-  width: calc(var(--padding) * 4);
-  height: calc(var(--padding) * 4);
+  bottom: calc(var(--padding) * 5);
+  right: calc(var(--padding) * 5);
+  width: calc(var(--padding) * 5);
+  height: calc(var(--padding) * 5);
   background-color: #88888844;
   border-radius: 4px;
   color: var(--color);
@@ -719,6 +725,7 @@ button {
   font-size: 24px;
   cursor: pointer;
   user-select: none;
+  backdrop-filter: blur(15px);
 }
 ${spinnerStyle}
 </style>
