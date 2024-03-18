@@ -4,6 +4,7 @@ import {Post} from '../models/Post';
 import {logoDataUrl} from './logo-data-url';
 
 export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
+type NormalizedPost = Post & { normalizedText?: string }
 
 const WHITE_COLOR = '#fefefe'
 const BLACK_COLOR = '#191919'
@@ -21,15 +22,19 @@ function thumbnailImageSrc(post: PostWithOpenGraphData) {
   return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
 }
 
-function postTitle(post: PostWithOpenGraphData) {
-  return post.rssItem?.title
+export function postTitle(post: PostWithOpenGraphData) {
+  if (!post.text.includes('**')) {
+    return
+  }
+
+  return post.text.replaceAll('\n', '').replace(/^\*\*(.*)\*\*(.*)$/, '$1')
 }
 
 function postLink(post: PostWithOpenGraphData) {
   return post.link ? post.link : post.og?.url ?? ''
 }
 
-function postText(post: PostWithOpenGraphData) {
+export function postText(post: PostWithOpenGraphData) {
   if (!post.text) {
     return
   }
@@ -226,6 +231,20 @@ const scripts = {
     list.innerHTML = posts.map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
     scripts.makeLinksClickable()
   },
+  rerenderList2(posts: PostWithOpenGraphData[]) {
+    const list = document.getElementById('list')
+    if (!list) {
+      return
+    }
+    list.innerHTML = posts.map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+  },
+  debounce(func: (...args: any[]) => any, timeout = 300){
+    let timer: any = undefined
+    return (...args: any[]) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+  },
   filterForAuthor(author: string) {
     const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
     if (searchBar) {
@@ -235,20 +254,58 @@ const scripts = {
       setTimeout(() => scripts.scrollToTop(), 100)
     }
   },
-  searchPosts(expr: string) {
-    function normalize(s: string | undefined): string {
-      if (!s) {
-        return ''
-      }
-      return s && s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+  normalizeString(s: string | undefined): string {
+    if (!s) {
+      return ''
     }
-    expr = normalize(expr)
+    return s && s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+  },
+  normalizePost(post: Post): NormalizedPost {
+    const authorName = post.author?.name ? scripts.normalizeString(post.author.name) : ''
+    const authorUrl = post.author?.uri ? scripts.normalizeString(post.author.uri) : ''
+    const text = scripts.normalizeString(post.text)
+    const normalizedText = [' ', authorName, authorUrl, text].join(' ')
+
+    return {
+      ...post,
+      normalizedText,
+    }
+  },
+  matchPost(post: NormalizedPost, expr: string): boolean {
+    return post.normalizedText?.includes(expr) || false
+  },
+  searchPosts(expr: string) {
+    expr = scripts.normalizeString(expr)
     const posts = 
       expr === '' 
       ? window.posts 
-      : window.posts.filter(post => normalize(post.author?.name).includes(expr) || normalize(post.author?.uri).includes(expr) || normalize(post.text).includes(expr))
+      : window.posts.filter(post => scripts.matchPost(post, ' ' + expr))
 
     scripts.rerenderList(posts)
+  },
+  searchPosts2(expr: string) {
+    expr = scripts.normalizeString(expr)
+    const posts = 
+      expr === '' 
+      ? window.posts 
+      : window.posts.filter(post => scripts.normalizeString(post.author?.name).includes(expr) || scripts.normalizeString(post.author?.uri).includes(expr) || scripts.normalizeString(post.text).includes(expr))
+
+    return posts
+  },
+  searchPosts3(expr: string) {
+    expr = scripts.normalizeString(expr)
+    const posts = 
+      expr === '' 
+      ? window.posts 
+      : window.posts.filter(post => scripts.matchPost(post, expr))
+
+    return posts
+  },
+  time(f: () => void) {
+    const start = Date.now()
+    f()
+    const end = Date.now()
+    console.debug('elapsed ', end - start)
   },
   sharePost(id: string | undefined) {
     const post = window.posts.find(post => post._id === id)
@@ -276,7 +333,7 @@ const scripts = {
       return
     }
 
-    searchBar.addEventListener('input', () => scripts.searchPosts(searchBar.value))
+    searchBar.addEventListener('input', scripts.debounce(() => scripts.searchPosts(searchBar.value)))
     if (!searchBar.form) {
       return
     }
@@ -305,7 +362,7 @@ const scripts = {
           lastValue = backToTopText
         }
       }
-    }, 1000)
+    }, 500)
   },
   reload() {
     fetch(window.location.href)
@@ -598,6 +655,7 @@ button {
   border-radius: 4px;
   border-style: solid;
   padding: var(--padding);
+  padding-right: var(--half-padding);
   background-color: var(--background-color);
   color: var(--color);
   height: 20px;
@@ -605,7 +663,7 @@ button {
 .searchbar {
   display: flex;
   flex-grow: 1;
-  font-size: 14px;
+  font-size: 16px;
   border: 0;
   padding: 0;
   background-color: var(--background-color);
@@ -614,7 +672,7 @@ button {
 .search-reset {
   color: #888;
   margin: 0;
-  padding: 0;
+  padding: var(--half-padding);
   min-width: unset;
   height: unset;
   border: 0;
@@ -737,7 +795,8 @@ export function serializeScripts(obj: object) {
 }
 
 function page(posts: PostWithOpenGraphData[], script?: string) {
-  const sanitizedPosts = posts.map(post => ({ ...post, rssItem: { ...post.rssItem, content: undefined }}))
+  const rssItem = undefined
+  const sanitizedPosts = posts.map(post => scripts.normalizePost({ ...post, rssItem }))
   const manifest = JSON.stringify({
     name: APP_NAME,
     short_name: APP_NAME,
@@ -797,7 +856,6 @@ function page(posts: PostWithOpenGraphData[], script?: string) {
         <script>
           scripts.init()
         </script>
-        <!-- TODO escaping issue with posts -->
         ${elem('script', {}, `posts = ${JSON.stringify(sanitizedPosts, undefined, 4)};`)}
         ${script ? elem('script', {id: 'feeds.js'}, script) : ''}
     `,

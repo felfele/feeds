@@ -15,6 +15,7 @@ import { Post } from '../models/Post'
 import { readFileSync } from 'fs'
 import { safeFetch } from '../helpers/safeFetch'
 import { publishCommand } from './publish'
+import { postCommand } from './post'
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch')
@@ -180,6 +181,8 @@ const definitions =
     })
     .
     addCommand('publish', 'Publish feeds', publishCommand)
+    .
+    addCommand('post', 'Post related commands', postCommand)
     .
     addCommand('f <feed-url>', 'Test', async (url: string) => {
         const feed = await safeFetch('https://www.youtube.com/@decino', { 

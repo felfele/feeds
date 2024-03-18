@@ -99,7 +99,7 @@ export class RefreshableFeed extends React.PureComponent<Props, RefreshableFeedS
                             togglePostSelection={this.togglePostSelection}
                         />
                     )}
-                    keyExtractor={(item) => '' + (item.link || '') + '/' + item._id + '/' + (item.topic || '')}
+                    keyExtractor={(item) => '' + (item.link || '') + '/' + item._id}
                     extraData={this.state}
                     refreshControl={
                         <RefreshControl
