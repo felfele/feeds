@@ -49,7 +49,8 @@ export const publishCommand =
         const previewsJSON = fs.readFileSync(previewsFile, { encoding: 'utf-8' }) 
         const previews = JSON.parse(previewsJSON) as PostWithOpenGraphData[]
         const script = fs.readFileSync('dist/feeds.js', { encoding: 'utf-8' })
-        const feedPageHtml = makeFeedPageHtml(previews, script)
+        const env = process.env['CONFIG'] ? JSON.parse(process.env['CONFIG']) : undefined
+        const feedPageHtml = makeFeedPageHtml(previews, script, env)
         output(feedPageHtml)
     })
     .

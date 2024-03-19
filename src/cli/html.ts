@@ -4,7 +4,9 @@ import {Post} from '../models/Post';
 import {logoDataUrl} from './logo-data-url';
 
 export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
-type NormalizedPost = Post & { normalizedText?: string }
+type Index = { [key: string]: string }
+type NormalizedPost = Post & { normalizedText?: string, index?: Index}
+type ScoredPost = NormalizedPost & { score: number }
 
 const WHITE_COLOR = '#fefefe'
 const BLACK_COLOR = '#191919'
@@ -23,7 +25,7 @@ function thumbnailImageSrc(post: PostWithOpenGraphData) {
 }
 
 export function postTitle(post: PostWithOpenGraphData) {
-  if (!post.text.includes('**')) {
+  if (!post.text.startsWith('**')) {
     return
   }
 
@@ -147,6 +149,7 @@ function title(content: string) {
 interface WindowProps {
   scripts: typeof scripts
   posts: PostWithOpenGraphData[]
+  scoredPosts: ScoredPost[]
   feeds: {
     makeFeedPageHtml: typeof makeFeedPageHtml,
     listItem: typeof listItem,
@@ -258,54 +261,71 @@ const scripts = {
     if (!s) {
       return ''
     }
-    return s && s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
+    return s
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .replace(/[^\p{Letter}0-9 -]/gu, '')
+      .toLowerCase()
   },
   normalizePost(post: Post): NormalizedPost {
     const authorName = post.author?.name ? scripts.normalizeString(post.author.name) : ''
-    const authorUrl = post.author?.uri ? scripts.normalizeString(post.author.uri) : ''
+    const authorUrl = post.author?.uri ? getHumanHostname(post.author.uri) : ''
     const text = scripts.normalizeString(post.text)
     const normalizedText = [' ', authorName, authorUrl, text].join(' ')
+    const textSet = new Set<string>(normalizedText.split(' ').filter(word => ![' ', ''].includes(word)))
+    const index = Array.from(textSet).reduce<Index>((acc, v) => ({ ...acc, [v[0]]: acc[v[0]] ? acc[v[0]] + ' ' + v : ' ' + v }), {})
 
     return {
       ...post,
-      normalizedText,
+      index,
     }
   },
-  matchPost(post: NormalizedPost, expr: string): boolean {
-    return post.normalizedText?.includes(expr) || false
+  scorePost(post: NormalizedPost, expr: string): number {
+    const words = expr.split(' ').filter(word => word !== '')
+    let score = 0
+    for (const word of words) {
+      const isNegative = word.startsWith('-')
+      const searchTerm = isNegative ? word.slice(1) : word
+      // search for words after space to disambiguate
+      const matched = post.index?.[searchTerm[0]]?.includes(' ' + searchTerm)
+      if (matched) {
+        if (isNegative) {
+          return 0
+        }
+        score += 1
+      } else if (isNegative) {
+        score += 1
+      }
+    }
+    return score
   },
   searchPosts(expr: string) {
-    expr = scripts.normalizeString(expr)
-    const posts = 
-      expr === '' 
-      ? window.posts 
-      : window.posts.filter(post => scripts.matchPost(post, ' ' + expr))
-
-    scripts.rerenderList(posts)
+    const posts = scripts.time(() => scripts.searchPostsInner(expr), 'searchPosts time: ')
+    scripts.time(() => scripts.rerenderList(posts), 'rerender time: ')
   },
-  searchPosts2(expr: string) {
+  searchPostsInner(expr: string) {
     expr = scripts.normalizeString(expr)
     const posts = 
       expr === '' 
       ? window.posts 
-      : window.posts.filter(post => scripts.normalizeString(post.author?.name).includes(expr) || scripts.normalizeString(post.author?.uri).includes(expr) || scripts.normalizeString(post.text).includes(expr))
+      : window.posts.reduce((prev: ScoredPost[], post) => {
+          const score = scripts.scorePost(post, expr)
+          if (score > 0) {
+            return [...prev, { ...post, score }]
+          }
+          return prev
+        }, []).sort((a, b) => b.score - a.score)
 
+    // TODO DEBUG
+    window.scoredPosts = posts as ScoredPost[]
     return posts
   },
-  searchPosts3(expr: string) {
-    expr = scripts.normalizeString(expr)
-    const posts = 
-      expr === '' 
-      ? window.posts 
-      : window.posts.filter(post => scripts.matchPost(post, expr))
-
-    return posts
-  },
-  time(f: () => void) {
+  time<T>(f: () => T, name = '') {
     const start = Date.now()
-    f()
+    const ret = f()
     const end = Date.now()
-    console.debug('elapsed ', end - start)
+    console.debug(`${name} elapsed `, end - start)
+    return ret
   },
   sharePost(id: string | undefined) {
     const post = window.posts.find(post => post._id === id)
@@ -794,7 +814,7 @@ export function serializeScripts(obj: object) {
   return Object.entries(obj).map(fun => `${fun[1]}`).join(',')
 }
 
-function page(posts: PostWithOpenGraphData[], script?: string) {
+function page(posts: PostWithOpenGraphData[], script?: string, env?: { [key: string]: string }) {
   const rssItem = undefined
   const sanitizedPosts = posts.map(post => scripts.normalizePost({ ...post, rssItem }))
   const manifest = JSON.stringify({
@@ -835,9 +855,9 @@ function page(posts: PostWithOpenGraphData[], script?: string) {
             <meta name="apple-mobile-web-app-capable" content="yes">
             <meta name="apple-touch-fullscreen" content="yes">
             ${elem('link', {rel: 'shortcut icon', href: logoDataUrl})}
-            ${elem('script', {}, `scripts = {${serializeScripts(scripts)}}`)}
             ${style()}
             ${elem('link', {rel: 'manifest', href: manifestDataUrl})}
+            ${env?.url ? elem('link', {rel: 'alternate', type: 'application/rss+xml', href: `${env?.url}.rss`}) : ''}
         `,
         )}
         ${elem(
@@ -853,11 +873,12 @@ function page(posts: PostWithOpenGraphData[], script?: string) {
             ${backToTopButton()}
           `,
         )}
+        ${elem('script', {}, `scripts = {${serializeScripts(scripts)}}`)}
+        ${elem('script', {}, `posts = ${JSON.stringify(sanitizedPosts, undefined, 4)};`)}
+        ${script ? elem('script', {id: 'feeds.js'}, script) : ''}
         <script>
           scripts.init()
         </script>
-        ${elem('script', {}, `posts = ${JSON.stringify(sanitizedPosts, undefined, 4)};`)}
-        ${script ? elem('script', {id: 'feeds.js'}, script) : ''}
     `,
     )}
 
@@ -867,6 +888,7 @@ function page(posts: PostWithOpenGraphData[], script?: string) {
 export function makeFeedPageHtml(
   posts: PostWithOpenGraphData[],
   script?: string,
+  env?: { [key: string]: string },
 ) {
-  return page(posts, script);
+  return page(posts, script, env);
 }
