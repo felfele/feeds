@@ -8,9 +8,16 @@ function postDescription(post: PostWithOpenGraphData) {
     return post.rssItem?.content ? post.rssItem.content : post.text
 }
 
+function escapeEnclosure(s: string | undefined): string {
+    if (!s) {
+        return ''
+    }
+    return s.replaceAll('&','&amp;')
+}
+
 function postEnclosure(post: PostWithOpenGraphData) {
     return post.images.length > 0
-        ? `<enclosure url="${post.images[0].uri}" />`
+        ? `<enclosure url="${escapeEnclosure(post.images[0].uri)}" />`
         : ''
 }
 
