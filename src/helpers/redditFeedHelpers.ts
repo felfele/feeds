@@ -79,21 +79,26 @@ const redditPostDataImages = (postData: RedditPostData): RSSThumbnail[] => {
         ? findBestResolutionRedditImage(postData.preview.images[0])
         : undefined
 
-    const width = image?.width ? image?.width : 640
-    const height = image?.height ? image?.height : 422
-    return (postData.url_overridden_by_dest != null &&
-        (postData.url_overridden_by_dest.endsWith('.jpg') || postData.url_overridden_by_dest.endsWith('.png')))
-        ? [{
-            url: [postData.url_overridden_by_dest],
+    if (!image) {
+        return []
+    }
+
+    // fix reddit image url as seen at
+    // https://stackoverflow.com/questions/63611376/fetching-an-image-from-reddit-javascript-react-no-praw
+    const url = image.url.replace('amp;s', 's').replace('amp;', '').replace('amp;', '')
+    const width = image.width ? image.width : 640
+    const height = image.height ? image.height : 422
+    return [{
+            url: [url],
             width: [width],
             height: [height],
         }]
-        : []
 }
 
 const redditPostDataToRSSItem = (postData: RedditPostData): RSSItem => {
     const redditMobileLink = urlUtils.getCanonicalUrl('m.' + urlUtils.REDDIT_COM).slice(0, -1) + postData.permalink
     const created = Math.floor(postData.created_utc * 1000)
+    const thumbnail = redditPostDataImages(postData)
     if (postData.post_hint == null) {
         return {
             title: '',
@@ -102,7 +107,7 @@ const redditPostDataToRSSItem = (postData: RedditPostData): RSSItem => {
             url: postData.url,
             created,
             media: {
-                thumbnail: redditPostDataImages(postData),
+                thumbnail,
             },
         }
     }
@@ -114,7 +119,7 @@ const redditPostDataToRSSItem = (postData: RedditPostData): RSSItem => {
             url: redditMobileLink,
             created,
             media: {
-                thumbnail: redditPostDataImages(postData),
+                thumbnail,
             },
         }
     }

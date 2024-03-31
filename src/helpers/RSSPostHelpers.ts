@@ -14,6 +14,7 @@ import {
     RSSEnclosure,
     loadRSSFeed,
     fetchFeed,
+    HEADERS_WITH_CURL,
 } from './RSSFeedHelpers'
 import { safeFetch } from './safeFetch'
 import { MINUTE } from './dateHelpers'
@@ -63,6 +64,7 @@ const parseFeedFromHtml = (html: any): Feed => {
             const feedUrl = getFeedUrlFromHtmlLink(link)
             if (feedUrl !== '') {
                 feed.feedUrl = feedUrl
+                break
             }
         }
     }
@@ -75,6 +77,7 @@ const parseFeedFromHtml = (html: any): Feed => {
                 const feedUrl = getFeedUrlFromHtmlLink(link)
                 if (feedUrl !== '') {
                     feed.feedUrl = feedUrl
+                    break
                 }
             }
         }
@@ -143,7 +146,11 @@ export const fetchContentWithMimeType = async (url: string): Promise<ContentWith
 
     try {
         const response = await safeFetch(url, {
-            headers: isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_SAFARI,
+            headers: {
+                ...isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
+            },
+            cache: 'no-cache',
+            keepalive: false,
         })
 
         const contentType = response.headers.get('Content-Type')
@@ -173,9 +180,10 @@ export const getFeedFromHtml = (baseUrl: string, html: string): Feed => {
     if (typeof feed.favicon === 'string' && feed.favicon !== '') {
         feed.favicon = urlUtils.createUrlFromUrn(feed.favicon, baseUrl)
     }
-    if (feed.name.search(' - ') >= 0) {
-        feed.name = feed.name.replace(/ - .*/, '')
-    }
+    
+    const regex = new RegExp(/ - .*/g)
+    feed.name = feed.name.replace(regex, '').replaceAll('\n', '').trim()
+
     feed.url = baseUrl
     return feed
 }
@@ -214,10 +222,14 @@ const tryFetchFeedFromAltLocations = async (baseUrl: string, feed: Feed): Promis
         const rssContentWithMimeType = await fetchRSSFeedUrlFromUrl(altUrl)
         if (rssContentWithMimeType != null && isRssMimeType(rssContentWithMimeType.mimeType)) {
             feed.feedUrl = altUrl
-            const rssFeed = await loadRSSFeed(altUrl, rssContentWithMimeType.content)
-            return {
-                ...feed,
-                name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
+            try {
+                const rssFeed = await loadRSSFeed(altUrl, rssContentWithMimeType.content)
+                return {
+                    ...feed,
+                    name: rssFeed.feed.title === '' ? feed.name : rssFeed.feed.title,
+                }    
+            } catch (e) {
+                continue
             }
         }
     }
@@ -325,7 +337,7 @@ const feedFaviconString = (favicon: string | number): string => {
     return typeof favicon === 'string' ? favicon : ''
 }
 
-export const loadPosts = async (storedFeeds: Feed[]): Promise<PublicPost[]> => {
+export const loadPosts = async (storedFeeds: Feed[]): Promise<Post[]> => {
     const posts: Post[] = []
     const metrics: RSSFeedWithMetrics[] = []
 
@@ -347,7 +359,7 @@ export const loadPosts = async (storedFeeds: Feed[]): Promise<PublicPost[]> => {
                 posts.push.apply(posts, convertedPosts)
                 metrics.push(feedWithMetrics)
             } catch (e) {
-                Debug.log('RSSPostManager.loadPosts', 'error while parsing feed', {e, feedWithMetrics})
+                Debug.log('loadPosts', 'error while parsing feed', {e, feedWithMetrics})
             }
         }
     }
@@ -439,12 +451,15 @@ const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: stri
     const posts = rssFeed.items.map(item => {
         try {
             const markdown = htmlToMarkdown(item.description)
+            const contentMarkdown = item.content && htmlToMarkdown(item.content)
             const [text, markdownImages] = extractTextAndImagesFromMarkdown(markdown, '')
             const mediaImages = extractImagesFromMedia(item.media)
             const enclosureImages = extractImagesFromEnclosures(item.enclosures)
+            const [contentText, contentImages] = contentMarkdown ? extractTextAndImagesFromMarkdown(contentMarkdown, '') : [undefined, undefined]
             const images = markdownImages
                             .concat(mediaImages)
                             .concat(markdownImages.length === 0 ? enclosureImages : [])
+                            .concat(contentImages ? contentImages : [])
             const title = isTitleSameAsText(item.title, text)
                 ? ''
                 : item.title === '(Untitled)'
@@ -464,6 +479,7 @@ const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: stri
                         uri: strippedFavicon,
                     },
                 },
+                rssItem: item,
             }
             return post
         } catch (e) {

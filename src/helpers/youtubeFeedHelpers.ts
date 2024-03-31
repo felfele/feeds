@@ -12,6 +12,7 @@ export const isYoutubeLink = (url: string): boolean => {
 
 export const fetchYoutubeFeed = async (url: string, fetchConfiguration: FetchConfiguration): Promise<Feed | Feed[] | undefined> => {
     const parsedUrl = parse(url)
+
     if (parsedUrl.path?.startsWith('/channel/')) {
         const channelId = parsedUrl.path?.replace('/channel/', '')
         const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`
@@ -28,6 +29,13 @@ export const fetchYoutubeFeed = async (url: string, fetchConfiguration: FetchCon
     if (contentResult != null) {
         const feed = await tryFetchFeedByContentWithMimeType(canonicalUrl, contentResult, fetchConfiguration)
         if (feed != null) {
+            if (!Array.isArray(feed) && parsedUrl.path?.startsWith('/@')) {
+                const youtubeUrl = feed.url + parsedUrl.path.split('/')[1]
+                return {
+                    ...feed,
+                    url: youtubeUrl,
+                }
+            }
             return feed
         }
     }

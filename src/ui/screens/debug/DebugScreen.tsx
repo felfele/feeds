@@ -15,6 +15,8 @@ import { waitMillisec } from '../../../helpers/Utils'
 import { TypedNavigation } from '../../../helpers/navigation'
 import { Feed } from '../../../models/Feed'
 import { FragmentSafeAreaView } from '../../misc/FragmentSafeAreaView'
+import { fetchFeed, HEADERS_WITH_CURL } from '../../../helpers/RSSFeedHelpers'
+import { fetchFeedsFromUrl } from '../../../helpers/feedHelpers'
 
 export interface StateProps {
     appState: AppState

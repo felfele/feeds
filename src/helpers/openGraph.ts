@@ -10,10 +10,20 @@ export interface OpenGraphData {
 }
 
 export const fetchOpenGraphData = async (url: string): Promise<OpenGraphData> => {
-    const response = await fetch(url)
-    const html = await response.text()
-    const data = parseOpenGraphData(html, url)
-    return data
+    try {
+        const response = await fetch(url)
+        const html = await response.text()
+        const data = parseOpenGraphData(html, url)
+        return data    
+    } catch (e) {
+        return {
+            title: '',
+            description: '',
+            image: '',
+            name: '',
+            url,
+        }
+    }
 }
 
 export const parseOpenGraphData = (html: string, baseUrl: string): OpenGraphData => {
