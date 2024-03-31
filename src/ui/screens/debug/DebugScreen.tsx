@@ -126,14 +126,6 @@ export const DebugScreen = (props: Props) => (
                 />
                 <RowItem
                     icon={
-                        <MaterialCommunityIcon name='server-network' />
-                    }
-                    title='Fetch Youtube'
-                    onPress={async () => await onYoutubeFetch()}
-                    buttonStyle='navigate'
-                />
-                <RowItem
-                    icon={
                         <IonIcon name='md-list' />
                     }
                     title='View logs'
@@ -197,11 +189,4 @@ const onLogAppStateVersion = async () => {
 
 const onFixRedditFeeds = async (props: Props) => {
     props.onFixRedditFeeds()
-}
-
-const onYoutubeFetch = async () => {
-    // const feed = await fetchFeedsFromUrl('https://www.youtube.com/feeds/videos.xml?channel_id=UCJ8V9aiz50m6NVn0ix5v8RQ')
-    // const feed = await fetchFeedsFromUrl('https://www.youtube.com/@decino')
-    const feed = await fetchFeedsFromUrl('http://192.168.1.69:9000/@decino')
-    Debug.log('onYoutubeFetch', { feed })
 }
