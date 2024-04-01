@@ -384,6 +384,18 @@ const scripts = {
       }
     }, 500)
   },
+  fixYoutubeThumbnails() {
+    const imgs = Array.from(document.getElementsByClassName('thumbnail')) as HTMLImageElement[]
+    imgs.forEach(img => {
+      // youtube returns a default 120x90 placeholder image if the given thumbnail was not found
+      // this fix replaces the default placeholder image with the medium quality default version
+      if (img.src.includes('ytimg.com') && img.naturalWidth === 120 && img.naturalHeight === 90) {
+        const src = img.src
+        const replacedSrc = src.replace(/\/\w+.jpg$/, '/mqdefault.jpg')
+        img.src = replacedSrc
+      }
+    })
+  },
   reload() {
     fetch(window.location.href)
     .then(response => response.text())
@@ -413,6 +425,7 @@ const scripts = {
       scripts.makeLinksClickable()
       scripts.initSearchBar()
       scripts.initScrollReloadButton()
+      scripts.fixYoutubeThumbnails()
       console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })      
     })
   },
