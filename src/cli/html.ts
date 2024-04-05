@@ -807,8 +807,8 @@ button {
   justify-content: center;
   bottom: calc(var(--padding) * 5);
   right: calc(var(--padding) * 5);
-  width: calc(var(--padding) * 5);
-  height: calc(var(--padding) * 5);
+  width: calc(var(--padding) * 7);
+  height: calc(var(--padding) * 7);
   background-color: #88888844;
   border-radius: 4px;
   color: var(--color);
