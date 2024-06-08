@@ -12,10 +12,11 @@ import { Feed } from '../models/Feed'
 import { mergeUpdatedPosts } from '../helpers/postHelpers'
 import { Post } from '../models/Post'
 
-import { readFileSync } from 'fs'
+import { readFileSync, writeSync, statSync, openSync, closeSync, writeFileSync } from 'fs'
 import { safeFetch } from '../helpers/safeFetch'
 import { publishCommand } from './publish'
 import { postCommand } from './post'
+import { HEADERS_WITH_SAFARI, HEADERS_WITH_WHATSAPP } from '../helpers/RSSFeedHelpers'
 
 // tslint:disable-next-line:no-var-requires
 const fetch = require('node-fetch')
@@ -23,6 +24,7 @@ const fetch = require('node-fetch')
 const FormData = require('form-data')
 // tslint:disable-next-line: no-var-requires
 const qrcode = require('qrcode')
+// tslint:disable-next-line: no-var-requires
 
 declare var process: {
     argv: string[],
@@ -43,6 +45,8 @@ const definitions =
     addOption('-v, --verbose', 'verbose mode', () => Debug.setDebugMode(true))
     .
     addOption('-n, --no-colors', 'no colors in output', () => Debug.useColors = false)
+    .
+    addOption('-j, --json', 'use json as output if applicable', () => setOutput((...args) => console.log(JSON.stringify(args[0], undefined, 4))))
     .
     addCommand('version', 'Print app version', () => output(Version))
     .
@@ -117,8 +121,8 @@ const definitions =
     })
     .
     addCommand('metadata <url>', 'Fetch metadata of url', async (url: string) => {
-        const data = await fetchHtmlMetaData(url)
-        output({data})
+        const data = await fetchHtmlMetaData(url, { headers: { ...HEADERS_WITH_SAFARI } })
+        output(data)
     })
     .
     addCommand('checkversions', 'Check package.json versions', async () => {
@@ -139,21 +143,37 @@ const definitions =
         const feeds: Feed[] = []
         for await (const opmlFeed of opmlFeeds) {
             const feed = await convertOPMLFeed(opmlFeed)
-            if (feed) {
-                feeds.push(feed)
+            if (!feed) {
+                continue
             }
+            feeds.push(feed)
+            console.debug({ feed })
+
+            const file = 'opml-test-output.json'
+            const stats = statSync(file)
+            const size = stats.isFile() ? stats.size : 0
+            if (!stats.isFile()) {
+                writeFileSync(file, '')
+            }
+            const begin = size === 0 ? '{"feeds":[' : ','
+            const end = ']}'
+            const position = size <= begin.length ? size : size - end.length
+            const data = `${begin}${JSON.stringify(feed, undefined, 4)}${end}`
+            const fd = openSync(file, 'rs+')
+            const ret = writeSync(fd, data, position, 'utf-8')
+            closeSync(fd)
         }
         // const feeds = await convertOPMLFeeds(opmlFeeds)
         // output({feeds})
         // const isFeed = (feed: Feed | undefined): feed is Feed => feed != null
         // const data =  feeds.filter<Feed>(isFeed)
 
-        output({feeds})
+        output(feeds)
     })
     .
     addCommand('addFeed <url>', 'Test add feed input', async (url: string) => {
         const feeds = await fetchFeedsFromUrl(url)
-        output(JSON.stringify(feeds, undefined, 4))
+        output(feeds)
     })
     .
     addCommand('fetchFeeds <feeds-file> [max-posts]', 'Fetch feeds from file', async (feedsFile: string, maxPostsValue: string) => {
@@ -226,6 +246,17 @@ const definitions =
             }
         }
         output(JSON.stringify(uniqueLinks, undefined, 4))
+    })
+    .
+    addCommand('merge-feeds <...feed-files>', 'Merge feed files', async (...feedFiles: string[]) => {
+        let allFeeds: Feed[] = []
+        for (const file of feedFiles) {
+            const feedsData = readFileSync(file, { encoding: 'utf-8' })
+            const feedsObj = JSON.parse(feedsData)
+            const feeds = feedsObj.feeds as Feed[]
+            allFeeds = allFeeds.concat(feeds)
+        }
+        output({ feeds: allFeeds })
     })
 
 

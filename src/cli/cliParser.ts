@@ -7,6 +7,7 @@ type Action = (...args: string[]) => void
 interface Argument {
     name: string
     required: boolean
+    rest: boolean
 }
 
 interface Option {
@@ -46,13 +47,24 @@ const defineArguments = (defArgs: string[]): Argument[] => {
     let required = true
     const args: Argument[] = []
     for (const defArg of defArgs) {
-        if (defArg.startsWith('<') && defArg.endsWith('>')) {
+        if (defArg.startsWith('<...') && defArg.endsWith('>')) {
             if (!required) {
                 throwError(`cannot define required argument after optional arguments: ${defArg}`)
             }
             args.push({
                 name: defArg,
                 required,
+                rest: true,
+            })
+        }
+        else if (defArg.startsWith('<') && defArg.endsWith('>')) {
+            if (!required) {
+                throwError(`cannot define required argument after optional arguments: ${defArg}`)
+            }
+            args.push({
+                name: defArg,
+                required,
+                rest: false,
             })
         }
         else if (defArg.startsWith('[') && defArg.endsWith(']')) {
@@ -60,6 +72,7 @@ const defineArguments = (defArgs: string[]): Argument[] => {
             args.push({
                 name: defArg,
                 required,
+                rest: false,
             })
         }
         else {
@@ -315,7 +328,8 @@ const executeCommandAction = (commandName: string, context: Context, printer: Pr
     }
 
     const commandRequiredArgs = command.args.filter(arg => arg.required)
-    const commandArgs = [...context.args.slice(0, command.args.length)]
+    const hasRestArgs = command.args.filter(arg => arg.rest)
+    const commandArgs = [...context.args.slice(0, hasRestArgs ? undefined : command.args.length)]
     if (commandArgs.length < commandRequiredArgs.length) {
         throwCommandMissingParameterError(command)
     }
@@ -341,7 +355,7 @@ const executeCommandAction = (commandName: string, context: Context, printer: Pr
     return {
         ...context,
         command,
-        args: context.args.slice(command.args.length),
+        args: hasRestArgs ? [] : context.args.slice(command.args.length),
     }
 }
 

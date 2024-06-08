@@ -6,6 +6,12 @@ export const REDDIT_COM = 'reddit.com'
 const HTTP_URL_MATCHER = /(http.?:\/\/.*?)( |$)/
 
 export const getHumanHostname = (url: string): string => {
+    if (!url) {
+        return ''
+    }
+    if (typeof url.startsWith !== 'function') {
+        return ''
+    }
     if (url.startsWith('//')) {
         url = 'https:' + url
     }

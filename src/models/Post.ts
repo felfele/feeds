@@ -14,4 +14,5 @@ export interface Post extends PublicPost {
     author?: Author
     updatedAt?: number
     rssItem?: RSSItem
+    tags?: string[]
 }

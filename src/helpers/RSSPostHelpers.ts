@@ -15,6 +15,7 @@ import {
     loadRSSFeed,
     fetchFeed,
     HEADERS_WITH_CURL,
+    HEADERS_WITH_WHATSAPP,
 } from './RSSFeedHelpers'
 import { safeFetch } from './safeFetch'
 import { MINUTE } from './dateHelpers'
@@ -148,6 +149,7 @@ export const fetchContentWithMimeType = async (url: string): Promise<ContentWith
         const response = await safeFetch(url, {
             headers: {
                 ...isRedditUrl ? HEADERS_WITH_FELFELE : HEADERS_WITH_CURL,
+                ...url.startsWith('https://cointelegraph.com') ? HEADERS_WITH_WHATSAPP : HEADERS_WITH_CURL,
             },
             cache: 'no-cache',
             keepalive: false,
@@ -348,6 +350,7 @@ export const loadPosts = async (storedFeeds: Feed[]): Promise<Post[]> => {
 
     const fetchFeedPromises = storedFeeds.map(feed => tryFetchFeed(feed.feedUrl))
     const feeds = await Promise.all(fetchFeedPromises)
+    Debug.log('feeds', { feeds })
     for (const feedWithMetrics of feeds) {
         if (feedWithMetrics) {
             try {
@@ -355,7 +358,8 @@ export const loadPosts = async (storedFeeds: Feed[]): Promise<Post[]> => {
                 const favicon = feedMap[feedWithMetrics.url]?.favicon
                 const faviconString = feedFaviconString(favicon)
                 const feedName = feedMap[feedWithMetrics.url]?.name || feedWithMetrics.feed.title
-                const convertedPosts = convertRSSFeedtoPosts(rssFeed, feedName, faviconString, feedWithMetrics.url)
+                const tags = feedMap[feedWithMetrics.url]?.tags
+                const convertedPosts = convertRSSFeedtoPosts(rssFeed, feedName, faviconString, feedWithMetrics.url, tags)
                 posts.push.apply(posts, convertedPosts)
                 metrics.push(feedWithMetrics)
             } catch (e) {
@@ -365,6 +369,19 @@ export const loadPosts = async (storedFeeds: Feed[]): Promise<Post[]> => {
     }
     return posts
 }
+
+const toRemove = [
+    "This RSS feed is intended for readers, not scrapers.",
+]
+
+function htmlImageReplacer(match: string, p1: string) {
+    // fix images on slashdot
+    if (p1.startsWith('https://a.fsdn.com/')) {
+        return ''
+    }
+
+    return `![](${p1})`
+} 
 
 export const htmlToMarkdown = (description: string): string => {
     const strippedHtml = description
@@ -377,7 +394,7 @@ export const htmlToMarkdown = (description: string): string => {
         // replace html links to markdown links
         .replace(/<a.*?href=['"](.*?)['"].*?>(.*?)<\/a>/gi, '[$2]($1)')
         // replace html images to markdown images
-        .replace(/<img.*?src=['"](.*?)['"].*?>/gi, '![]($1)')
+        .replace(/<img.*?src=['"](.*?)['"].*?>/gi, htmlImageReplacer)
         // replace html paragraphs to markdown paragraphs
         .replace(/<p.*?>/gi, '\n\n')
         // strip other html tags
@@ -387,7 +404,8 @@ export const htmlToMarkdown = (description: string): string => {
         // replace multiple space with one space
         .replace(/ +/g, ' ')
 
-    return he.decode(strippedHtml)
+    const decoded = he.decode(strippedHtml)
+    return decoded
 }
 
 export const extractTextAndImagesFromMarkdown = (markdown: string, baseUri: string): [string, ImageData[]] => {
@@ -443,7 +461,7 @@ const stripTrailing = (s: string, trail: string): string => {
     return s
 }
 
-const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: string, feedUrl: string): Post[] => {
+const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: string, feedUrl: string, tags?: string[]): Post[] => {
     const links: Set<string> = new Set()
     const strippedFavicon = stripTrailing(favicon, '/')
     const now = Date.now()
@@ -480,6 +498,7 @@ const convertRSSFeedtoPosts = (rssFeed: RSSFeed, feedName: string, favicon: stri
                     },
                 },
                 rssItem: item,
+                tags,
             }
             return post
         } catch (e) {

@@ -28,6 +28,10 @@ export const HEADERS_WITH_CURL = {
     'accept': '*/*',
 }
 
+export const HEADERS_WITH_WHATSAPP = {
+    'User-Agent': 'WhatsApp/2',
+}
+
 export interface RSSEnclosure {
     url: string
     length: string
@@ -204,6 +208,8 @@ function parseRSSChannel(channel: any, items?: [] | undefined) {
 
             if (val.pubDate) {
                 obj.created = Date.parse(val.pubDate[0])
+            } else if (val['dc:date']) {
+                obj.created = Date.parse(val['dc:date'])
             }
             if (val['media:content']) {
                 obj.media = val.media || {}
@@ -216,7 +222,7 @@ function parseRSSChannel(channel: any, items?: [] | undefined) {
             if (val['thumb_large'] || val['thumb']) {
                 obj.media = {}
                 obj.media.thumbnail = [{
-                  url: val['thumb_large'] || val['thumb']
+                    url: val['thumb_large'] || val['thumb']
                 }]
             }
             if (val.enclosure) {

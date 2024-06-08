@@ -5,7 +5,7 @@ import {logoDataUrl} from './logo-data-url';
 
 export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
 type Index = { [key: string]: string }
-type NormalizedPost = Post & { normalizedText?: string, index?: Index}
+type NormalizedPost = Post & { normalizedText?: string, index?: Index, textSet?: Set<string>}
 type ScoredPost = NormalizedPost & { score: number }
 
 const WHITE_COLOR = '#fefefe'
@@ -20,8 +20,27 @@ const THEME_COLOR = COLOR_STEP_10
 const APP_NAME = 'Feeds'
 const PADDING = '10px'
 
+function makeAbsoluteUrl(url: string, baseUrl?: string) {
+  if (!url) {
+    return undefined
+  }
+  if (url.startsWith('http')) {
+    return url
+  }
+  try {
+    return new URL(url, baseUrl).href
+  } catch {
+    return undefined
+  }
+}
+
 function thumbnailImageSrc(post: PostWithOpenGraphData) {
-  return post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
+  const imageSrc = post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
+  if (!imageSrc) {
+    return undefined
+  }
+  const absImageSrc = makeAbsoluteUrl(imageSrc, post.link)
+  return absImageSrc
 }
 
 export function postTitle(post: PostWithOpenGraphData) {
@@ -93,6 +112,7 @@ export function card(post: PostWithOpenGraphData) {
   const text = postText(post);
   const comment = commentLink(post);
   const sharePost = `window.scripts.sharePost('${post._id}')`
+  const tags = post.tags
   return `
 <div class="card-parent">
     <a class="main-link" href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
@@ -112,6 +132,7 @@ export function card(post: PostWithOpenGraphData) {
     ${title ? `<div class="text b">${link(postLink(post), title)}</div>` : ''}
     ${text ? `<div class="text">${link(postLink(post), text)}</div>` : ''}
     ${comment ? `<div class="text"><a class="link comment" href="${comment}" target="_blank" rel="noopener noreferrer">Comments</a></div>` : ''}
+    ${tags ? `<div class="tags">${tags.map(tag => `<div class="tag" onclick="window.scripts.filterForAuthor('${tag}')">#${tag}</div>`).join(' ')}</div>` : ''}
 </div>
 `;
 }
@@ -205,7 +226,7 @@ const scripts = {
   makeLinksClickable() {
     const cards = Array.from(document.querySelectorAll('div.card-parent'))
     cards.forEach(card => {
-      const clickableLinks = Array.from(card.querySelectorAll('div.text a, div.share, div.left, a.image-link'))
+      const clickableLinks = Array.from(card.querySelectorAll('div.text a, div.share, div.left, a.image-link, div.tags .tag'))
       const mainLink = card.querySelector(".main-link");
       clickableLinks.forEach((ele) =>
         ele.addEventListener("click", (e) => e.stopPropagation())
@@ -231,15 +252,19 @@ const scripts = {
     if (!list) {
       return
     }
-    list.innerHTML = posts.map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
-    scripts.makeLinksClickable()
-  },
-  rerenderList2(posts: PostWithOpenGraphData[]) {
-    const list = document.getElementById('list')
-    if (!list) {
-      return
-    }
-    list.innerHTML = posts.map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+
+    // optimization for responsivity
+    const firstNToRender = 20
+
+    list.innerHTML = posts.slice(0, firstNToRender).map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+
+    setTimeout(() => {
+      const restOfHTML = posts.slice(firstNToRender).map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+      list.innerHTML += restOfHTML
+
+      scripts.makeLinksClickable()
+      scripts.fixYoutubeThumbnails()  
+    })
   },
   debounce(func: (...args: any[]) => any, timeout = 300){
     let timer: any = undefined
@@ -271,12 +296,15 @@ const scripts = {
     const authorName = post.author?.name ? scripts.normalizeString(post.author.name) : ''
     const authorUrl = post.author?.uri ? getHumanHostname(post.author.uri) : ''
     const text = scripts.normalizeString(post.text)
-    const normalizedText = [' ', authorName, authorUrl, text].join(' ')
+    const tags = post.tags || []
+    const urlParts = authorUrl.split('/')
+    const normalizedText = [' ', ...tags, ...tags.map(tag => `#${tag}`), authorName, ...urlParts, text].join(' ')
     const textSet = new Set<string>(normalizedText.split(' ').filter(word => ![' ', ''].includes(word)))
     const index = Array.from(textSet).reduce<Index>((acc, v) => ({ ...acc, [v[0]]: acc[v[0]] ? acc[v[0]] + ' ' + v : ' ' + v }), {})
 
     return {
       ...post,
+      textSet,
       index,
     }
   },
@@ -316,8 +344,6 @@ const scripts = {
           return prev
         }, []).sort((a, b) => b.score - a.score)
 
-    // TODO DEBUG
-    window.scoredPosts = posts as ScoredPost[]
     return posts
   },
   time<T>(f: () => T, name = '') {
@@ -422,9 +448,9 @@ const scripts = {
         scripts.setLightMode('light')
       }
 
-      scripts.makeLinksClickable()
       scripts.initSearchBar()
       scripts.initScrollReloadButton()
+      scripts.makeLinksClickable()
       scripts.fixYoutubeThumbnails()
       console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })      
     })
@@ -694,6 +720,7 @@ button {
   height: 20px;
 }
 .searchbar {
+  appearance: none;
   display: flex;
   flex-grow: 1;
   font-size: 16px;
@@ -722,7 +749,7 @@ button {
     cursor: pointer;
 }
 .card-parent:hover {
-    background-color: #88888888;
+    background-color: #88888844;
 }
 .card-parent:active {
     background-color: #88888822;
@@ -757,7 +784,7 @@ button {
   fill: var(--color-step-30);
 }
 .share:hover {
-  background-color: var(--color-step-40);
+  background-color: #88888866;
 }
 .title {
     font-weight: 500;
@@ -782,6 +809,19 @@ button {
 .comment {
     margin-top: var(--padding);
     margin-bottom: var(--padding);
+}
+.comment:hover {
+  background-color: #88888866;
+}
+.tags {
+  display: flex;
+}
+.tag {
+  margin: var(--padding);
+  padding: var(--half-padding)
+}
+.tag:hover {
+  background-color: #88888866;
 }
 .link {
   text-decoration: underline;
@@ -858,6 +898,7 @@ function page(posts: PostWithOpenGraphData[], script?: string, env?: { [key: str
           `
             ${elem('meta', {charset: 'UTF-8'})}
             ${elem('meta', {name: 'theme-color', content: THEME_COLOR})}
+            <meta name="referrer" content="no-referrer" />
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <!-- <meta name="viewport" content="viewport-fit=cover"> -->
             <meta name="mobile-web-app-capable" content="yes">

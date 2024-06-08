@@ -31,16 +31,17 @@ export const parseOpenGraphData = (html: string, baseUrl: string): OpenGraphData
     return getHtmlOpenGraphData(document, baseUrl)
 }
 
-export const getHtmlOpenGraphData = (document: HTMLElement, baseUrl: string): OpenGraphData => {
-    const metaElements = HtmlUtils.findPath(document, ['html', 'head', 'meta'])
-
+export const getHtmlOpenGraphData = (document: HTMLElement, url: string): OpenGraphData => {
     const ogData: OpenGraphData = {
         title: '',
         description: '',
         image: '',
         name: '',
-        url: baseUrl,
+        url,
     }
+
+    const baseUrl = new URL(url).origin
+    const metaElements = HtmlUtils.findPath(document, ['html', 'head', 'meta'])
     for (const meta of metaElements) {
         ogData.title = getPropertyIfValueNotSet(ogData.title, meta, 'og:title')
         ogData.description = getPropertyIfValueNotSet(ogData.description, meta, 'og:description')
@@ -55,9 +56,16 @@ const normalizeOpenGraphData = (ogData: OpenGraphData, baseUrl: string): OpenGra
     if (!ogData.image) {
         return ogData
     }
+
+    // make relative path absolute
+    const absoluteUrlImage = createUrlFromUrn(ogData.image, baseUrl) 
+
+    // remove broken images pointing to the website and not an image
+    const image = absoluteUrlImage === baseUrl + '/' ? '' : absoluteUrlImage
+
     return {
         ...ogData,
-        image: createUrlFromUrn(ogData.image, baseUrl),
+        image,
     }
 }
 
