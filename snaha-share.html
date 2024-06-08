@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+body {
+    font-size: 16px;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+.center {
+    display: flex;
+    width: min(94vw, 94vh);
+    height: min(94vw, 94vh);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+}
+form {
+    display: flex;
+    width: min(94vw, 94vh);
+    flex-direction: row;
+}
+input {
+    display: flex;
+    padding: 8px;
+    margin-right: 8px;
+    flex-grow: 1;
+}
+#output {
+    padding: 8px;
+    width: 80vw;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.error {
+    color:orangered;
+}
+img {
+    padding-left: 8px;
+    padding-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+button {
+    padding: 8px;
+}
+        </style>
+    </head>
+    <body>
+        <div class="center">
+            <form>
+                <input placeholder="Paste url here..." />
+                <button id="share">Share 🚀</button>
+            </form>
+            <div id="output">&nbsp;</div>
+        </div>
+    </body>
+    <script>
+const button = document.getElementById('share')
+button.onclick = async (e) => {
+    const input = document.getElementsByTagName('input').item(0)
+    if (!input) return
+    const output = document.getElementById('output')
+
+    try {
+        input.disabled = true
+        button.disabled = true
+        output.className = ''
+        output.innerHTML = '🕓 Getting data...'
+        const body = input.value
+        const url = window.location.origin.startsWith('file:')
+            ? 'http://localhost/snaha'
+            : window.location.origin + '/snaha'
+        const response = await fetch(url, { method: 'POST', body })
+        const post = await response.json()
+        console.debug({ response, post })
+        input.value = ''
+
+        const title = post.text.replaceAll('\n', '').replace(/^\*\*(.*)\*\*(.*)$/, '$1')
+        const icon =  post.author?.image.uri ? `<img src="${post.author?.image.uri}" />` : ''
+
+        output.innerHTML = `✅ Shared successfully: ${icon} ${title}`
+    } catch (e) {
+        output.className = 'error'
+        output.innerText = e
+    } finally {
+        input.disabled = false
+        button.disabled = false
+    }
+
+}
+    </script>
+</html>
