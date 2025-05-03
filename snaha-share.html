@@ -24,12 +24,19 @@ form {
     display: flex;
     width: min(94vw, 94vh);
     flex-direction: row;
+    margin-bottom: 16px;
 }
 input {
     display: flex;
     padding: 8px;
     margin-right: 8px;
     flex-grow: 1;
+}
+.tags {
+    justify-content: center;
+    align-items: center;
+
+    max-width: 60vw;
 }
 #output {
     padding: 8px;
@@ -62,6 +69,10 @@ button {
             <form>
                 <input placeholder="Paste url here..." />
                 <button id="share">Share 🚀</button>
+                <br/>
+            </form>
+            <form>
+                <input class="tags" placeholder="Add tags here separated with space..." />                
             </form>
             <div id="output">&nbsp;</div>
         </div>
@@ -71,6 +82,7 @@ const button = document.getElementById('share')
 button.onclick = async (e) => {
     const input = document.getElementsByTagName('input').item(0)
     if (!input) return
+    const tags = document.getElementsByClassName("tags").item[0] || []
     const output = document.getElementById('output')
 
     try {
@@ -82,7 +94,7 @@ button.onclick = async (e) => {
         const url = window.location.origin.startsWith('file:')
             ? 'http://localhost/snaha'
             : window.location.origin + '/snaha'
-        const response = await fetch(url, { method: 'POST', body })
+        const response = await fetch(url, { method: 'POST', body, tags })
         const post = await response.json()
         console.debug({ response, post })
         input.value = ''

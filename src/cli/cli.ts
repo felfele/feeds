@@ -4,7 +4,7 @@ import { parseArguments, addOption } from './cliParser'
 import { output, setOutput } from './cliHelpers'
 import * as urlUtils from '../helpers/urlUtils'
 import { fetchOpenGraphData } from '../helpers/openGraph'
-import { fetchHtmlMetaData } from '../helpers/htmlMetaData'
+import { fetchHtmlMetaData, fetchHtmlMetaDataOnly } from '../helpers/htmlMetaData'
 import { convertOPMLFeed, convertOPMLFeeds, readOPML, tryFetchOPML } from '../helpers/opmlImport'
 import { fetchFeedsFromUrl } from '../helpers/feedHelpers'
 import { fetchFeedFromUrl, loadPosts } from '../helpers/RSSPostHelpers'
@@ -122,6 +122,11 @@ const definitions =
     .
     addCommand('metadata <url>', 'Fetch metadata of url', async (url: string) => {
         const data = await fetchHtmlMetaData(url, { headers: { ...HEADERS_WITH_SAFARI } })
+        output(data)
+    })
+    .
+    addCommand('metadata-only <url>', 'Fetch metadata of url', async (url: string) => {
+        const data = await fetchHtmlMetaDataOnly(url, { headers: { ...HEADERS_WITH_SAFARI } })
         output(data)
     })
     .

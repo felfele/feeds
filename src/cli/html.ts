@@ -119,7 +119,7 @@ export function card(post: PostWithOpenGraphData) {
     </a>
     <div class="card">
         <div class="left" onclick="window.scripts.filterForAuthor('${post.author?.name || ''}')">
-            <img src="${post.author?.image.uri}" />
+            <img loading="lazy" src="${post.author?.image.uri}" />
         </div>
         <div class="right">
             <div class="title">${post.author?.name}</div>
@@ -128,7 +128,7 @@ export function card(post: PostWithOpenGraphData) {
         <div class="spacer"></div>
         <div class="share" onclick="${sharePost}">${verticalDotsIcon()}</div>
     </div>
-    ${thumbnailImage ? link(postLink(post), `<img class="thumbnail" src="${thumbnailImage}" />`, 'image-link') : ''}
+    ${thumbnailImage ? link(postLink(post), `<img loading="lazy" class="thumbnail" src="${thumbnailImage}" onload="window.scripts.fixYoutubeThumbnail(this)"/>`, 'image-link') : ''}
     ${title ? `<div class="text b">${link(postLink(post), title)}</div>` : ''}
     ${text ? `<div class="text">${link(postLink(post), text)}</div>` : ''}
     ${comment ? `<div class="text"><a class="link comment" href="${comment}" target="_blank" rel="noopener noreferrer">Comments</a></div>` : ''}
@@ -410,17 +410,18 @@ const scripts = {
       }
     }, 500)
   },
+  fixYoutubeThumbnail(img: HTMLImageElement) {
+    // youtube returns a default 120x90 placeholder image if the given thumbnail was not found
+    // this fix replaces the default placeholder image with the medium quality default version
+    if (img.src.includes('ytimg.com') && img.naturalWidth === 120 && img.naturalHeight === 90) {
+      const src = img.src
+      const replacedSrc = src.replace(/\/\w+.jpg$/, '/mqdefault.jpg')
+      img.src = replacedSrc
+    }
+  },
   fixYoutubeThumbnails() {
     const imgs = Array.from(document.getElementsByClassName('thumbnail')) as HTMLImageElement[]
-    imgs.forEach(img => {
-      // youtube returns a default 120x90 placeholder image if the given thumbnail was not found
-      // this fix replaces the default placeholder image with the medium quality default version
-      if (img.src.includes('ytimg.com') && img.naturalWidth === 120 && img.naturalHeight === 90) {
-        const src = img.src
-        const replacedSrc = src.replace(/\/\w+.jpg$/, '/mqdefault.jpg')
-        img.src = replacedSrc
-      }
-    })
+    imgs.forEach(scripts.fixYoutubeThumbnail)
   },
   reload() {
     fetch(window.location.href)
@@ -439,13 +440,15 @@ const scripts = {
       const columnMode = sessionStorage.getItem('grid-mode')
       if (columnMode) {
         scripts.setGridMode(columnMode)
+      } else {
+        scripts.setGridMode('three-column')
       }
 
       const lightMode = sessionStorage.getItem('light-mode')
       if (lightMode) {
         scripts.setLightMode(lightMode)
       } else {
-        scripts.setLightMode('light')
+        scripts.setLightMode('dark')
       }
 
       scripts.initSearchBar()
@@ -602,13 +605,13 @@ function style() {
   --white: var(--color-step-50);
   --black: var(--color-base);
 
-  --background-color: var(--stored-background-color, var(--white));
+  --background-color: var(--stored-background-color, var(--black));
   --color: var(--stored-color, var(--color));
 
   --max-column-width: min(500px, max(100vmin, 320px)); 
   --three-column-mode: repeat(3, 1fr);
   --one-column-mode: var(--max-column-width);
-  --column-mode: var(--stored-column-mode, var(--one-column-mode));
+  --column-mode: var(--stored-column-mode, var(--three-column-mode));
 
   --padding: ${PADDING};
   --half-padding: calc(var(--padding) / 2);
@@ -650,7 +653,6 @@ ul {
     gap: var(--padding);
     padding: 0;
     margin: 0;
-    margin-top: 1em;
     margin-bottom: 1em;
     justify-content: center;
     list-style-type: none;
@@ -693,6 +695,7 @@ button {
 }
 .three-column {
     grid-template-columns: var(--column-mode);
+    grid-template-rows: masonry;
 }
 .one-column {
     grid-template-columns: var(--column-mode);
@@ -706,9 +709,7 @@ button {
   flex-direction: row;
   justify-content: stretch;
   align-items: center;
-  margin-left: calc((100vw - var(--max-column-width)) / 2 + var(--padding));
-  margin-right: calc((100vw - var(--max-column-width)) / 2 + var(--padding));
-  margin-top: var(--padding);
+  margin: var(--padding) calc((100vw - var(--max-column-width)) / 2 + var(--padding));
   border-color: #88888888;
   border-width: 1px;
   border-radius: 4px;
@@ -908,6 +909,7 @@ function page(posts: PostWithOpenGraphData[], script?: string, env?: { [key: str
             <link rel="apple-touch-icon" href="${logoDataUrl}">
             <meta name="apple-mobile-web-app-capable" content="yes">
             <meta name="apple-touch-fullscreen" content="yes">
+            <meta name="referrer" content="no-referrer">
             ${elem('link', {rel: 'shortcut icon', href: logoDataUrl})}
             ${style()}
             ${elem('link', {rel: 'manifest', href: manifestDataUrl})}

@@ -24,11 +24,19 @@ export const fetchHtmlMetaData = async (url: string, init?: RequestInit): Promis
     return parseHtmlMetaData(url, html, feed)
 }
 
-export function parseHtmlMetaData(url: string, html: string, feed: Feed | null) {
+export const fetchHtmlMetaDataOnly = async (url: string, init?: RequestInit): Promise<HtmlMetaData> => {
+    Debug.log('fetchHtmlMetaDataOnly', {url, init})
+    const response = await fetch(url, init)
+    Debug.log('fetchHtmlMetaDataOnly', {response})
+    const html = await response.text()
+    return parseHtmlMetaData(url, html)
+}
+
+export function parseHtmlMetaData(url: string, html: string, feed?: Feed | null) {
     const document = HtmlUtils.parse(html)
     const baseUrl = new URL(url).origin
     const openGraphData = getHtmlOpenGraphData(document, url)
-    const feedName = feed != null ? feed.name : ''
+    const feedName = feed ? feed.name : ''
     const name = getFirstNonEmpty([getMetaName(document), openGraphData.name, feedName])
     const title = getHtmlTitle(document, openGraphData.title)
     const favicon = parseFaviconFromHtml(html) || DEFAULT_FAVICON

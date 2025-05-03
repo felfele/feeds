@@ -60,7 +60,7 @@ button {
     <body>
         <div class="center">
             <form>
-                <input placeholder="Paste url here..." />
+                <input autofocus placeholder="Paste url here..." />
                 <button id="share">Share 🚀</button>
             </form>
             <div id="output">&nbsp;</div>
@@ -92,6 +92,7 @@ button.onclick = async (e) => {
 
         output.innerHTML = `✅ Shared successfully: ${icon} ${title}`
     } catch (e) {
+        console.error({e})
         output.className = 'error'
         output.innerText = e
     } finally {
