@@ -43,6 +43,9 @@ input {
     justify-content: center;
     display: flex;
 }
+#visit {
+    display: none;
+}
 .error {
     color:orangered;
 }
@@ -64,6 +67,7 @@ button {
                 <button id="share">Share 🚀</button>
             </form>
             <div id="output">&nbsp;</div>
+            <button id="visit">Go to feed ✨</button>
         </div>
     </body>
     <script>
@@ -91,6 +95,10 @@ button.onclick = async (e) => {
         const icon =  post.author?.image.uri ? `<img src="${post.author?.image.uri}" />` : ''
 
         output.innerHTML = `✅ Shared successfully: ${icon} ${title}`
+
+        const visitButton = document.getElementById('visit')
+        visitButton.onclick = () => window.open(url)
+        visitButton.style.display = 'flex'
     } catch (e) {
         console.error({e})
         output.className = 'error'

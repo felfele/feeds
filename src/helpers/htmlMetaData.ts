@@ -15,19 +15,19 @@ export interface HtmlMetaData extends OpenGraphData {
 }
 
 export const fetchHtmlMetaData = async (url: string, init?: RequestInit): Promise<HtmlMetaData> => {
-    Debug.log('fetchHtmlMetaData', {url, init})
+    Debug.log('fetchHtmlMetaData', { url, init })
     const response = await fetch(url, init)
-    Debug.log('fetchHtmlMetaData', {response})
+    Debug.log('fetchHtmlMetaData', { response })
     const html = await response.text()
     const feed = await tryFetchFeedFromUrl(url)
-    Debug.log('fetchHtmlMetaData', {feed})
+    Debug.log('fetchHtmlMetaData', { feed })
     return parseHtmlMetaData(url, html, feed)
 }
 
 export const fetchHtmlMetaDataOnly = async (url: string, init?: RequestInit): Promise<HtmlMetaData> => {
-    Debug.log('fetchHtmlMetaDataOnly', {url, init})
+    Debug.log('fetchHtmlMetaDataOnly', { url, init })
     const response = await fetch(url, init)
-    Debug.log('fetchHtmlMetaDataOnly', {response})
+    Debug.log('fetchHtmlMetaDataOnly', { response })
     const html = await response.text()
     return parseHtmlMetaData(url, html)
 }
@@ -43,7 +43,7 @@ export function parseHtmlMetaData(url: string, html: string, feed?: Feed | null)
     const icon = createUrlFromUrn(favicon, baseUrl)
     const createdAt = getPublishedTime(document)
     const updatedAt = getModifiedTime(document, createdAt)
-    Debug.log('parseHtmlMetaData', {url, name})
+    Debug.log('parseHtmlMetaData', { url, name })
     return {
         ...openGraphData,
         title,
@@ -61,7 +61,7 @@ const tryFetchFeedFromUrl = async (url: string): Promise<Feed | null> => {
         const feed = await fetchFeedFromUrl(url)
         return feed
     } catch (e) {
-        Debug.log('tryFetchFeedFromUrl', {e})
+        Debug.log('tryFetchFeedFromUrl', { e })
         return null
     }
 }
