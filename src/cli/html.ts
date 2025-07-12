@@ -1,11 +1,11 @@
-import {OpenGraphData} from '../helpers/openGraph';
+import { OpenGraphData } from '../helpers/openGraph';
 import { getHumanHostname } from '../helpers/urlUtils';
-import {Post} from '../models/Post';
-import {logoDataUrl} from './logo-data-url';
+import { Post } from '../models/Post';
+import { logoDataUrl } from './logo-data-url';
 
-export type PostWithOpenGraphData = Post & {og?: OpenGraphData};
+export type PostWithOpenGraphData = Post & { og?: OpenGraphData };
 type Index = { [key: string]: string }
-type NormalizedPost = Post & { normalizedText?: string, index?: Index, textSet?: Set<string>}
+type NormalizedPost = Post & { normalizedText?: string, index?: Index, textSet?: Set<string> }
 type ScoredPost = NormalizedPost & { score: number }
 
 const WHITE_COLOR = '#fefefe'
@@ -21,75 +21,75 @@ const APP_NAME = 'Feeds'
 const PADDING = '10px'
 
 function makeAbsoluteUrl(url: string, baseUrl?: string) {
-  if (!url) {
-    return undefined
-  }
-  if (url.startsWith('http')) {
-    return url
-  }
-  try {
-    return new URL(url, baseUrl).href
-  } catch {
-    return undefined
-  }
+    if (!url) {
+        return undefined
+    }
+    if (url.startsWith('http')) {
+        return url
+    }
+    try {
+        return new URL(url, baseUrl).href
+    } catch {
+        return undefined
+    }
 }
 
 function thumbnailImageSrc(post: PostWithOpenGraphData) {
-  const imageSrc = post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
-  if (!imageSrc) {
-    return undefined
-  }
-  const absImageSrc = makeAbsoluteUrl(imageSrc, post.link)
-  return absImageSrc
+    const imageSrc = post.images[0]?.uri ? post.images[0]?.uri : post.og?.image
+    if (!imageSrc) {
+        return undefined
+    }
+    const absImageSrc = makeAbsoluteUrl(imageSrc, post.link)
+    return absImageSrc
 }
 
 export function postTitle(post: PostWithOpenGraphData) {
-  if (!post.text.startsWith('**')) {
-    return
-  }
+    if (!post.text.startsWith('**')) {
+        return
+    }
 
-  return post.text.replaceAll('\n', '').replace(/^\*\*(.*)\*\*(.*)$/, '$1')
+    return post.text.replaceAll('\n', '').replace(/^\*\*(.*)\*\*(.*)$/, '$1')
 }
 
 function postLink(post: PostWithOpenGraphData) {
-  return post.link ? post.link : post.og?.url ?? ''
+    return post.link ? post.link : post.og?.url ?? ''
 }
 
 export function postText(post: PostWithOpenGraphData) {
-  if (!post.text) {
-    return
-  }
+    if (!post.text) {
+        return
+    }
 
-  return post.text
-    // remove bold text
-    .replace(/^\*\*.*\*\*/m, '')
-    // remove comment links
-    .replace(/\[Comments\]\((.*?)\)/gm, '')
-    // replace links with just the text
-    .replace(/\[(.*?)\]\((.*?)\)/gm, '$1')
+    return post.text
+        // remove bold text
+        .replace(/^\*\*.*\*\*/m, '')
+        // remove comment links
+        .replace(/\[Comments\]\((.*?)\)/gm, '')
+        // replace links with just the text
+        .replace(/\[(.*?)\]\((.*?)\)/gm, '$1')
 }
 
 function fixYoutubeThumbnail(image: string | undefined) {
-  const replacement = 'hq720'; // can be also 'mqdefault' for medium resolution
-  return image ? image.replace(/hqdefault.jpg$/, `${replacement}.jpg`) : image;
+    const replacement = 'hq720'; // can be also 'mqdefault' for medium resolution
+    return image ? image.replace(/hqdefault.jpg$/, `${replacement}.jpg`) : image;
 }
 
 function link(href: string, content: string, className = '') {
-  return `<a href="${href}" class="${className}" target="_blank" rel="noopener noreferrer">${content}</a>`
+    return `<a href="${href}" class="${className}" target="_blank" rel="noopener noreferrer">${content}</a>`
 }
 
 function commentLink(post: Post): string | undefined {
-  const match = post.text.match(/\[Comments\]\((.*?)\)/m)
+    const match = post.text.match(/\[Comments\]\((.*?)\)/m)
 
-  if (!match) {
-    return
-  }
+    if (!match) {
+        return
+    }
 
-  return match[1]
+    return match[1]
 }
 
 const verticalDotsIcon = (size = '20') => `
-<svg version="1.1" id="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+<svg version="1.1" id="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
   width="${size}" height="${size}" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;}
@@ -103,17 +103,17 @@ const verticalDotsIcon = (size = '20') => `
 `
 
 export function card(post: PostWithOpenGraphData) {
-  const postUpdateTime = post.updatedAt || post.createdAt
-  const printableTime = postUpdateTime ? new Date(postUpdateTime).toLocaleString() : ''
-  const url = post.link || ''
-  const hostnameText = url === '' ? '' : getHumanHostname(url)
-  const title = postTitle(post)
-  const thumbnailImage = fixYoutubeThumbnail(thumbnailImageSrc(post));
-  const text = postText(post);
-  const comment = commentLink(post);
-  const sharePost = `window.scripts.sharePost('${post._id}')`
-  const tags = post.tags
-  return `
+    const postUpdateTime = post.updatedAt || post.createdAt
+    const printableTime = postUpdateTime ? new Date(postUpdateTime).toLocaleString() : ''
+    const url = post.link || ''
+    const hostnameText = url === '' ? '' : getHumanHostname(url)
+    const title = postTitle(post)
+    const thumbnailImage = fixYoutubeThumbnail(thumbnailImageSrc(post));
+    const text = postText(post);
+    const comment = commentLink(post);
+    const sharePost = `window.scripts.sharePost('${post._id}')`
+    const tags = post.tags
+    return `
 <div class="card-parent">
     <a class="main-link" href="${postLink(post)}" target="_blank" rel="noopener noreferrer">
     </a>
@@ -138,25 +138,25 @@ export function card(post: PostWithOpenGraphData) {
 }
 
 function serializeAttr(attr: unknown) {
-  return typeof attr === 'function' ? `(${attr})()` : `${attr}`;
+    return typeof attr === 'function' ? `(${attr})()` : `${attr}`;
 }
 
 function serializeAttrs(attrs = {}) {
-  return Object.entries(attrs)
-    .map((attr) => ` ${attr[0]}="${serializeAttr(attr[1])}"`)
-    .join('');
+    return Object.entries(attrs)
+        .map((attr) => ` ${attr[0]}="${serializeAttr(attr[1])}"`)
+        .join('');
 }
 
 function elem(name: string, attrs = {}, content: string = '') {
-  return `<${name}${serializeAttrs(attrs)}>${content}</${name}>`;
+    return `<${name}${serializeAttrs(attrs)}>${content}</${name}>`;
 }
 
 export function listItem(content: string) {
-  return `<li>${content}</li>`;
+    return `<li>${content}</li>`;
 }
 
 function list(posts: PostWithOpenGraphData[]) {
-  return `
+    return `
 <ul id="list" class="one-column">
     ${posts.map((post) => listItem(card(post))).join('')}
 </ul>
@@ -164,28 +164,28 @@ function list(posts: PostWithOpenGraphData[]) {
 }
 
 function title(content: string) {
-  return elem('title', {}, content);
+    return elem('title', {}, content);
 }
 
 interface WindowProps {
-  scripts: typeof scripts
-  posts: PostWithOpenGraphData[]
-  scoredPosts: ScoredPost[]
-  feeds: {
-    makeFeedPageHtml: typeof makeFeedPageHtml,
-    listItem: typeof listItem,
-    card: typeof card,
-  }
+    scripts: typeof scripts
+    posts: PostWithOpenGraphData[]
+    scoredPosts: ScoredPost[]
+    feeds: {
+        makeFeedPageHtml: typeof makeFeedPageHtml,
+        listItem: typeof listItem,
+        card: typeof card,
+    }
 }
 declare var window: Window & WindowProps
 
 const scripts = {
-  // icons
-  rotate360Icon(size = 20) {
-    return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><title>rotate--360</title><path d="M25.95,7.65l.0047-.0039c-.0918-.1094-.197-.2061-.2925-.3125-.1841-.2051-.3672-.41-.5635-.603-.1382-.1358-.2856-.2613-.43-.3907-.1831-.1645-.3657-.3286-.5581-.4824-.1592-.1279-.3244-.2466-.4895-.3667-.1921-.14-.3855-.2768-.5854-.4062-.1743-.1128-.3523-.2188-.5322-.3238q-.3081-.1786-.6253-.3408c-.1846-.0942-.37-.1846-.56-.27-.2224-.1-.449-.1914-.678-.2793-.1894-.0723-.3777-.1455-.5713-.209-.2463-.0815-.498-.1494-.7507-.2163-.1848-.0493-.3674-.1025-.5554-.1431-.29-.0634-.5865-.1074-.8833-.1508-.159-.023-.3145-.0552-.4754-.0728A12.9331,12.9331,0,0,0,6,7.7031V4H4v8h8V10H6.8115A10.961,10.961,0,0,1,16,5a11.1114,11.1114,0,0,1,1.189.0669c.1362.0146.268.042.4026.0615.2509.0366.5014.0742.7468.1275.1592.0346.3144.08.4712.1215.2131.0562.4258.1138.6335.1822.1643.0547.325.1167.4859.1782.1926.0742.3835.1509.5705.2349.1611.0727.3193.15.4763.23q.2677.1363.5262.2867c.153.0893.3046.18.4531.2758.1679.1089.3308.2242.4922.3413.1406.1026.2817.2037.417.3125.1616.1294.3156.2676.47.4063.1225.11.2478.2168.3652.332.1668.1636.3223.3379.4785.5117A10.9928,10.9928,0,1,1,5,16H3A13,13,0,1,0,25.95,7.65Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
-  },
-  upArrowIcon(size = 20) {
-    return  `<svg id="icon" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 32 32">
+    // icons
+    rotate360Icon(size = 20) {
+        return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;}</style></defs><title>rotate--360</title><path d="M25.95,7.65l.0047-.0039c-.0918-.1094-.197-.2061-.2925-.3125-.1841-.2051-.3672-.41-.5635-.603-.1382-.1358-.2856-.2613-.43-.3907-.1831-.1645-.3657-.3286-.5581-.4824-.1592-.1279-.3244-.2466-.4895-.3667-.1921-.14-.3855-.2768-.5854-.4062-.1743-.1128-.3523-.2188-.5322-.3238q-.3081-.1786-.6253-.3408c-.1846-.0942-.37-.1846-.56-.27-.2224-.1-.449-.1914-.678-.2793-.1894-.0723-.3777-.1455-.5713-.209-.2463-.0815-.498-.1494-.7507-.2163-.1848-.0493-.3674-.1025-.5554-.1431-.29-.0634-.5865-.1074-.8833-.1508-.159-.023-.3145-.0552-.4754-.0728A12.9331,12.9331,0,0,0,6,7.7031V4H4v8h8V10H6.8115A10.961,10.961,0,0,1,16,5a11.1114,11.1114,0,0,1,1.189.0669c.1362.0146.268.042.4026.0615.2509.0366.5014.0742.7468.1275.1592.0346.3144.08.4712.1215.2131.0562.4258.1138.6335.1822.1643.0547.325.1167.4859.1782.1926.0742.3835.1509.5705.2349.1611.0727.3193.15.4763.23q.2677.1363.5262.2867c.153.0893.3046.18.4531.2758.1679.1089.3308.2242.4922.3413.1406.1026.2817.2037.417.3125.1616.1294.3156.2676.47.4063.1225.11.2478.2168.3652.332.1668.1636.3223.3379.4785.5117A10.9928,10.9928,0,1,1,5,16H3A13,13,0,1,0,25.95,7.65Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
+    },
+    upArrowIcon(size = 20) {
+        return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 32 32">
   <defs>
     <style>
       .cls-1 {
@@ -197,327 +197,328 @@ const scripts = {
   <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
   </svg>
   `
-  },
-  threeColumnIcon(size = 20) {
-    return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><defs><style>.cls-1{fill:none;}</style></defs><title>thumbnail--2</title><path d="M8,30H4a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,30ZM4,24v4H8V24Z"/><path d="M18,30H14a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,18,30Zm-4-6v4h4V24Z"/><path d="M28,30H24a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,28,30Zm-4-6v4h4V24Z"/><path d="M8,20H4a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,20ZM4,14v4H8V14Z"/><path d="M18,20H14a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,18,20Zm-4-6v4h4V14Z"/><path d="M28,20H24a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,28,20Zm-4-6v4h4V14Z"/><path d="M8,10H4A2,2,0,0,1,2,8V4A2,2,0,0,1,4,2H8a2,2,0,0,1,2,2V8A2,2,0,0,1,8,10ZM4,4V8H8V4Z"/><path d="M18,10H14a2,2,0,0,1-2-2V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V8A2,2,0,0,1,18,10ZM14,4V8h4V4Z"/><path d="M28,10H24a2,2,0,0,1-2-2V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V8A2,2,0,0,1,28,10ZM24,4V8h4V4Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
-  },
-  brightnessIcon(size = 20) {
-    return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><defs><style>.cls-1{fill:none;}</style></defs><title>brightness-contrast</title><rect x="15" y="2" width="2" height="3"/><rect x="27" y="15" width="3" height="2"/><rect x="15" y="27" width="2" height="3"/><rect x="2" y="15" width="3" height="2"/><rect x="6.22" y="5.73" width="2" height="3" transform="translate(-3 7.23) rotate(-45)"/><rect x="23.27" y="6.23" width="3" height="2" transform="translate(2.14 19.63) rotate(-45)"/><rect x="23.77" y="23.27" width="2" height="3" transform="translate(-10.26 24.77) rotate(-45)"/><polygon points="5.47 25.13 7.59 23 9 24.42 6.88 26.54 5.47 25.13"/><path d="M16,8a8,8,0,1,0,8,8A8,8,0,0,0,16,8Zm0,14a6,6,0,0,1,0-12Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
-  },
-  
-  // functions
-  setLightMode(mode: 'light' | 'dark' | string) {
-    sessionStorage.setItem('light-mode', mode)
-    if (mode === 'light') {
-      document.documentElement.style.setProperty('--background-color', 'var(--white)')
-      document.documentElement.style.setProperty('--color', 'var(--black)')
-    } else {
-      document.documentElement.style.setProperty('--background-color', 'var(--black)')
-      document.documentElement.style.setProperty('--color', 'var(--white)')
-    }
-  },
-  setGridMode(mode: 'three-column' | 'one-column' | string) {
-    const listElement = document.getElementById('list')!
-    document.getElementById('grid-mode')!.innerHTML = mode === 'three-column' ? '⦙' : scripts.threeColumnIcon()
-    listElement.className = mode
-    sessionStorage.setItem('grid-mode', mode)
-    document.documentElement.style.setProperty('--column-mode', `var(--${mode}-mode)`)
-  },
-  makeLinksClickable() {
-    const cards = Array.from(document.querySelectorAll('div.card-parent'))
-    cards.forEach(card => {
-      const clickableLinks = Array.from(card.querySelectorAll('div.text a, div.share, div.left, a.image-link, div.tags .tag'))
-      const mainLink = card.querySelector(".main-link");
-      clickableLinks.forEach((ele) =>
-        ele.addEventListener("click", (e) => e.stopPropagation())
-      )
+    },
+    threeColumnIcon(size = 20) {
+        return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><defs><style>.cls-1{fill:none;}</style></defs><title>thumbnail--2</title><path d="M8,30H4a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,30ZM4,24v4H8V24Z"/><path d="M18,30H14a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,18,30Zm-4-6v4h4V24Z"/><path d="M28,30H24a2,2,0,0,1-2-2V24a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,28,30Zm-4-6v4h4V24Z"/><path d="M8,20H4a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,20ZM4,14v4H8V14Z"/><path d="M18,20H14a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,18,20Zm-4-6v4h4V14Z"/><path d="M28,20H24a2,2,0,0,1-2-2V14a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v4A2,2,0,0,1,28,20Zm-4-6v4h4V14Z"/><path d="M8,10H4A2,2,0,0,1,2,8V4A2,2,0,0,1,4,2H8a2,2,0,0,1,2,2V8A2,2,0,0,1,8,10ZM4,4V8H8V4Z"/><path d="M18,10H14a2,2,0,0,1-2-2V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V8A2,2,0,0,1,18,10ZM14,4V8h4V4Z"/><path d="M28,10H24a2,2,0,0,1-2-2V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V8A2,2,0,0,1,28,10ZM24,4V8h4V4Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
+    },
+    brightnessIcon(size = 20) {
+        return `<svg id="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="${size}" height="${size}"><defs><style>.cls-1{fill:none;}</style></defs><title>brightness-contrast</title><rect x="15" y="2" width="2" height="3"/><rect x="27" y="15" width="3" height="2"/><rect x="15" y="27" width="2" height="3"/><rect x="2" y="15" width="3" height="2"/><rect x="6.22" y="5.73" width="2" height="3" transform="translate(-3 7.23) rotate(-45)"/><rect x="23.27" y="6.23" width="3" height="2" transform="translate(2.14 19.63) rotate(-45)"/><rect x="23.77" y="23.27" width="2" height="3" transform="translate(-10.26 24.77) rotate(-45)"/><polygon points="5.47 25.13 7.59 23 9 24.42 6.88 26.54 5.47 25.13"/><path d="M16,8a8,8,0,1,0,8,8A8,8,0,0,0,16,8Zm0,14a6,6,0,0,1,0-12Z"/><rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></svg>`
+    },
 
-      // avoid triggering again
-      mainLink?.addEventListener("click", (e) => e.stopPropagation())
-
-      function handleClick(e: Event) {
-        e.stopPropagation()
-        const noTextSelected = !window.getSelection()?.toString();
-
-        if (noTextSelected && mainLink) {
-          (mainLink as HTMLLinkElement).click()
+    // functions
+    setLightMode(mode: 'light' | 'dark' | string) {
+        sessionStorage.setItem('light-mode', mode)
+        if (mode === 'light') {
+            document.documentElement.style.setProperty('--background-color', 'var(--white)')
+            document.documentElement.style.setProperty('--color', 'var(--black)')
+        } else {
+            document.documentElement.style.setProperty('--background-color', 'var(--black)')
+            document.documentElement.style.setProperty('--color', 'var(--white)')
         }
-      }
+    },
+    setGridMode(mode: 'three-column' | 'one-column' | string) {
+        const listElement = document.getElementById('list')!
+        document.getElementById('grid-mode')!.innerHTML = mode === 'three-column' ? '⦙' : scripts.threeColumnIcon()
+        listElement.className = mode
+        sessionStorage.setItem('grid-mode', mode)
+        document.documentElement.style.setProperty('--column-mode', `var(--${mode}-mode)`)
+    },
+    makeLinksClickable() {
+        const cards = Array.from(document.querySelectorAll('div.card-parent'))
+        cards.forEach(card => {
+            const clickableLinks = Array.from(card.querySelectorAll('div.text a, div.share, div.left, a.image-link, div.tags .tag'))
+            const mainLink = card.querySelector(".main-link");
+            clickableLinks.forEach((ele) =>
+                ele.addEventListener("click", (e) => e.stopPropagation())
+            )
 
-      card.addEventListener("click", handleClick)
-    })
-  },
-  rerenderList(posts: PostWithOpenGraphData[]) {
-    const list = document.getElementById('list')
-    if (!list) {
-      return
-    }
+            // avoid triggering again
+            mainLink?.addEventListener("click", (e) => e.stopPropagation())
 
-    // optimization for responsivity
-    const firstNToRender = 20
+            function handleClick(e: Event) {
+                e.stopPropagation()
+                const noTextSelected = !window.getSelection()?.toString();
 
-    list.innerHTML = posts.slice(0, firstNToRender).map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+                if (noTextSelected && mainLink) {
+                    (mainLink as HTMLLinkElement).click()
+                }
+            }
 
-    setTimeout(() => {
-      const restOfHTML = posts.slice(firstNToRender).map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
-      list.innerHTML += restOfHTML
-
-      scripts.makeLinksClickable()
-      scripts.fixYoutubeThumbnails()  
-    })
-  },
-  debounce(func: (...args: any[]) => any, timeout = 300){
-    let timer: any = undefined
-    return (...args: any[]) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => { func.apply(this, args); }, timeout);
-    };
-  },
-  filterForAuthor(author: string) {
-    const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
-    if (searchBar) {
-      searchBar.value = author
-      scripts.searchPosts(author)
-      // scroll can be cancelled when layout changes hence the delay
-      setTimeout(() => scripts.scrollToTop(), 100)
-    }
-  },
-  normalizeString(s: string | undefined): string {
-    if (!s) {
-      return ''
-    }
-    return s
-      .normalize('NFD')
-      .replace(/\p{Diacritic}/gu, '')
-      .replace(/[^\p{Letter}0-9 -]/gu, '')
-      .toLowerCase()
-  },
-  normalizePost(post: Post): NormalizedPost {
-    const authorName = post.author?.name ? scripts.normalizeString(post.author.name) : ''
-    const authorUrl = post.author?.uri ? getHumanHostname(post.author.uri) : ''
-    const text = scripts.normalizeString(post.text)
-    const tags = post.tags || []
-    const urlParts = authorUrl.split('/')
-    const normalizedText = [' ', ...tags, ...tags.map(tag => `#${tag}`), authorName, ...urlParts, text].join(' ')
-    const textSet = new Set<string>(normalizedText.split(' ').filter(word => ![' ', ''].includes(word)))
-    const index = Array.from(textSet).reduce<Index>((acc, v) => ({ ...acc, [v[0]]: acc[v[0]] ? acc[v[0]] + ' ' + v : ' ' + v }), {})
-
-    return {
-      ...post,
-      textSet,
-      index,
-    }
-  },
-  scorePost(post: NormalizedPost, expr: string): number {
-    const words = expr.split(' ').filter(word => word !== '')
-    let score = 0
-    for (const word of words) {
-      const isNegative = word.startsWith('-')
-      const searchTerm = isNegative ? word.slice(1) : word
-      // search for words after space to disambiguate
-      const matched = post.index?.[searchTerm[0]]?.includes(' ' + searchTerm)
-      if (matched) {
-        if (isNegative) {
-          return 0
+            card.addEventListener("click", handleClick)
+        })
+    },
+    rerenderList(posts: PostWithOpenGraphData[]) {
+        const list = document.getElementById('list')
+        if (!list) {
+            return
         }
-        score += 1
-      } else if (isNegative) {
-        score += 1
-      }
-    }
-    return score
-  },
-  searchPosts(expr: string) {
-    const posts = scripts.time(() => scripts.searchPostsInner(expr), 'searchPosts time: ')
-    scripts.time(() => scripts.rerenderList(posts), 'rerender time: ')
-  },
-  searchPostsInner(expr: string) {
-    expr = scripts.normalizeString(expr)
-    const posts = 
-      expr === '' 
-      ? window.posts 
-      : window.posts.reduce((prev: ScoredPost[], post) => {
-          const score = scripts.scorePost(post, expr)
-          if (score > 0) {
-            return [...prev, { ...post, score }]
-          }
-          return prev
-        }, []).sort((a, b) => b.score - a.score)
 
-    return posts
-  },
-  time<T>(f: () => T, name = '') {
-    const start = Date.now()
-    const ret = f()
-    const end = Date.now()
-    console.debug(`${name} elapsed `, end - start)
-    return ret
-  },
-  sharePost(id: string | undefined) {
-    const post = window.posts.find(post => post._id === id)
-    if (!post) {
-      return
-    }
-    const url = `${window.location.origin}/myfeed`
-    console.debug({ url, post })
-    fetch(url, { method: 'PUT', body: JSON.stringify(post) })
-  },
-  scrollToTop() {
-    window.scrollTo({top: 0, behavior: 'smooth'})
-  },
-  showLoader() {
-    document.getElementById('loader')!.style.display = 'block'
-    document.getElementById('search')!.style.display = 'none'
-  },
-  showSearchBar() {
-    document.getElementById('loader')!.style.display = 'none'
-    document.getElementById('search')!.style.display = 'flex'
-  },
-  initSearchBar() {
-    const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
-    if (!searchBar) {
-      return
-    }
+        // optimization for responsivity
+        const firstNToRender = 20
 
-    searchBar.addEventListener('input', scripts.debounce(() => scripts.searchPosts(searchBar.value)))
-    if (!searchBar.form) {
-      return
-    }
-    searchBar.form.addEventListener('reset', () => scripts.searchPosts(''))
-    searchBar.form.addEventListener('submit', (e) => { e.preventDefault(); searchBar.blur() })
-  },
-  initScrollReloadButton() {
-    const button = Array.from(document.getElementsByClassName('back-to-top'))[0]
-    if (!button) {
-      return
-    }
+        list.innerHTML = posts.slice(0, firstNToRender).map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
 
-    const reloadText = scripts.rotate360Icon()
-    const backToTopText = scripts.upArrowIcon()
-  
-    let lastValue: string | undefined = undefined
-    setInterval(() => {
-      if (window.scrollY === 0) {
-        if (lastValue !== reloadText) {
-          button.innerHTML = reloadText
-          lastValue = reloadText
+        setTimeout(() => {
+            const restOfHTML = posts.slice(firstNToRender).map((post) => window.feeds.listItem(window.feeds.card(post))).join('')
+            list.innerHTML += restOfHTML
+
+            scripts.makeLinksClickable()
+            scripts.fixYoutubeThumbnails()
+        })
+    },
+    debounce(func: (...args: any[]) => any, timeout = 300) {
+        let timer: any = undefined
+        return (...args: any[]) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    },
+    filterForAuthor(author: string) {
+        const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
+        if (searchBar) {
+            searchBar.value = author
+            scripts.searchPosts(author)
+            // scroll can be cancelled when layout changes hence the delay
+            setTimeout(() => scripts.scrollToTop(), 100)
         }
-      } else {
-        if (lastValue !== backToTopText) {
-          button.innerHTML = backToTopText
-          lastValue = backToTopText
+    },
+    normalizeString(s: string | undefined): string {
+        if (!s) {
+            return ''
         }
-      }
-    }, 500)
-  },
-  fixYoutubeThumbnail(img: HTMLImageElement) {
-    // youtube returns a default 120x90 placeholder image if the given thumbnail was not found
-    // this fix replaces the default placeholder image with the medium quality default version
-    if (img.src.includes('ytimg.com') && img.naturalWidth === 120 && img.naturalHeight === 90) {
-      const src = img.src
-      const replacedSrc = src.replace(/\/\w+.jpg$/, '/mqdefault.jpg')
-      img.src = replacedSrc
-    }
-  },
-  fixYoutubeThumbnails() {
-    const imgs = Array.from(document.getElementsByClassName('thumbnail')) as HTMLImageElement[]
-    imgs.forEach(scripts.fixYoutubeThumbnail)
-  },
-  reload() {
-    fetch(window.location.href)
-    .then(response => response.text())
-    .then(html => {
-      const backgroundColor = document.documentElement.style.getPropertyValue('--background-color')
-      const color = document.documentElement.style.getPropertyValue('--color')
-      const columnMode = sessionStorage.getItem('grid-mode')
-      html = html.replace(':' + 'root {', ':' +`root {--stored-background-color: ${backgroundColor};--stored-color: ${color};--stored-column-mode: var(--${columnMode}-mode);`)
-      document.write(html)
-      document.close()
-    })
-  },
-  init() {
-    document.addEventListener('DOMContentLoaded', () => { 
-      const columnMode = sessionStorage.getItem('grid-mode')
-      if (columnMode) {
-        scripts.setGridMode(columnMode)
-      } else {
-        scripts.setGridMode('three-column')
-      }
+        return s
+            .normalize('NFD')
+            .replace(/\p{Diacritic}/gu, '')
+            .replace(/[^\p{Letter}0-9 -]/gu, '')
+            .toLowerCase()
+    },
+    normalizePost(post: Post): NormalizedPost {
+        const authorName = post.author?.name ? scripts.normalizeString(post.author.name) : ''
+        const authorUrl = post.author?.uri ? getHumanHostname(post.author.uri) : ''
+        const text = scripts.normalizeString(post.text)
+        const tags = post.tags || []
+        const urlParts = authorUrl.split('/')
+        const normalizedText = [' ', ...tags, ...tags.map(tag => `#${tag}`), authorName, ...urlParts, text].join(' ')
+        const textSet = new Set<string>(normalizedText.split(' ').filter(word => ![' ', ''].includes(word)))
+        const index = Array.from(textSet).reduce<Index>((acc, v) => ({ ...acc, [v[0]]: acc[v[0]] ? acc[v[0]] + ' ' + v : ' ' + v }), {})
 
-      const lightMode = sessionStorage.getItem('light-mode')
-      if (lightMode) {
-        scripts.setLightMode(lightMode)
-      } else {
-        scripts.setLightMode('dark')
-      }
+        return {
+            ...post,
+            textSet,
+            index,
+        }
+    },
+    scorePost(post: NormalizedPost, expr: string): number {
+        const words = expr.split(' ').filter(word => word !== '')
+        let score = 0
+        for (const word of words) {
+            const isNegative = word.startsWith('-')
+            const searchTerm = isNegative ? word.slice(1) : word
+            // search for words after space to disambiguate
+            const matched = post.index?.[searchTerm[0]]?.includes(' ' + searchTerm)
+            if (matched) {
+                if (isNegative) {
+                    return 0
+                }
+                score += 1
+            } else if (isNegative) {
+                score += 1
+            }
+        }
+        return score
+    },
+    searchPosts(expr: string) {
+        const posts = scripts.time(() => scripts.searchPostsInner(expr), 'searchPosts time: ')
+        scripts.time(() => scripts.rerenderList(posts), 'rerender time: ')
+    },
+    searchPostsInner(expr: string) {
+        expr = scripts.normalizeString(expr)
+        const posts =
+            expr === ''
+                ? window.posts
+                : window.posts.reduce((prev: ScoredPost[], post) => {
+                    const score = scripts.scorePost(post, expr)
+                    if (score > 0) {
+                        return [...prev, { ...post, score }]
+                    }
+                    return prev
+                }, []).sort((a, b) => b.score - a.score)
 
-      scripts.initSearchBar()
-      scripts.initScrollReloadButton()
-      scripts.makeLinksClickable()
-      scripts.fixYoutubeThumbnails()
-      console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })      
-    })
-  },
+        return posts
+    },
+    time<T>(f: () => T, name = '') {
+        const start = Date.now()
+        const ret = f()
+        const end = Date.now()
+        console.debug(`${name} elapsed `, end - start)
+        return ret
+    },
+    sharePost(id: string | undefined) {
+        const post = window.posts.find(post => post._id === id)
+        if (!post) {
+            return
+        }
+        const url = `${window.location.origin}/myfeed`
+        console.debug({ url, post })
+        fetch(url, { method: 'PUT', body: JSON.stringify(post) })
+    },
+    scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    },
+    showLoader() {
+        document.getElementById('loader')!.style.display = 'block'
+        document.getElementById('search')!.style.display = 'none'
+    },
+    showSearchBar() {
+        document.getElementById('loader')!.style.display = 'none'
+        document.getElementById('search')!.style.display = 'flex'
+    },
+    initSearchBar() {
+        const searchBar = (document.getElementsByClassName('searchbar')?.[0]) as HTMLInputElement
+        if (!searchBar) {
+            return
+        }
+
+        searchBar.addEventListener('input', scripts.debounce(() => scripts.searchPosts(searchBar.value)))
+        if (!searchBar.form) {
+            return
+        }
+        searchBar.form.addEventListener('reset', () => scripts.searchPosts(''))
+        searchBar.form.addEventListener('submit', (e) => { e.preventDefault(); searchBar.blur() })
+    },
+    initScrollReloadButton() {
+        const button = Array.from(document.getElementsByClassName('back-to-top'))[0]
+        if (!button) {
+            return
+        }
+
+        const reloadText = scripts.rotate360Icon()
+        const backToTopText = scripts.upArrowIcon()
+
+        let lastValue: string | undefined = undefined
+        setInterval(() => {
+            if (window.scrollY === 0) {
+                if (lastValue !== reloadText) {
+                    button.innerHTML = reloadText
+                    lastValue = reloadText
+                }
+            } else {
+                if (lastValue !== backToTopText) {
+                    button.innerHTML = backToTopText
+                    lastValue = backToTopText
+                }
+            }
+        }, 500)
+    },
+    fixYoutubeThumbnail(img: HTMLImageElement) {
+        // youtube returns a default 120x90 placeholder image if the given thumbnail was not found
+        // this fix replaces the default placeholder image with the medium quality default version
+        if (img.src.includes('ytimg.com') && img.naturalWidth === 120 && img.naturalHeight === 90) {
+            const src = img.src
+            const replacedSrc = src.replace(/\/\w+.jpg$/, '/mqdefault.jpg')
+            img.src = replacedSrc
+        }
+    },
+    fixYoutubeThumbnails() {
+        const imgs = Array.from(document.getElementsByClassName('thumbnail')) as HTMLImageElement[]
+        imgs.forEach(scripts.fixYoutubeThumbnail)
+    },
+    reload() {
+        fetch(window.location.href)
+            .then(response => response.text())
+            .then(html => {
+                const backgroundColor = document.documentElement.style.getPropertyValue('--background-color')
+                const color = document.documentElement.style.getPropertyValue('--color')
+                const columnMode = sessionStorage.getItem('grid-mode')
+                html = html.replace(':' + 'root {', ':' + `root {--stored-background-color: ${backgroundColor};--stored-color: ${color};--stored-column-mode: var(--${columnMode}-mode);`)
+                document.write(html)
+                document.close()
+            })
+    },
+    init() {
+        document.addEventListener('DOMContentLoaded', () => {
+            const columnMode = sessionStorage.getItem('grid-mode')
+            if (columnMode) {
+                scripts.setGridMode(columnMode)
+            } else {
+                const defaultMode = window.innerWidth < 500 ? 'one-column' : 'three-column'
+                scripts.setGridMode(defaultMode)
+            }
+
+            const lightMode = sessionStorage.getItem('light-mode')
+            if (lightMode) {
+                scripts.setLightMode(lightMode)
+            } else {
+                scripts.setLightMode('dark')
+            }
+
+            scripts.initSearchBar()
+            scripts.initScrollReloadButton()
+            scripts.makeLinksClickable()
+            scripts.fixYoutubeThumbnails()
+            console.debug('onDOMContentLoaded', { sessionStorage, columnMode, lightMode })
+        })
+    },
 }
 
 function topbar() {
-  const logoOnClick = () => {
-    window.scripts.showLoader()
-    window.scrollTo({top: 0, behavior: 'smooth'});
-    window.scripts.reload();
-  };
-  const lightModeOnClick = () => {
-    if (sessionStorage.getItem('light-mode') === 'dark') {
-      window.scripts.setLightMode('light')
-    } else {
-      window.scripts.setLightMode('dark')
+    const logoOnClick = () => {
+        window.scripts.showLoader()
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scripts.reload();
+    };
+    const lightModeOnClick = () => {
+        if (sessionStorage.getItem('light-mode') === 'dark') {
+            window.scripts.setLightMode('light')
+        } else {
+            window.scripts.setLightMode('dark')
+        }
     }
-  }
-  const gridModeOnClick = () => {
-    if (document.getElementById('list')!.className === 'three-column') {
-      window.scripts.setGridMode('one-column')
-    } else {
-      window.scripts.setGridMode('three-column')
+    const gridModeOnClick = () => {
+        if (document.getElementById('list')!.className === 'three-column') {
+            window.scripts.setGridMode('one-column')
+        } else {
+            window.scripts.setGridMode('three-column')
+        }
     }
-  }
-  return elem(
-    'header',
-    {class: 'topbar'},
-    elem('img', {src: logoDataUrl, class: 'logo', onclick: logoOnClick})
-    +
-    elem('div', {class: 'spacer' })
-    +
-    elem(
-      'button',
-      {
-        id: 'grid-mode',
-        onclick: gridModeOnClick,
-      },
-      scripts.threeColumnIcon(),
+    return elem(
+        'header',
+        { class: 'topbar' },
+        elem('img', { src: logoDataUrl, class: 'logo', onclick: logoOnClick })
+        +
+        elem('div', { class: 'spacer' })
+        +
+        elem(
+            'button',
+            {
+                id: 'grid-mode',
+                onclick: gridModeOnClick,
+            },
+            scripts.threeColumnIcon(),
+        )
+        +
+        elem(
+            'button',
+            {
+                id: 'light-mode',
+                onclick: lightModeOnClick,
+            },
+            scripts.brightnessIcon(),
+        )
     )
-    +
-    elem(
-      'button',
-      {
-        id: 'light-mode',
-        onclick: lightModeOnClick,
-      },
-      scripts.brightnessIcon(),
-    )
-  )
 }
 
 const backToTopButton = () => {
-  const reloadText = scripts.rotate360Icon()
-  const onclick = () => {
-    if (window.scrollY === 0) {
-      window.scripts.showLoader()
-      window.scripts.reload()
-    } else {
-      window.scripts.scrollToTop()
+    const reloadText = scripts.rotate360Icon()
+    const onclick = () => {
+        if (window.scrollY === 0) {
+            window.scripts.showLoader()
+            window.scripts.reload()
+        } else {
+            window.scripts.scrollToTop()
+        }
     }
-  }
-  return elem('div', { class: 'back-to-top', onclick }, reloadText)
+    return elem('div', { class: 'back-to-top', onclick }, reloadText)
 }
 
 
@@ -579,11 +580,11 @@ const spinnerStyle = `
         100% {
           transform: translate(calc(var(--loader-size) * 2), 0);
         }
-      }     
+      }
 `
 
 function searchBar() {
-  return `
+    return `
 <form class="search-form" id="search">
   <input type="search" id="searchbar" class="searchbar" placeholder="Search or filter..."></input>
   <button type="reset" class="search-reset">&times;</button>
@@ -591,7 +592,7 @@ function searchBar() {
 }
 
 function style() {
-  return `
+    return `
 <style>
 :root {
   --color-base: #191919;
@@ -608,10 +609,11 @@ function style() {
   --background-color: var(--stored-background-color, var(--black));
   --color: var(--stored-color, var(--color));
 
-  --max-column-width: min(500px, max(100vmin, 320px)); 
+  --max-column-width: min(500px, max(100vmin, 320px));
   --three-column-mode: repeat(3, 1fr);
   --one-column-mode: var(--max-column-width);
-  --column-mode: var(--stored-column-mode, var(--three-column-mode));
+  --default-column-mode: var(--three-column-mode);
+  --column-mode: var(--stored-column-mode, var(--default-column-mode));
 
   --padding: ${PADDING};
   --half-padding: calc(var(--padding) / 2);
@@ -619,7 +621,12 @@ function style() {
   --header-height: calc(var(--padding) * 5);
 
   --loader-offset: ${PADDING};
-  --loader-size: ${PADDING}; 
+  --loader-size: ${PADDING};
+}
+@media screen and (max-width: 500px) {
+:root {
+    --default-column-mode: var(--one-column-mode);
+}
 }
 body {
     width: 100vw;
@@ -678,7 +685,7 @@ button {
     color: #fff8;
     fill: #fff8;
     font-size: 20px;
-    cursor: pointer;  
+    cursor: pointer;
     margin: var(--half-padding);
     padding: var(--padding);
     border: 1px solid #fff8;
@@ -766,7 +773,7 @@ button {
     align-items: center;
     display: flex;
 }
-.left img { 
+.left img {
     width: calc(3 * var(--padding));
     height: calc(3 * var(--padding));
 }
@@ -865,64 +872,64 @@ ${spinnerStyle}
 }
 
 export function serializeScripts(obj: object) {
-  return Object.entries(obj).map(fun => `${fun[1]}`).join(',')
+    return Object.entries(obj).map(fun => `${fun[1]}`).join(',')
 }
 
 function page(posts: PostWithOpenGraphData[], script?: string, env?: { [key: string]: string }) {
-  const rssItem = undefined
-  const sanitizedPosts = posts.map(post => scripts.normalizePost({ ...post, rssItem }))
-  const manifest = JSON.stringify({
-    name: APP_NAME,
-    short_name: APP_NAME,
-    background_color: THEME_COLOR,
-    theme_color: THEME_COLOR,
-    display: "standalone",
-    start_url: 'https://test.felfele.org/feeds',
-    icons: [
-      {
-        src: logoDataUrl,
-        type: 'image/png',
-        sizes: '128x128',
-      }
-    ]
-  });
-  const manifestDataUrl = `data:application/manifest+json,${encodeURIComponent(manifest)}`
-  return `
+    const rssItem = undefined
+    const sanitizedPosts = posts.map(post => scripts.normalizePost({ ...post, rssItem }))
+    const manifest = JSON.stringify({
+        name: APP_NAME,
+        short_name: APP_NAME,
+        background_color: THEME_COLOR,
+        theme_color: THEME_COLOR,
+        display: "standalone",
+        start_url: 'https://test.felfele.org/feeds',
+        icons: [
+            {
+                src: logoDataUrl,
+                type: 'image/png',
+                sizes: '128x128',
+            }
+        ]
+    });
+    const manifestDataUrl = `data:application/manifest+json,${encodeURIComponent(manifest)}`
+    return `
     <!DOCTYPE html>
     ${elem(
-      'html',
-      {lang: 'en'},
-      `
+        'html',
+        { lang: 'en' },
+        `
         ${elem(
-          'head',
-          {},
-          `
-            ${elem('meta', {charset: 'UTF-8'})}
-            ${elem('meta', {name: 'theme-color', content: THEME_COLOR})}
+            'head',
+            {},
+            `
+            ${elem('meta', { charset: 'UTF-8' })}
+            ${elem('meta', { name: 'theme-color', content: THEME_COLOR })}
             <meta name="referrer" content="no-referrer" />
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <!-- <meta name="viewport" content="viewport-fit=cover"> -->
             <meta name="mobile-web-app-capable" content="yes">
-            <meta name="apple-mobile-web-app-capable" content="yes"> 
+            <meta name="apple-mobile-web-app-capable" content="yes">
             <meta name="apple-mobile-web-app-status-bar-style" content="black-transparent">
             <meta name="apple-mobile-web-app-title" content="${APP_NAME}">
             <link rel="apple-touch-icon" href="${logoDataUrl}">
             <meta name="apple-mobile-web-app-capable" content="yes">
             <meta name="apple-touch-fullscreen" content="yes">
             <meta name="referrer" content="no-referrer">
-            ${elem('link', {rel: 'shortcut icon', href: logoDataUrl})}
+            ${elem('link', { rel: 'shortcut icon', href: logoDataUrl })}
             ${style()}
-            ${elem('link', {rel: 'manifest', href: manifestDataUrl})}
-            ${env?.url ? elem('link', {rel: 'alternate', type: 'application/rss+xml', href: `${env?.url}.rss`}) : ''}
+            ${elem('link', { rel: 'manifest', href: manifestDataUrl })}
+            ${env?.url ? elem('link', { rel: 'alternate', type: 'application/rss+xml', href: `${env?.url}.rss` }) : ''}
         `,
         )}
         ${elem(
-          'body',
-          {
-          },
-          `
+            'body',
+            {
+            },
+            `
             ${topbar()}
-            ${elem('div', {class: 'header-placeholder'})}
+            ${elem('div', { class: 'header-placeholder' })}
             ${spinner}
             ${searchBar()}
             ${list(posts)}
@@ -931,7 +938,7 @@ function page(posts: PostWithOpenGraphData[], script?: string, env?: { [key: str
         )}
         ${elem('script', {}, `scripts = {${serializeScripts(scripts)}}`)}
         ${elem('script', {}, `posts = ${JSON.stringify(sanitizedPosts, undefined, 4)};`)}
-        ${script ? elem('script', {id: 'feeds.js'}, script) : ''}
+        ${script ? elem('script', { id: 'feeds.js' }, script) : ''}
         <script>
           scripts.init()
         </script>
@@ -942,9 +949,9 @@ function page(posts: PostWithOpenGraphData[], script?: string, env?: { [key: str
 }
 
 export function makeFeedPageHtml(
-  posts: PostWithOpenGraphData[],
-  script?: string,
-  env?: { [key: string]: string },
+    posts: PostWithOpenGraphData[],
+    script?: string,
+    env?: { [key: string]: string },
 ) {
-  return page(posts, script, env);
+    return page(posts, script, env);
 }
